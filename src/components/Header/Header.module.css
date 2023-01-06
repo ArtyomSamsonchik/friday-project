@@ -1,0 +1,17 @@
+.links_list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    font-size: 1.1rem;
+}
+
+.link {
+    padding: 5px;
+    border: 1px solid;
+}
+
+.link.active {
+    border-color: #008300;
+    color: #008300;
+}

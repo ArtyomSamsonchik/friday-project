@@ -1,0 +1,55 @@
+.label {
+    display: block;
+    position: relative;
+    margin-bottom: 35px;
+    width: fit-content;
+    height: 50px;
+    font-size: 1.1em;
+}
+
+.label::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #7d6ffb;
+    transform: scaleX(0);
+    transition: transform 0.2s ease-out;
+}
+
+.label:focus-within::before {
+    transform: scaleX(1);
+}
+
+.label.errorInput::before {
+    transform: scaleX(1);
+    background-color: red;
+}
+
+.input {
+    padding: 8px 15px;
+    height: 100%;
+    font-family: inherit;
+    font-size: 1.1em;
+    border: none;
+    background-color: var(--input-bg-color);
+}
+
+.input::placeholder {
+    font-style: italic;
+}
+
+.error {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    padding: 5px;
+    width: 400px;
+    color: #d90101;
+}
+
+[data-theme^='dark'] .error {
+    color:  #f49f9f;
+}
