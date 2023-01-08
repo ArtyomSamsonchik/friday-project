@@ -3,7 +3,10 @@ import thunkMiddleware from 'redux-thunk'
 
 import { authSlice } from '../features/auth/auth-slice'
 
+import { appSlice } from './app-slice'
+
 const rootReducer = combineReducers({
+  app: appSlice,
   auth: authSlice,
 })
 
