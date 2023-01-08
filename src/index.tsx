@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App, {PATH} from './app/App';
-import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider} from "react-router-dom";
+import {createHashRouter, createRoutesFromElements, Route, RouterProvider} from "react-router-dom";
+import App from "./app/App";
 import Login from "./components/Login/Login";
 import SignUp from "./components/SignUp/SignUp";
 import Profile from "./components/Profile/Profile";
@@ -12,10 +12,11 @@ import RestorePassword from "./components/RestorePassword/RestorePassword";
 import Test from "./components/Test/Test";
 import store from "./app/store";
 import {Provider} from "react-redux";
+import {PATH} from "./app/path";
 
-const router = createBrowserRouter(
+const router = createHashRouter(
     createRoutesFromElements(
-        <Route path="/friday-project" element={<App/>}>
+        <Route path="/" element={<App/>}>
             <Route path={PATH.LOGIN} element={<Login/>}/>
             <Route path={PATH.SIGN_UP} element={<SignUp/>}/>
             <Route path={PATH.PROFILE} element={<Profile/>}/>
