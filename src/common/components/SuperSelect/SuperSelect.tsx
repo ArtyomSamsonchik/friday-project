@@ -12,7 +12,7 @@ type SuperSelectPropsType<T> = DefaultSelectPropsType & {
   onChangeOption?: (option: T) => void
 }
 
-function SuperSelect<T extends string | number = string>(props: SuperSelectPropsType<T>) {
+export const SuperSelect = <T extends string | number = string>(props: SuperSelectPropsType<T>) => {
   const { options, onChange, onChangeOption, className, ...restProps } = props
   const mappedOptions = options
     ? options.map((el, i) => (
@@ -38,5 +38,3 @@ function SuperSelect<T extends string | number = string>(props: SuperSelectProps
     </div>
   )
 }
-
-export default SuperSelect

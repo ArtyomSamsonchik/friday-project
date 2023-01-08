@@ -2,11 +2,11 @@ import React from 'react'
 
 import { Outlet } from 'react-router-dom'
 
-import Header from '../components/Header/Header'
+import { Header } from '../components/Header/Header'
 
 import s from './App.module.css'
 
-const App = () => {
+export const App = () => {
   return (
     <div className={s.app}>
       <Header />
@@ -14,5 +14,3 @@ const App = () => {
     </div>
   )
 }
-
-export default App

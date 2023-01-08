@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 
-import SuperButton from '../../common/components/SuperButton/SuperButton'
-import SuperCheckbox from '../../common/components/SuperCheckbox/SuperCheckbox'
-import SuperInputText from '../../common/components/SuperInputText/SuperInputText'
-import SuperRadio from '../../common/components/SuperRadio/SuperRadio'
-import SuperSelect from '../../common/components/SuperSelect/SuperSelect'
+import { SuperButton } from '../../common/components/SuperButton/SuperButton'
+import { SuperCheckbox } from '../../common/components/SuperCheckbox/SuperCheckbox'
+import { SuperInputText } from '../../common/components/SuperInputText/SuperInputText'
+import { SuperRadio } from '../../common/components/SuperRadio/SuperRadio'
+import { SuperSelect } from '../../common/components/SuperSelect/SuperSelect'
 
 import s from './Test.module.css'
 
-const Test = () => {
+export const Test = () => {
   const options = ['x', 'y', 'z']
   const [selected, setSelected] = useState(options[1])
 
@@ -42,5 +42,3 @@ const Test = () => {
     </>
   )
 }
-
-export default Test

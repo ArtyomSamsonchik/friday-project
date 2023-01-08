@@ -11,11 +11,9 @@ type SuperButtonPropsType = DefaultButtonPropsType & {
   red?: boolean
 }
 
-const SuperButton: React.FC<SuperButtonPropsType> = props => {
+export const SuperButton: React.FC<SuperButtonPropsType> = props => {
   const { red, className, ...restProps } = props
   const finalClassName = `${s.button} ${red ? s.red : s.default} ${className ? className : ''}`
 
   return <button className={finalClassName} {...restProps} />
 }
-
-export default SuperButton

@@ -15,7 +15,7 @@ type SuperInputTextPropsType = DefaultInputPropsType & {
   labelClassName?: string
 }
 
-const SuperInputText: React.FC<SuperInputTextPropsType> = ({
+export const SuperInputText: React.FC<SuperInputTextPropsType> = ({
   type,
   onChange,
   onChangeText,
@@ -58,5 +58,3 @@ const SuperInputText: React.FC<SuperInputTextPropsType> = ({
     </label>
   )
 }
-
-export default SuperInputText

@@ -6,7 +6,7 @@ import { PATH } from '../../app/path'
 
 import s from './Header.module.css'
 
-const Header = () => {
+export const Header = () => {
   const links = Object.entries(PATH).map(([name, path], i) => {
     name = name.replace('_', ' ').toLowerCase()
 
@@ -25,5 +25,3 @@ const Header = () => {
     </div>
   )
 }
-
-export default Header

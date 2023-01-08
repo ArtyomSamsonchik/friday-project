@@ -6,5 +6,3 @@ export const authSlice = (state = initState, action: any): typeof initState => {
       return state
   }
 }
-
-export default authSlice
