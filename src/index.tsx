@@ -8,13 +8,13 @@ import { createHashRouter, createRoutesFromElements, Route, RouterProvider } fro
 import { App } from './app/App'
 import { PATH } from './app/path'
 import { store } from './app/store'
-import { ErrorPage } from './components/ErrorPage/ErrorPage'
-import { Login } from './components/Login/Login'
-import { NewPassword } from './components/NewPassword/NewPassword'
-import { Profile } from './components/Profile/Profile'
-import { RestorePassword } from './components/RestorePassword/RestorePassword'
-import { SignUp } from './components/SignUp/SignUp'
-import { Test } from './components/Test/Test'
+import { ErrorPage } from './common/components/ErrorPage/ErrorPage'
+import { Login } from './common/components/Login/Login'
+import { NewPassword } from './common/components/NewPassword/NewPassword'
+import { Profile } from './common/components/Profile/Profile'
+import { RestorePassword } from './common/components/RestorePassword/RestorePassword'
+import { SignUp } from './common/components/SignUp/SignUp'
+import { Test } from './common/components/Test/Test'
 
 const router = createHashRouter(
   createRoutesFromElements(

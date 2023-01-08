@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 
-import { SuperButton } from '../../common/components/SuperButton/SuperButton'
-import { SuperCheckbox } from '../../common/components/SuperCheckbox/SuperCheckbox'
-import { SuperInputText } from '../../common/components/SuperInputText/SuperInputText'
-import { SuperRadio } from '../../common/components/SuperRadio/SuperRadio'
-import { SuperSelect } from '../../common/components/SuperSelect/SuperSelect'
+import { SuperButton } from '../shared/SuperButton/SuperButton'
+import { SuperCheckbox } from '../shared/SuperCheckbox/SuperCheckbox'
+import { SuperInputText } from '../shared/SuperInputText/SuperInputText'
+import { SuperRadio } from '../shared/SuperRadio/SuperRadio'
+import { SuperSelect } from '../shared/SuperSelect/SuperSelect'
 
 import s from './Test.module.css'
 
