@@ -1,15 +1,18 @@
-import React from 'react';
-import s from "./App.module.css";
-import Header from "../components/Header/Header";
-import {Outlet} from "react-router-dom";
+import React from 'react'
+
+import { Outlet } from 'react-router-dom'
+
+import Header from '../components/Header/Header'
+
+import s from './App.module.css'
 
 const App = () => {
-    return (
-        <div className={s.app}>
-            <Header/>
-            <Outlet/>
-        </div>
-    )
+  return (
+    <div className={s.app}>
+      <Header />
+      <Outlet />
+    </div>
+  )
 }
 
 export default App

@@ -1,9 +1,10 @@
-import {applyMiddleware, combineReducers, legacy_createStore as createStore} from "redux";
-import authSlice from "../features/auth/authSlice";
-import thunkMiddleware from "redux-thunk";
+import { applyMiddleware, combineReducers, legacy_createStore as createStore } from 'redux'
+import thunkMiddleware from 'redux-thunk'
+
+import authSlice from '../features/auth/authSlice'
 
 const rootReducer = combineReducers({
-    auth: authSlice
+  auth: authSlice,
 })
 
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
