@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+import commonS from '../../styles/common.module.css'
 import { SuperButton } from '../shared/SuperButton/SuperButton'
 import { SuperCheckbox } from '../shared/SuperCheckbox/SuperCheckbox'
 import { SuperInputText } from '../shared/SuperInputText/SuperInputText'
@@ -13,7 +14,7 @@ export const Test = () => {
   const [selected, setSelected] = useState(options[1])
 
   return (
-    <>
+    <div className={commonS.demo}>
       <h1>Super components demo</h1>
       <h3>Super button</h3>
       <div className={s.container}>
@@ -39,6 +40,6 @@ export const Test = () => {
       <div className={s.container}>
         <SuperInputText placeholder="Input some text" />
       </div>
-    </>
+    </div>
   )
 }
