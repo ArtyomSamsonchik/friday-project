@@ -26,12 +26,7 @@ export const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const handleClickShowPassword = () => setShowPassword(show => !show)
-  const inputType = () => {
-    return showPassword ? 'text' : 'password'
-  }
-  const isVisibility = () => {
-    return showPassword ? <VisibilityOff /> : <Visibility />
-  }
+
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
   }
