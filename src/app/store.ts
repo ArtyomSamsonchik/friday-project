@@ -22,7 +22,12 @@ export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
 export type RootStateType = ReturnType<typeof store.getState>
 export type AppDispatch = ThunkDispatch<RootStateType, unknown, AnyAction>
 export type AppActionsType = AuthSliceActionType
-export type AppThunk<R = void> = ThunkAction<R, RootStateType, unknown, AppActionsType>
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootStateType,
+  unknown,
+  AppActionsType
+>
 
 //@ts-ignore
 window.store = store

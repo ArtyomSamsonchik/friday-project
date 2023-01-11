@@ -1,9 +1,5 @@
-import { Dispatch } from 'redux'
-
 import { authApi, LoginParamsType, RegisterDataType } from '../../app/api-instance'
 import { AppThunk } from '../../app/store'
-
-import { authAPI } from './auth-api'
 
 const initState = {
   isLoggedIn: false,
@@ -36,13 +32,13 @@ const isRegister = (value: true) => {
 //thunk
 export const isRegisterTC =
   (data: RegisterDataType): AppThunk =>
-  dispatch => {
-    authApi.register(data).then(res => res.data)
-
+  async dispatch => {
+    await authApi.register(data)
     dispatch(isRegister(true))
   }
 export const LoginTC =
-  (values: LoginParamsType) => async (dispatch: Dispatch<AuthSliceActionType>) => {
+  (values: LoginParamsType): AppThunk =>
+  async dispatch => {
     try {
       const loginData = await authApi.login(values)
 
