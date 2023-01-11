@@ -1,4 +1,6 @@
-import { authApi, RegisterDataType } from '../../app/api-instance'
+import { Dispatch } from 'redux'
+
+import { authApi, LoginParamsType, RegisterDataType } from '../../app/api-instance'
 import { AppThunk } from '../../app/store'
 
 import { authAPI } from './auth-api'
@@ -9,28 +11,29 @@ const initState = {
 }
 
 type initStateType = typeof initState
-export type AuthSliceActionType = ReturnType<typeof isRegister>
+export type AuthSliceActionType = ReturnType<typeof isRegister> | LoginAT
 
 export const authSlice = (
   state: initStateType = initState,
   action: AuthSliceActionType
-): typeof initState => {
+): initStateType => {
   switch (action.type) {
-    /* case 'auth/login':
-                               return { ...state, isLoggedIn: true }*/
     case 'AUTH/IS-REGISTERED':
       return { ...state, registered: action.value }
-
+    case 'AUTH/LOGIN':
+      return { ...state, isLoggedIn: action.isLoggedIn }
     default:
       return state
   }
 }
 
-export const login = () => ({ type: 'auth/login' } as const)
+//actions
+export const setLoggedIn = (isLoggedIn: boolean) => ({ type: 'AUTH/LOGIN', isLoggedIn } as const)
 const isRegister = (value: true) => {
   return { type: 'AUTH/IS-REGISTERED', value } as const
 }
 
+//thunk
 export const isRegisterTC =
   (data: RegisterDataType): AppThunk =>
   dispatch => {
@@ -38,6 +41,20 @@ export const isRegisterTC =
 
     dispatch(isRegister(true))
   }
+export const LoginTC =
+  (values: LoginParamsType) => async (dispatch: Dispatch<AuthSliceActionType>) => {
+    try {
+      const loginData = await authApi.login(values)
+
+      console.log(loginData)
+      if (loginData) {
+        dispatch(setLoggedIn(true))
+      }
+    } catch (e: any) {
+      const error = e.response ? e.response.data.error : e.message + ', more details in the console'
+    }
+  }
+
 /*export const fetchProfile =
   (email: string, password: string): AppThunk =>
   async dispatch => {
@@ -46,7 +63,7 @@ export const isRegisterTC =
     dispatch(setProfile(data))
   }*/
 
-type LoginAT = ReturnType<typeof login>
-type ActionsType = LoginAT
+//types
+type LoginAT = ReturnType<typeof setLoggedIn>
 
 //TODO: add app status processing via dispatching in every thunk
