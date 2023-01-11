@@ -1,5 +1,5 @@
-import { authApi, LoginParamsType, RegisterDataType } from '../../app/api-instance'
-import { AppThunk } from '../../app/store'
+import {authApi, LoginParamsType, RegisterDataType} from '../../app/api-instance'
+import {AppThunk} from '../../app/store'
 
 const initState = {
   isLoggedIn: false,
@@ -15,49 +15,42 @@ export const authSlice = (
 ): initStateType => {
   switch (action.type) {
     case 'AUTH/IS-REGISTERED':
-      return { ...state, registered: action.value }
+      return {...state, registered: action.value}
     case 'AUTH/LOGIN':
-      return { ...state, isLoggedIn: action.isLoggedIn }
+      return {...state, isLoggedIn: action.isLoggedIn}
     default:
       return state
   }
 }
 
 //actions
-export const setLoggedIn = (isLoggedIn: boolean) => ({ type: 'AUTH/LOGIN', isLoggedIn } as const)
+export const setLoggedIn = (isLoggedIn: boolean) => ({type: 'AUTH/LOGIN', isLoggedIn} as const)
 const isRegister = (value: true) => {
-  return { type: 'AUTH/IS-REGISTERED', value } as const
+  return {type: 'AUTH/IS-REGISTERED', value} as const
 }
 
 //thunk
 export const isRegisterTC =
   (data: RegisterDataType): AppThunk =>
-  async dispatch => {
-    await authApi.register(data)
-    dispatch(isRegister(true))
-  }
+    async dispatch => {
+      await authApi.register(data)
+      dispatch(isRegister(true))
+    }
+
 export const LoginTC =
   (values: LoginParamsType): AppThunk =>
-  async dispatch => {
-    try {
-      const loginData = await authApi.login(values)
-
-      console.log(loginData)
-      if (loginData) {
-        dispatch(setLoggedIn(true))
+    async dispatch => {
+      try {
+        const loginData = await authApi.login(values)
+        console.log(loginData)
+        if (loginData) {
+          dispatch(setLoggedIn(true))
+        }
+      } catch (e: any) {
+        const error = e.response ? e.response.data.error : e.message + ', more details in the console'
       }
-    } catch (e: any) {
-      const error = e.response ? e.response.data.error : e.message + ', more details in the console'
     }
-  }
 
-/*export const fetchProfile =
-  (email: string, password: string): AppThunk =>
-  async dispatch => {
-    const { data } = await authAPI.login(email, password)
-
-    dispatch(setProfile(data))
-  }*/
 
 //types
 type LoginAT = ReturnType<typeof setLoggedIn>
