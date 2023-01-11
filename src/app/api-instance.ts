@@ -7,3 +7,12 @@ export const instance = axios.create({
       : 'https://neko-back.herokuapp.com/2.0',
   withCredentials: true,
 })
+export const authApi = {
+  register(data: RegisterDataType) {
+    return instance.post<{ addedUser: any; error?: string }>('/auth/register', data)
+  },
+}
+export type RegisterDataType = {
+  email: string
+  password: string
+}

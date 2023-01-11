@@ -6,7 +6,7 @@ import {
 } from 'redux'
 import thunkMiddleware, { ThunkAction, ThunkDispatch } from 'redux-thunk'
 
-import { authSlice } from '../features/auth/auth-slice'
+import { authSlice, AuthSliceActionType } from '../features/auth/auth-slice'
 import { profileSlice } from '../features/profile/profile-slice'
 
 import { appSlice } from './app-slice'
@@ -21,7 +21,8 @@ export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
 
 export type RootStateType = ReturnType<typeof store.getState>
 export type AppDispatch = ThunkDispatch<RootStateType, unknown, AnyAction>
-export type AppThunk<R = void> = ThunkAction<R, RootStateType, unknown, AnyAction>
+export type AppActionsType = AuthSliceActionType
+export type AppThunk<R = void> = ThunkAction<R, RootStateType, unknown, AppActionsType>
 
 //@ts-ignore
 window.store = store
