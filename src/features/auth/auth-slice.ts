@@ -1,8 +1,3 @@
-import { AppThunk } from '../../app/store'
-import { setProfile } from '../profile/profile-slice'
-
-import { authAPI } from './auth-api'
-
 const initState = {
   isLoggedIn: false,
 }
@@ -17,14 +12,6 @@ export const authSlice = (state = initState, action: ActionsType): typeof initSt
 }
 
 export const login = () => ({ type: 'auth/login' } as const)
-
-export const fetchProfile =
-  (email: string, password: string): AppThunk =>
-  async dispatch => {
-    const { data } = await authAPI.login(email, password)
-
-    dispatch(setProfile(data))
-  }
 
 type LoginAT = ReturnType<typeof login>
 type ActionsType = LoginAT

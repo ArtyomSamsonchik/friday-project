@@ -1,5 +1,5 @@
-import { RootStateType } from '../../app/store'
-import { User } from '../auth/auth-api'
+import { AppThunk, RootStateType } from '../../app/store'
+import { authAPI, User } from '../auth/auth-api'
 
 const initState = {
   userData: null as User | null,
@@ -19,6 +19,20 @@ export const setProfile = (profile: User) =>
     type: 'profile/loaded',
     payload: profile,
   } as const)
+
+export const updateProfile = (patch: Partial<Pick<User, 'name' | 'avatar'>>) =>
+  ({
+    type: 'profile/update',
+    payload: patch,
+  } as const)
+
+export const fetchProfile =
+  (email: string, password: string): AppThunk =>
+  async dispatch => {
+    const { data } = await authAPI.login(email, password)
+
+    dispatch(setProfile(data))
+  }
 
 export const selectProfile = (state: RootStateType) => state.profile.userData
 
