@@ -55,7 +55,9 @@ export const SignUp = () => {
       } else if (values.password.length < 3) {
         errors.password = 'Invalid password'
       }
-
+      if (values.password !== values.confirmPassword) {
+        errors.confirmPassword = 'passwords not match'
+      }
       console.log(errors)
 
       return errors
@@ -79,20 +81,14 @@ export const SignUp = () => {
         >
           <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
             <InputLabel htmlFor="email">email</InputLabel>
-            <Input
-              id="email"
-              onChange={formik.handleChange}
-              value={formik.values.email}
-              type="text"
-            />
+            <Input id="email" {...formik.getFieldProps('email')} type="text" />
           </FormControl>
-
+          {formik.touched.email && formik.errors.email ? <div>{formik.errors.email}</div> : null}
           <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
             <InputLabel htmlFor="password">Password</InputLabel>
             <Input
               id="password"
-              onChange={formik.handleChange}
-              value={formik.values.password}
+              {...formik.getFieldProps('password')}
               type={showPassword ? 'text' : 'password'}
               endAdornment={
                 <InputAdornment position="end">
@@ -107,12 +103,14 @@ export const SignUp = () => {
               }
             />
           </FormControl>
+          {formik.touched.password && formik.errors.password ? (
+            <div>{formik.errors.password}</div>
+          ) : null}
           <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
             <InputLabel htmlFor="confirm password">Confirm Password</InputLabel>
             <Input
               id="confirmPassword"
-              onChange={formik.handleChange}
-              value={formik.values.confirmPassword}
+              {...formik.getFieldProps('confirmPassword')}
               type={showConfirmPassword ? 'text' : 'password'}
               endAdornment={
                 <InputAdornment position="end">
@@ -127,10 +125,15 @@ export const SignUp = () => {
               }
             />
           </FormControl>
+          {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
+            <div>{formik.errors.confirmPassword}</div>
+          ) : null}
         </Box>
 
         <div className={style.ButtonAndLink}>
-          <button type="submit">Submit</button>
+          <button disabled={JSON.stringify(formik.errors) !== '{}'} type="submit">
+            Submit
+          </button>
           <div>Already have an account?</div>
           <a href={'/friday-project#/login'} style={{ color: 'blue' }}>
             {' '}

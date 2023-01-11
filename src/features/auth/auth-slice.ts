@@ -17,7 +17,7 @@ export const authSlice = (
 ): typeof initState => {
   switch (action.type) {
     /* case 'auth/login':
-                   return { ...state, isLoggedIn: true }*/
+                               return { ...state, isLoggedIn: true }*/
     case 'AUTH/IS-REGISTERED':
       return { ...state, registered: action.value }
 
@@ -33,8 +33,8 @@ const isRegister = (value: true) => {
 
 export const isRegisterTC =
   (data: RegisterDataType): AppThunk =>
-  async dispatch => {
-    const res = await authApi.register(data).then(res => res.data)
+  dispatch => {
+    authApi.register(data).then(res => res.data)
 
     dispatch(isRegister(true))
   }
