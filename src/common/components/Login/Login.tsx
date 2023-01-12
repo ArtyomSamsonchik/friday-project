@@ -2,7 +2,7 @@ import React from 'react'
 
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import { IconButton, Input, Paper } from '@mui/material'
+import { IconButton, Input } from '@mui/material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
@@ -10,18 +10,19 @@ import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormGroup from '@mui/material/FormGroup'
 import FormLabel from '@mui/material/FormLabel'
-import Grid from '@mui/material/Grid'
 import InputAdornment from '@mui/material/InputAdornment'
 import InputLabel from '@mui/material/InputLabel'
 import TextField from '@mui/material/TextField'
 import { useFormik } from 'formik'
 import { Navigate } from 'react-router-dom'
 
-import { LoginTC } from '../../../features/auth/auth-slice'
+import { loginTC } from '../../../features/auth/auth-slice'
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks'
+import common from '../../styles/common.module.css'
 import { CustomPaperContainer } from '../CustomPaperContainer/CustomPaperContainer'
 
 import s from './Login.module.css'
+
 type FormikErrorType = {
   email?: string
   password?: string
@@ -60,7 +61,7 @@ export const Login = React.memo(() => {
       return errors
     },
     onSubmit: values => {
-      dispatch(LoginTC(values))
+      dispatch(loginTC(values))
     },
   })
 
@@ -72,10 +73,10 @@ export const Login = React.memo(() => {
     <CustomPaperContainer>
       <FormControl fullWidth>
         <FormLabel>
-          <h3 className={s.h3Label}>Sign in</h3>
+          <h3 className={common.h3Label}>Sign in</h3>
         </FormLabel>
         <form onSubmit={formik.handleSubmit}>
-          <FormGroup>
+          <FormGroup style={{ gap: '24px' }}>
             <TextField
               label="Email"
               margin="normal"
@@ -128,15 +129,15 @@ export const Login = React.memo(() => {
                 </a>
               </p>
             </FormLabel>
-            <Button type={'submit'} variant={'contained'} fullWidth className={s.submitBtn}>
+            <Button type={'submit'} variant={'contained'} fullWidth className={common.submitBtn}>
               Sign in
             </Button>
           </FormGroup>
         </form>
       </FormControl>
-      <Box className={s.box}>
+      <Box className={common.box}>
         <p>Already have an account?</p>
-        <a href={'#/signup'} className={s.boxA}>
+        <a href={'#/signup'} className={common.boxA}>
           Sign up
         </a>
       </Box>
