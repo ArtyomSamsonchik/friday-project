@@ -13,7 +13,13 @@ export const authAPI = {
     return instance.post<LoginParamsType, AxiosResponse<ResponseType>>('/auth/login', values)
   },
   forgot(data: ForgotRequestType) {
-    return instance.post<any, AxiosResponse<ForgotResponseType>>('/auth/forgot', data)
+    return instance.post<ForgotRequestType, AxiosResponse<ForgotResponseType>>('/auth/forgot', data)
+  },
+  setNewPassword(data: NewPasswordRequestType) {
+    return instance.post<NewPasswordRequestType, AxiosResponse<NewPasswordResponseType>>(
+      '/auth/set-new-password',
+      data
+    )
   },
   me() {},
 }
@@ -66,4 +72,12 @@ export type ForgotRequestType = {
   email: string
   from: string
   message: string
+}
+export type NewPasswordRequestType = {
+  password: string
+  resetPasswordToken: string
+}
+export type NewPasswordResponseType = {
+  info: string
+  error: string
 }
