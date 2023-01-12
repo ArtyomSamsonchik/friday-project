@@ -8,4 +8,5 @@ export const PATH = {
   NEW_PASSWORD: 'new-password',
   RESTORE_PASSWORD: 'restore-password',
   TEST: 'test',
+  CHECK_EMAIL: 'check-email',
 } as const

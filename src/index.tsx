@@ -12,6 +12,7 @@ import { ErrorPage } from './common/components/ErrorPage/ErrorPage'
 import { Login } from './common/components/Login/Login'
 import { NewPassword } from './common/components/NewPassword/NewPassword'
 import { Profile } from './common/components/Profile/Profile'
+import { CheckEmail } from './common/components/RestorePassword/CheckEmail/CheckEmail'
 import { RestorePassword } from './common/components/RestorePassword/RestorePassword'
 import { SignUp } from './common/components/SignUp/SignUp'
 import { Test } from './common/components/Test/Test'
@@ -24,6 +25,7 @@ const router = createHashRouter(
       <Route path={PATH.PROFILE} element={<Profile />} />
       <Route path={PATH.NEW_PASSWORD} element={<NewPassword />} />
       <Route path={PATH.RESTORE_PASSWORD} element={<RestorePassword />} />
+      <Route path={PATH.CHECK_EMAIL} element={<CheckEmail />} />
       <Route path={PATH.TEST} element={<Test />} />
       <Route path={PATH.ERROR} element={<ErrorPage />} />
       <Route path="*" element={<ErrorPage />} />
