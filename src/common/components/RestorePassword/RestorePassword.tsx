@@ -14,7 +14,7 @@ import { useAppDispatch, useAppSelector } from '../../../utils/hooks'
 import common from '../../styles/common.module.css'
 import { CustomPaperContainer } from '../CustomPaperContainer/CustomPaperContainer'
 
-type FormikErrorType = {
+export type FormikErrorType = {
   email?: string
   password?: string
   rememberMe?: boolean
