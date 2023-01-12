@@ -2,16 +2,27 @@ import { Dispatch } from 'redux'
 
 import { AppThunk } from '../../app/store'
 
-import { authAPI, ForgotRequestType, LoginParamsType, RegisterDataType } from './auth-api'
+import {
+  authAPI,
+  ForgotRequestType,
+  LoginParamsType,
+  NewPasswordRequestType,
+  RegisterDataType,
+} from './auth-api'
 
 const initState = {
   isLoggedIn: false,
   registered: false,
   isRecalled: false,
+  isStateToken: '',
 }
 
 type initStateType = typeof initState
-export type AuthSliceActionType = ReturnType<typeof isRegister> | LoginAT | SetForgotPasswordAT
+export type AuthSliceActionType =
+  | ReturnType<typeof isRegister>
+  | LoginAT
+  | SetForgotPasswordAT
+  | SetNewPasswordAT
 
 export const authSlice = (
   state: initStateType = initState,
@@ -24,6 +35,8 @@ export const authSlice = (
       return { ...state, isLoggedIn: action.isLoggedIn }
     case 'AUTH/FORGOT-PASSWORD':
       return { ...state, isRecalled: action.isRecalled }
+    case 'AUTH/SET-NEW-PASSWORD-TOKEN':
+      return { ...state, isStateToken: action.token }
     default:
       return state
   }
@@ -37,6 +50,8 @@ const isRegister = (value: true) => {
 
 export const setRecallPassword = (isRecalled: boolean) =>
   ({ type: 'AUTH/FORGOT-PASSWORD', isRecalled } as const)
+export const setNewPasswordToken = (token: string) =>
+  ({ type: 'AUTH/SET-NEW-PASSWORD-TOKEN', token } as const)
 
 //thunk
 export const isRegisterTC =
@@ -78,7 +93,22 @@ export const recallPasswordTC =
       dispatch(setRecallPassword(true))
     })
   }
+
+export const setNewPasswordTC =
+  (password: string, token: string): AppThunk =>
+  (dispatch: Dispatch) => {
+    const data: NewPasswordRequestType = {
+      password,
+      resetPasswordToken: token,
+    }
+
+    authAPI.setNewPassword(data).then(res => {
+      console.log(res.data.info)
+    })
+  }
+
 //types
 type LoginAT = ReturnType<typeof setLoggedIn>
 type SetForgotPasswordAT = ReturnType<typeof setRecallPassword>
+type SetNewPasswordAT = ReturnType<typeof setNewPasswordToken>
 //TODO: add app status processing via dispatching in every thunk
