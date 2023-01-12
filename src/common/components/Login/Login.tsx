@@ -19,7 +19,9 @@ import { Navigate } from 'react-router-dom'
 
 import { LoginTC } from '../../../features/auth/auth-slice'
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks'
+import { CustomPaperContainer } from '../CustomPaperContainer/CustomPaperContainer'
 
+import s from './Login.module.css'
 type FormikErrorType = {
   email?: string
   password?: string
@@ -51,7 +53,7 @@ export const Login = React.memo(() => {
       }
       if (!values.password) {
         errors.password = 'Required'
-      } else if (values.password.length < 3) {
+      } else if (values.password.length < 7) {
         errors.password = 'Invalid password'
       }
 
@@ -67,105 +69,77 @@ export const Login = React.memo(() => {
   }
 
   return (
-    <Grid container justifyContent={'center'} alignItems={'center'}>
-      <Grid item justifyContent={'center'}>
-        <Paper
-          variant={'outlined'}
-          style={{ padding: '33px', marginTop: '60px', minWidth: '420px' }}
-        >
-          <FormControl fullWidth>
-            <FormLabel>
-              <h3
-                style={{ color: '#000', fontSize: '26px', fontWeight: '600', textAlign: 'center' }}
-              >
-                Sign in
-              </h3>
+    <CustomPaperContainer>
+      <FormControl fullWidth>
+        <FormLabel>
+          <h3 className={s.h3Label}>Sign in</h3>
+        </FormLabel>
+        <form onSubmit={formik.handleSubmit}>
+          <FormGroup>
+            <TextField
+              label="Email"
+              margin="normal"
+              type="email"
+              variant="standard"
+              {...formik.getFieldProps('email')}
+            />
+            {formik.errors.email && formik.touched.email && (
+              <div style={{ color: 'red' }}>{formik.errors.email}</div>
+            )}
+
+            <FormControl fullWidth variant="standard">
+              <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+              <Input
+                id="standard-adornment-password"
+                type={showPassword ? 'text' : 'password'}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      sx={{ color: 'black' }}
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                {...formik.getFieldProps('password')}
+              />
+            </FormControl>
+
+            {formik.errors.password && formik.touched.password && (
+              <div style={{ color: 'red' }}>{formik.errors.password}</div>
+            )}
+            <FormControlLabel
+              label={'Remember me'}
+              control={
+                <Checkbox
+                  {...formik.getFieldProps('rememberMe')}
+                  checked={formik.values.rememberMe}
+                />
+              }
+            />
+            <FormLabel className={s.formLabelForgotPassword}>
+              <p>
+                <a href={'#/restore-password'} rel="Forgot Password? noreferrer">
+                  {' '}
+                  Forgot Password?
+                </a>
+              </p>
             </FormLabel>
-            <form onSubmit={formik.handleSubmit}>
-              <FormGroup>
-                <TextField
-                  label="Email"
-                  margin="normal"
-                  type="email"
-                  variant="standard"
-                  {...formik.getFieldProps('email')}
-                />
-                {formik.errors.email && formik.touched.email && (
-                  <div style={{ color: 'red' }}>{formik.errors.email}</div>
-                )}
-
-                <FormControl fullWidth variant="standard">
-                  <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
-                  <Input
-                    id="standard-adornment-password"
-                    type={showPassword ? 'text' : 'password'}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          sx={{ color: 'black' }}
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    {...formik.getFieldProps('password')}
-                  />
-                </FormControl>
-
-                {formik.errors.password && formik.touched.password && (
-                  <div style={{ color: 'red' }}>{formik.errors.password}</div>
-                )}
-                <FormControlLabel
-                  label={'Remember me'}
-                  control={
-                    <Checkbox
-                      {...formik.getFieldProps('rememberMe')}
-                      checked={formik.values.rememberMe}
-                    />
-                  }
-                />
-                <FormLabel style={{ textAlign: 'right', color: '#000', marginBottom: '69px' }}>
-                  <p>
-                    <a href={'#/restore-password'} rel="Forgot Password? noreferrer">
-                      {' '}
-                      Forgot Password?
-                    </a>
-                  </p>
-                </FormLabel>
-                <Button
-                  type={'submit'}
-                  variant={'contained'}
-                  fullWidth
-                  style={{
-                    backgroundColor: '#366EFF',
-                    borderRadius: '30px',
-                    textTransform: 'initial',
-                  }}
-                >
-                  Sign in
-                </Button>
-              </FormGroup>
-            </form>
-          </FormControl>
-          <Box style={{ textAlign: 'center', marginTop: '31px' }}>
-            <p>Already have an account?</p>
-            <a
-              href={'#/signup'}
-              style={{
-                fontSize: '16px',
-                textDecoration: 'underline',
-                color: '#366EFF',
-                fontWeight: '600',
-              }}
-            >
-              Sign up
-            </a>
-          </Box>
-        </Paper>
-      </Grid>
-    </Grid>
+            <Button type={'submit'} variant={'contained'} fullWidth className={s.submitBtn}>
+              Sign in
+            </Button>
+          </FormGroup>
+        </form>
+      </FormControl>
+      <Box className={s.box}>
+        <p>Already have an account?</p>
+        <a href={'#/signup'} className={s.boxA}>
+          Sign up
+        </a>
+      </Box>
+    </CustomPaperContainer>
   )
 })

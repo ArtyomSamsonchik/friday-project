@@ -1,0 +1,31 @@
+.h3Label {
+    font-size: 26px;
+    font-weight: 600;
+    color: #000;
+    text-align: center;
+}
+
+.formLabelForgotPassword {
+    margin-bottom: 69px;
+
+    color: #000;
+    text-align: right;
+}
+
+.submitBtn {
+    text-transform: initial;
+
+    background-color: #366EFF;
+    border-radius: 30px;
+}
+.box{
+    margin-top: 31px;
+
+    text-align: center;
+}
+.boxA{
+    font-size:16px;
+    font-weight:600;
+    color: #366EFF;
+    text-decoration:underline;
+}
