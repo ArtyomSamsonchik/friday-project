@@ -1,5 +1,11 @@
 .paper {
+    display: flex;
+    flex-direction: column;
+    gap: 31px;
+    justify-content: center;
+
     min-width: 420px;
+    max-width: 420px;
     margin-top: 60px;
-    padding: 33px;
+    padding: 33px
 }
