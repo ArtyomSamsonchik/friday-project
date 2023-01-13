@@ -19,9 +19,10 @@ import { Profile } from './features/profile/Profile'
 const router = createHashRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
+      <Route index element={<Profile />} />
       <Route path={PATH.LOGIN} element={<Login />} />
       <Route path={PATH.SIGN_UP} element={<SignUp />} />
-      <Route path={PATH.PROFILE} element={<Profile />} />
+      <Route index path={PATH.PROFILE} element={<Profile />} />
       <Route path={PATH.NEW_PASSWORD} element={<NewPassword />} />
       <Route path={PATH.RESTORE_PASSWORD} element={<RestorePassword />} />
       <Route path={PATH.TEST} element={<Test />} />

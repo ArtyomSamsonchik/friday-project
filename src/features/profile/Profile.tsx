@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback } from 'react'
 
 import { LogoutOutlined } from '@mui/icons-material'
 import { Avatar, Box, Container, Paper, Typography } from '@mui/material'
@@ -11,24 +11,14 @@ import { useAppDispatch, useAppSelector } from '../../utils/hooks'
 import { profileIsNotLoaded } from '../../utils/profileIsNotLoaded'
 import { selectIsLoggedIn } from '../auth/auth-slice'
 
-import { EditableSpan } from './components/EditableSpan/EditableSpan'
-import { PhotoIconButton } from './components/PhotoIconButton'
-import { closeSession, fetchProfile, fetchUpdatedProfile, selectProfile } from './profile-slice'
+import { EditableSpan } from './EditableSpan/EditableSpan'
+import { PhotoIconButton } from './PhotoIconButton'
+import { closeSession, fetchUpdatedProfile, selectProfile } from './profile-slice'
 
 export const Profile = () => {
-  //TODO: think about User | null | {} flow
   let profile = useAppSelector(selectProfile)
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
   const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      const email = process.env.REACT_APP_EMAIL as string
-      const password = process.env.REACT_APP_PASSWORD as string
-
-      dispatch(fetchProfile(email, password))
-    }
-  }, [])
 
   const profileControlsDisabled = profileIsNotLoaded(profile)
 
@@ -40,9 +30,9 @@ export const Profile = () => {
     dispatch(closeSession())
   }
 
-  // if (!isLoggedIn) {
-  //   return <Navigate to={`/${PATH.SIGN_UP}`} />
-  // }
+  if (!isLoggedIn) {
+    return <Navigate to={`/${PATH.LOGIN}`} />
+  }
 
   return (
     <Container

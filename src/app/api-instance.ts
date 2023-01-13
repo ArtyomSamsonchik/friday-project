@@ -20,6 +20,9 @@ export const authApi = {
   logout() {
     return instance.delete<{ info: string; error?: string }>('auth/me')
   },
+  me() {
+    return instance.post<ProfileType>('auth/me')
+  },
 }
 export type RegisterDataType = {
   email: string
