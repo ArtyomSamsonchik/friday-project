@@ -1,5 +1,5 @@
-import {authApi, LoginParamsType, RegisterDataType} from '../../app/api-instance'
-import {AppThunk} from '../../app/store'
+import { authApi, LoginParamsType, RegisterDataType } from '../../app/api-instance'
+import { AppThunk, RootStateType } from '../../app/store'
 
 const initState = {
   isLoggedIn: false,
@@ -51,6 +51,8 @@ export const LoginTC =
       }
     }
 
+export const selectIsLoggedIn = (state: RootStateType) => state.auth.isLoggedIn
+export const selectIsRegistered = (state: RootStateType) => state.auth.registered
 
 //types
 type LoginAT = ReturnType<typeof setLoggedIn>
