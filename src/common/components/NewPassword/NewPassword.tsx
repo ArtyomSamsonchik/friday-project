@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
@@ -10,7 +10,7 @@ import FormLabel from '@mui/material/FormLabel'
 import InputAdornment from '@mui/material/InputAdornment'
 import InputLabel from '@mui/material/InputLabel'
 import { useFormik } from 'formik'
-import { Navigate, useParams } from 'react-router-dom'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
 
 import { PATH } from '../../../app/path'
 import { setNewPasswordTC, setNewPasswordToken } from '../../../features/auth/auth-slice'
@@ -21,6 +21,7 @@ import { FormikErrorType } from '../RestorePassword/RestorePassword'
 
 export const NewPassword = React.memo(() => {
   const [showPassword, setShowPassword] = React.useState(false)
+  const navigate = useNavigate()
 
   const handleClickShowPassword = () => setShowPassword(show => !show)
 
@@ -53,13 +54,15 @@ export const NewPassword = React.memo(() => {
     },
   })
 
-  if (isStateToken) {
-    console.log(isStateToken, token)
+  useEffect(() => {
+    if (isStateToken) {
+      console.log(isStateToken, token)
 
-    return <Navigate to={`/${PATH.LOGIN}`} />
-  } else {
-    !isStateToken && token && dispatch(setNewPasswordToken(token))
-  }
+      navigate(`/${PATH.LOGIN}`)
+    } else {
+      !isStateToken && token && dispatch(setNewPasswordToken(token))
+    }
+  }, [isStateToken])
 
   return (
     <CustomPaperContainer>
