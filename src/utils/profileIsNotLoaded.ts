@@ -1,4 +1,4 @@
-import { ProfileType } from '../app/api-instance'
+import { ProfileType } from '../features/auth/auth-api'
 
 export const profileIsNotLoaded = (profile: ProfileType) => {
   const { _id, name, email } = profile

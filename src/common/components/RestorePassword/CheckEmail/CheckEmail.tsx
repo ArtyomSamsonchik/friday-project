@@ -32,7 +32,7 @@ export const CheckEmail = () => {
           </Typography>
         </CardContent>
         <CardActions sx={{ justifyContent: 'center' }}>
-          <Link href="#/login" underline="none" sx={{ width: '100%' }} rel={'noreferrer'}>
+          <Link href="/login" underline="none" sx={{ width: '100%' }} rel={'noreferrer'}>
             <Button variant="contained" size="small" fullWidth className={common.submitBtn}>
               Back to login
             </Button>
@@ -42,3 +42,5 @@ export const CheckEmail = () => {
     </CustomPaperContainer>
   )
 }
+
+// TODO: add click handler with navigate

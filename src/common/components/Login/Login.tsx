@@ -16,6 +16,7 @@ import TextField from '@mui/material/TextField'
 import { useFormik } from 'formik'
 import { Navigate } from 'react-router-dom'
 
+import { PATH } from '../../../app/path'
 import { loginTC } from '../../../features/auth/auth-slice'
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks'
 import common from '../../styles/common.module.css'
@@ -66,7 +67,7 @@ export const Login = React.memo(() => {
   })
 
   if (isLoggedIn) {
-    return <Navigate to={'/'} />
+    return <Navigate to={`/${PATH.PROFILE}`} />
   }
 
   return (

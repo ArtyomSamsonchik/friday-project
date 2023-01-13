@@ -8,9 +8,11 @@ import FormControl from '@mui/material/FormControl'
 import InputAdornment from '@mui/material/InputAdornment'
 import InputLabel from '@mui/material/InputLabel'
 import { useFormik } from 'formik'
+import { Navigate } from 'react-router-dom'
 
-import { isRegisterTC } from '../../../features/auth/auth-slice'
-import { useAppDispatch } from '../../../utils/hooks'
+import { PATH } from '../../../app/path'
+import { isRegisterTC, selectIsRegistered } from '../../../features/auth/auth-slice'
+import { useAppDispatch, useAppSelector } from '../../../utils/hooks'
 import { Title } from '../Title/Title'
 
 import style from './registerForm.module.css'
@@ -25,6 +27,7 @@ export const SignUp = () => {
   const dispatch = useAppDispatch()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const isRegistered = useAppSelector(selectIsRegistered)
   const handleClickShowPassword = () => setShowPassword(show => !show)
 
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -52,7 +55,7 @@ export const SignUp = () => {
 
       if (!values.password) {
         errors.password = 'Required'
-      } else if (values.password.length < 3) {
+      } else if (values.password.length < 7) {
         errors.password = 'Invalid password'
       }
       if (values.password !== values.confirmPassword) {
@@ -63,6 +66,10 @@ export const SignUp = () => {
       return errors
     },
   })
+
+  if (isRegistered) {
+    return <Navigate to={`/${PATH.LOGIN}`} />
+  }
 
   return (
     <div className={style.container}>

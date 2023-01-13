@@ -1,5 +1,5 @@
-import { authApi, ProfilePatchType, ProfileType } from '../../app/api-instance'
 import { AppThunk, RootStateType } from '../../app/store'
+import { authAPI, ProfilePatchType, ProfileType } from '../auth/auth-api'
 import { setLoggedIn } from '../auth/auth-slice'
 
 const initState = {
@@ -42,26 +42,19 @@ export const updateProfile = (patch: Pick<ProfileType, 'name' | 'avatar'>) =>
     payload: patch,
   } as const)
 
-export const fetchProfile =
-  (email: string, password: string, rememberMe = false): AppThunk =>
-  async dispatch => {
-    const { data } = await authApi.login({ email, password, rememberMe })
-
-    dispatch(setProfile(data))
-  }
-
 export const fetchUpdatedProfile =
   (patch: ProfilePatchType): AppThunk =>
   async dispatch => {
     const {
       data: { updatedUser },
-    } = await authApi.editProfile(patch)
+    } = await authAPI.editProfile(patch)
 
     dispatch(updateProfile({ name: updatedUser.name, avatar: updatedUser.avatar }))
   }
 
 export const closeSession = (): AppThunk => async dispatch => {
-  await authApi.logout()
+  await authAPI.logout()
+  dispatch(setLoggedIn(false))
   dispatch(setLoggedIn(false))
 }
 export const selectProfile = (state: RootStateType) => state.profile.userData

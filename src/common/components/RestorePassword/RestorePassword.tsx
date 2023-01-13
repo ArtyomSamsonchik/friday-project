@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField'
 import { useFormik } from 'formik'
 import { Navigate } from 'react-router-dom'
 
+import { PATH } from '../../../app/path'
 import { recallPasswordTC } from '../../../features/auth/auth-slice'
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks'
 import common from '../../styles/common.module.css'
@@ -43,7 +44,7 @@ export const RestorePassword = React.memo(() => {
   })
 
   if (isRecalled) {
-    return <Navigate to={'/check-email'} />
+    return <Navigate to={`/${PATH.CHECK_EMAIL}`} />
   }
 
   return (

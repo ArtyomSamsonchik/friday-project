@@ -1,43 +1,27 @@
-import { AxiosResponse } from 'axios/index'
-
 import { instance } from '../../app/api-instance'
 
 export const authAPI = {
   register(data: RegisterDataType) {
-    return instance.post<{ addedUser: any; error?: string }>('/auth/register', data)
+    return instance.post<{ addedUser: ProfileType; error?: string }>('/auth/register', data)
   },
-  /*login(email: string, password: string, rememberMe = false) {
-    return instance.post<User>('auth/login', { email, password, rememberMe })
-  },*/
   login(values: LoginParamsType) {
-    return instance.post<LoginParamsType, AxiosResponse<ResponseType>>('/auth/login', values)
+    return instance.post<ProfileType>('/auth/login', values)
   },
   forgot(data: ForgotRequestType) {
-    return instance.post<ForgotRequestType, AxiosResponse<ForgotResponseType>>('/auth/forgot', data)
+    return instance.post<ForgotResponseType>('/auth/forgot', data)
   },
   setNewPassword(data: NewPasswordRequestType) {
-    return instance.post<NewPasswordRequestType, AxiosResponse<NewPasswordResponseType>>(
-      '/auth/set-new-password',
-      data
-    )
+    return instance.post<ForgotResponseType>('/auth/set-new-password', data)
   },
-  me() {},
-}
-
-export type User = {
-  id: string
-  email: string
-  name: string
-  avatar?: string
-  rememberMe: boolean
-  isAdmin: boolean
-  verified: boolean
-  publicCardPacksCount: number
-  created: string
-  updated: string
-  __v: number //maybe useless data?
-
-  error?: string
+  editProfile(data: ProfilePatchType) {
+    return instance.put<{ updatedUser: ProfileType; error?: string }>('auth/me', data)
+  },
+  logout() {
+    return instance.delete<ForgotResponseType>('auth/me')
+  },
+  me() {
+    return instance.post<ProfileType>('auth/me')
+  },
 }
 
 export type RegisterDataType = {
@@ -50,7 +34,7 @@ export type LoginParamsType = {
   rememberMe: boolean
 }
 
-export type ResponseType = {
+export type ProfileType = {
   _id: string
   email: string
   name: string
@@ -63,10 +47,9 @@ export type ResponseType = {
   rememberMe: boolean
   error?: string
 }
-
 type ForgotResponseType = {
   info: string
-  error: string
+  error?: string
 }
 export type ForgotRequestType = {
   email: string
@@ -81,3 +64,5 @@ export type NewPasswordResponseType = {
   info: string
   error: string
 }
+
+export type ProfilePatchType = Partial<Pick<ProfileType, 'name' | 'avatar'>>

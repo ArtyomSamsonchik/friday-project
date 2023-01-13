@@ -1,11 +1,9 @@
-import { authApi, LoginParamsType, RegisterDataType } from '../../app/api-instance'
+import { Dispatch } from 'redux'
+
 import { setAppStatus } from '../../app/app-slice'
 import { AppThunk, RootStateType } from '../../app/store'
 import { handleError } from '../../utils/handleError'
 import { setProfile } from '../profile/profile-slice'
-import { Dispatch } from 'redux'
-
-import { AppThunk } from '../../app/store'
 
 import {
   authAPI,
@@ -37,7 +35,6 @@ export const authSlice = (
     case 'AUTH/IS-REGISTERED':
       return { ...state, registered: action.value }
     case 'AUTH/LOGIN':
-      return { ...state, isLoggedIn: action.isLoggedIn }
       return { ...state, isLoggedIn: action.isLoggedIn }
     case 'AUTH/FORGOT-PASSWORD':
       return { ...state, isRecalled: action.isRecalled }
@@ -72,13 +69,13 @@ export const loginTC =
   async dispatch => {
     dispatch(setRecallPassword(false))
     try {
-      const loginData = await authAPI.login(values)
+      const { data } = await authAPI.login(values)
 
-      if (loginData) {
-        dispatch(setLoggedIn(true))
-      }
-    } catch (e: any) {
-      const error = e.response ? e.response.data.error : e.message + ', more details in the console'
+      dispatch(setLoggedIn(true))
+      dispatch(setProfile(data))
+    } catch (e) {
+      // const error = e.response ? e.response.data.error : e.message + ', more details in the console'
+      handleError(e as Error, dispatch)
     }
   }
 
@@ -115,7 +112,7 @@ export const setNewPasswordTC =
 export const authTC = (): AppThunk => async dispatch => {
   try {
     dispatch(setAppStatus('loading'))
-    const { data } = await authApi.me()
+    const { data } = await authAPI.me()
 
     dispatch(setLoggedIn(true))
     dispatch(setProfile(data))
