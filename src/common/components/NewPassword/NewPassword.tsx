@@ -42,26 +42,21 @@ export const NewPassword = React.memo(() => {
       if (!values.password) {
         errors.password = 'Required'
       } else if (values.password.length < 7) {
-        errors.password = 'Invalid password'
+        errors.password = 'Invalid password. Password length must be more then 7 '
       }
 
       return errors
     },
     onSubmit: values => {
-      if (token) {
-        dispatch(setNewPasswordTC(values.password, token))
-      }
+      token && dispatch(setNewPasswordTC(values.password, token))
     },
   })
 
   useEffect(() => {
-    if (isStateToken) {
-      console.log(isStateToken, token)
-
+    if (!isStateToken || !token) {
       navigate(`/${PATH.LOGIN}`)
-    } else {
-      !isStateToken && token && dispatch(setNewPasswordToken(token))
     }
+    token && dispatch(setNewPasswordToken(token))
   }, [isStateToken])
 
   return (

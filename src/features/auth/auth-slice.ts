@@ -17,7 +17,7 @@ const initState = {
   isLoggedIn: false,
   registered: false,
   isRecalled: false,
-  isStateToken: '',
+  isStateToken: 'token',
 }
 
 type initStateType = typeof initState
