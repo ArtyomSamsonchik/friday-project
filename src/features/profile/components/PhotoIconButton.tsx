@@ -12,7 +12,6 @@ export const PhotoIconButton: FC<IconButtonProps> = props => {
         position: 'absolute',
         right: 0,
         bottom: 0,
-        zIndex: 1,
         border: ({ palette }) => `2px solid ${palette.common.white}`,
         backgroundColor: ({ palette }) => palette.grey['600'],
         color: ({ palette }) => palette.common.white,
@@ -26,3 +25,5 @@ export const PhotoIconButton: FC<IconButtonProps> = props => {
     </IconButton>
   )
 }
+
+//TODO: fix button transparency when disabled
