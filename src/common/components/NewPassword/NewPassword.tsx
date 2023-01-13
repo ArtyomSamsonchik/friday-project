@@ -54,9 +54,11 @@ export const NewPassword = React.memo(() => {
   })
 
   if (isStateToken) {
-    return <Navigate to={PATH.LOGIN} />
+    console.log(isStateToken, token)
+
+    return <Navigate to={`/${PATH.LOGIN}`} />
   } else {
-    token && dispatch(setNewPasswordToken(token))
+    !isStateToken && token && dispatch(setNewPasswordToken(token))
   }
 
   return (
