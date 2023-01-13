@@ -7,13 +7,20 @@ import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
+import { useNavigate } from 'react-router-dom'
 
+import { PATH } from '../../../../app/path'
 import emailImage from '../../../assets/email.png'
 import common from '../../../styles/common.module.css'
 import { CustomPaperContainer } from '../../CustomPaperContainer/CustomPaperContainer'
 
 import s from './CheckEmail.module.css'
 export const CheckEmail = () => {
+  const navigate = useNavigate()
+  const redirectToLoginHandler = () => {
+    navigate(`/${PATH.LOGIN}`)
+  }
+
   return (
     <CustomPaperContainer>
       <Card className={s.card}>
@@ -32,11 +39,18 @@ export const CheckEmail = () => {
           </Typography>
         </CardContent>
         <CardActions sx={{ justifyContent: 'center' }}>
-          <Link href="/login" underline="none" sx={{ width: '100%' }} rel={'noreferrer'}>
-            <Button variant="contained" size="small" fullWidth className={common.submitBtn}>
-              Back to login
-            </Button>
-          </Link>
+          <Button
+            onClick={redirectToLoginHandler}
+            variant="contained"
+            size="small"
+            fullWidth
+            className={common.submitBtn}
+            sx={{
+              color: '#fff',
+            }}
+          >
+            Back to login
+          </Button>
         </CardActions>
       </Card>
     </CustomPaperContainer>
