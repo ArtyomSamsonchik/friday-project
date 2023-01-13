@@ -14,6 +14,12 @@ export const authApi = {
   login(values: LoginParamsType) {
     return instance.post<LoginParamsType, AxiosResponse<ResponseType>>('/auth/login', values)
   },
+  editProfile(data: ProfilePatchType) {
+    return instance.put<{ updatedUser: ProfileType; error?: string }>('auth/me', data)
+  },
+  logout() {
+    return instance.delete<{ info: string; error?: string }>('auth/me')
+  },
 }
 export type RegisterDataType = {
   email: string
@@ -25,6 +31,7 @@ export type LoginParamsType = {
   rememberMe: boolean
 }
 
+export type ProfileType = ResponseType
 export type ResponseType = {
   _id: string
   email: string
@@ -38,3 +45,5 @@ export type ResponseType = {
   rememberMe: boolean
   error?: string
 }
+
+export type ProfilePatchType = Partial<Pick<ProfileType, 'name' | 'avatar'>>
