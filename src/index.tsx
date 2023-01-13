@@ -11,15 +11,16 @@ import { store } from './app/store'
 import { ErrorPage } from './common/components/ErrorPage/ErrorPage'
 import { Login } from './common/components/Login/Login'
 import { NewPassword } from './common/components/NewPassword/NewPassword'
-import { Profile } from './common/components/Profile/Profile'
 import { CheckEmail } from './common/components/RestorePassword/CheckEmail/CheckEmail'
 import { RestorePassword } from './common/components/RestorePassword/RestorePassword'
 import { SignUp } from './common/components/SignUp/SignUp'
 import { Test } from './common/components/Test/Test'
+import { Profile } from './features/profile/Profile'
 
 const router = createHashRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
+      <Route index element={<Profile />} />
       <Route path={PATH.LOGIN} element={<Login />} />
       <Route path={PATH.SIGN_UP} element={<SignUp />} />
       <Route path={PATH.PROFILE} element={<Profile />} />
