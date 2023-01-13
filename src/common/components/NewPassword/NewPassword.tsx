@@ -3,14 +3,12 @@ import React from 'react'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { IconButton, Input } from '@mui/material'
-import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import FormControl from '@mui/material/FormControl'
 import FormGroup from '@mui/material/FormGroup'
 import FormLabel from '@mui/material/FormLabel'
 import InputAdornment from '@mui/material/InputAdornment'
 import InputLabel from '@mui/material/InputLabel'
-import TextField from '@mui/material/TextField'
 import { useFormik } from 'formik'
 import { Navigate, useParams } from 'react-router-dom'
 
@@ -55,7 +53,7 @@ export const NewPassword = React.memo(() => {
     },
   })
 
-  if (!isStateToken && !token) {
+  if (!isStateToken) {
     return <Navigate to={PATH.LOGIN} />
   } else {
     token && dispatch(setNewPasswordToken(token))

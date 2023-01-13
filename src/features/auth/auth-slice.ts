@@ -106,6 +106,7 @@ export const setNewPasswordTC =
     }
 
     authAPI.setNewPassword(data).then(res => {
+      dispatch(setNewPasswordToken(''))
       console.log(res.data.info)
     })
   }
