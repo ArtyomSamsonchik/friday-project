@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 import commonS from '../../styles/common.module.css'
+import { OutlinedButton } from '../shared/OutlinedButton'
 import { SuperButton } from '../shared/SuperButton/SuperButton'
 import { SuperCheckbox } from '../shared/SuperCheckbox/SuperCheckbox'
 import { SuperInputText } from '../shared/SuperInputText/SuperInputText'
@@ -21,6 +22,7 @@ export const Test = () => {
         <SuperButton>button</SuperButton>
         <SuperButton red>red button</SuperButton>
         <SuperButton disabled>disabled</SuperButton>
+        <OutlinedButton>button</OutlinedButton>
       </div>
       <h3>Super checkbox</h3>
       <div className={s.container}>

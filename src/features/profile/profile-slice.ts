@@ -1,42 +1,74 @@
+import { authApi, ProfilePatchType, ProfileType } from '../../app/api-instance'
 import { AppThunk, RootStateType } from '../../app/store'
-import { authAPI, User } from '../auth/auth-api'
+import { setLoggedIn } from '../auth/auth-slice'
 
 const initState = {
-  userData: null as User | null,
+  userData: {
+    name: '',
+    email: '',
+    avatar: '',
+  } as ProfileType,
 }
 
-export const profileSlice = (state = initState, action: ActionsType): typeof initState => {
+export const profileSlice = (
+  state = initState,
+  action: ProfileSliceActionsType
+): typeof initState => {
   switch (action.type) {
-    case 'profile/loaded':
+    case 'PROFILE/LOADED':
       return { ...state, userData: action.payload }
+    case 'PROFILE/UPDATED':
+      return {
+        ...state,
+        userData: {
+          ...state.userData,
+          ...action.payload,
+        },
+      }
     default:
       return state
   }
 }
 
-export const setProfile = (profile: User) =>
+export const setProfile = (profile: ProfileType) =>
   ({
-    type: 'profile/loaded',
+    type: 'PROFILE/LOADED',
     payload: profile,
   } as const)
 
-export const updateProfile = (patch: Partial<Pick<User, 'name' | 'avatar'>>) =>
+export const updateProfile = (patch: Pick<ProfileType, 'name' | 'avatar'>) =>
   ({
-    type: 'profile/update',
+    type: 'PROFILE/UPDATED',
     payload: patch,
   } as const)
 
 export const fetchProfile =
-  (email: string, password: string): AppThunk =>
+  (email: string, password: string, rememberMe = false): AppThunk =>
   async dispatch => {
-    const { data } = await authAPI.login(email, password)
+    const { data } = await authApi.login({ email, password, rememberMe })
 
     dispatch(setProfile(data))
   }
 
+export const fetchUpdatedProfile =
+  (patch: ProfilePatchType): AppThunk =>
+  async dispatch => {
+    const {
+      data: { updatedUser },
+    } = await authApi.editProfile(patch)
+
+    dispatch(updateProfile({ name: updatedUser.name, avatar: updatedUser.avatar }))
+  }
+
+export const closeSession = (): AppThunk => async dispatch => {
+  await authApi.logout()
+  dispatch(setLoggedIn(false))
+}
 export const selectProfile = (state: RootStateType) => state.profile.userData
 
 type SetProfileAT = ReturnType<typeof setProfile>
-type ActionsType = SetProfileAT
+type updateProfileAT = ReturnType<typeof updateProfile>
+export type ProfileSliceActionsType = SetProfileAT | updateProfileAT
 
-//TODO: add error handling in thunk
+// TODO: replace fetchProfile with login thunk
+// TODO: add error handling in thunk
