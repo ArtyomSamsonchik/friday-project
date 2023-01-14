@@ -147,7 +147,7 @@ export const SignUp = () => {
               fullWidth
               className={common.submitBtn}
             >
-              Sign in
+              Sign up
             </Button>
           </FormGroup>
         </form>

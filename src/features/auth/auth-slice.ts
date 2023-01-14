@@ -60,8 +60,12 @@ export const setNewPasswordToken = (token: string) =>
 export const isRegisterTC =
   (data: RegisterDataType): AppThunk =>
   async dispatch => {
-    await authAPI.register(data)
-    dispatch(isRegister(true))
+    try {
+      await authAPI.register(data)
+      dispatch(isRegister(true))
+    } catch (e) {
+      handleError(e as Error, dispatch)
+    }
   }
 
 export const loginTC =

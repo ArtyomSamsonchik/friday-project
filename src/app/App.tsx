@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 
 import { Outlet } from 'react-router-dom'
 
+import DirectionSnackbar from '../common/components/ErrorSnackbar/ErrorSnackbar'
+import CustomizedSnackbars from '../common/components/ErrorSnackbar/ErrorSnackbar'
 import { Header } from '../common/components/Header/Header'
 import { authTC } from '../features/auth/auth-slice'
 import { useAppDispatch, useAppSelector } from '../utils/hooks'
@@ -23,6 +25,7 @@ export const App = () => {
 
   return (
     <div className={s.app}>
+      <CustomizedSnackbars />
       <Header />
       <Outlet />
     </div>
