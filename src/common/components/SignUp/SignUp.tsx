@@ -4,18 +4,22 @@ import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { IconButton, Input } from '@mui/material'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import FormControl from '@mui/material/FormControl'
+import FormGroup from '@mui/material/FormGroup'
+import FormLabel from '@mui/material/FormLabel'
 import InputAdornment from '@mui/material/InputAdornment'
 import InputLabel from '@mui/material/InputLabel'
+import TextField from '@mui/material/TextField'
 import { useFormik } from 'formik'
 import { Navigate } from 'react-router-dom'
 
 import { PATH } from '../../../app/path'
 import { isRegisterTC, selectIsRegistered } from '../../../features/auth/auth-slice'
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks'
-import { Title } from '../Title/Title'
-
-import style from './registerForm.module.css'
+import common from '../../styles/common.module.css'
+import { CustomPaperContainer } from '../CustomPaperContainer/CustomPaperContainer'
+import s from '../Login/Login.module.css'
 
 type ValueType = {
   email: string
@@ -72,82 +76,88 @@ export const SignUp = () => {
   }
 
   return (
-    <div className={style.container}>
-      <form className={style.registerForm} onSubmit={formik.handleSubmit}>
-        <Title title={'SIGN UP'} />
-
-        <Box
-          sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '100%',
-          }}
-        >
-          <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
-            <InputLabel htmlFor="email">email</InputLabel>
-            <Input id="email" {...formik.getFieldProps('email')} type="text" />
-          </FormControl>
-          {formik.touched.email && formik.errors.email ? <div>{formik.errors.email}</div> : null}
-          <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <Input
-              id="password"
-              {...formik.getFieldProps('password')}
-              type={showPassword ? 'text' : 'password'}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
+    <CustomPaperContainer>
+      <FormControl fullWidth>
+        <FormLabel>
+          <h3 className={common.h3Label}>Sign up</h3>
+        </FormLabel>
+        <form onSubmit={formik.handleSubmit}>
+          <FormGroup style={{ gap: '24px' }}>
+            <TextField
+              label="Email"
+              margin="normal"
+              type="email"
+              variant="standard"
+              {...formik.getFieldProps('email')}
             />
-          </FormControl>
-          {formik.touched.password && formik.errors.password ? (
-            <div>{formik.errors.password}</div>
-          ) : null}
-          <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
-            <InputLabel htmlFor="confirm password">Confirm Password</InputLabel>
-            <Input
-              id="confirmPassword"
-              {...formik.getFieldProps('confirmPassword')}
-              type={showConfirmPassword ? 'text' : 'password'}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    onMouseDown={handleMouseDownPassword}
-                  >
-                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-          </FormControl>
-          {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-            <div>{formik.errors.confirmPassword}</div>
-          ) : null}
-        </Box>
+            {formik.errors.email && formik.touched.email && (
+              <div style={{ color: 'red' }}>{formik.errors.email}</div>
+            )}
 
-        <div className={style.ButtonAndLink}>
-          <button disabled={JSON.stringify(formik.errors) !== '{}'} type="submit">
-            Submit
-          </button>
-          <div>Already have an account?</div>
-          <a href={'/friday-project#/login'} style={{ color: 'blue' }}>
-            {' '}
-            Sign In
-          </a>
-        </div>
-      </form>
-    </div>
+            <FormControl fullWidth variant="standard">
+              <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+              <Input
+                id="standard-adornment-password"
+                type={showPassword ? 'text' : 'password'}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      sx={{ color: 'black' }}
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                {...formik.getFieldProps('password')}
+              />
+            </FormControl>
+
+            {formik.errors.password && formik.touched.password && (
+              <div style={{ color: 'red' }}>{formik.errors.password}</div>
+            )}
+            <FormControl fullWidth variant="standard">
+              <InputLabel htmlFor="standard-adornment-password">Confirm Password</InputLabel>
+              <Input
+                id="standard-adornment-confirm-password"
+                type={showConfirmPassword ? 'text' : 'password'}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      sx={{ color: 'black' }}
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                {...formik.getFieldProps('confirmPassword')}
+              />
+            </FormControl>
+            <FormLabel className={s.formLabelForgotPassword}></FormLabel>
+            <Button
+              disabled={JSON.stringify(formik.errors) !== '{}'}
+              style={{ marginTop: '50px' }}
+              type={'submit'}
+              variant={'contained'}
+              fullWidth
+              className={common.submitBtn}
+            >
+              Sign in
+            </Button>
+          </FormGroup>
+        </form>
+      </FormControl>
+      <Box className={common.box}>
+        <div>Already have an account?</div>
+        <a href={'/friday-project#/login'} className={common.boxA}>
+          Sign In
+        </a>
+      </Box>
+    </CustomPaperContainer>
   )
 }
