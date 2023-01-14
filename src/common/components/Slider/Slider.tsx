@@ -1,18 +1,13 @@
 import * as React from 'react'
-import { ChangeEvent } from 'react'
 
 import { Input } from '@mui/material'
 import Box from '@mui/material/Box'
 import Slider from '@mui/material/Slider'
 
-function valuetext(value: number) {
-  return `${value}°C`
-}
-
 const minDistance = 1
 
 export default function MinimumDistanceSlider() {
-  const [value1, setValue1] = React.useState<number[]>([2, 80])
+  const [value1, setValue1] = React.useState<number[]>([2, 5])
 
   const handleChange1 = (event: Event, newValue: number | number[], activeThumb: number) => {
     if (!Array.isArray(newValue)) {
@@ -25,42 +20,55 @@ export default function MinimumDistanceSlider() {
       setValue1([value1[0], Math.max(newValue[1], value1[0] + minDistance)])
     }
   }
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setValue1([Number(e.currentTarget.value), value1[1]])
+  const handleInputChange1 = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue1([Number(event.target.value), value1[1]])
   }
-  const [value2, setValue2] = React.useState<number[]>([2, 80])
-
-  const handleChange2 = (event: Event, newValue: number | number[], activeThumb: number) => {
-    if (!Array.isArray(newValue)) {
-      return
-    }
-
-    if (newValue[1] - newValue[0] < minDistance) {
-      if (activeThumb === 0) {
-        const clamped = Math.min(newValue[0], 100 - minDistance)
-
-        setValue2([clamped, clamped + minDistance])
-      } else {
-        const clamped = Math.max(newValue[1], minDistance)
-
-        setValue2([clamped - minDistance, clamped])
-      }
-    } else {
-      setValue2(newValue as number[])
+  const handleInputChange2 = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue1([value1[0], Number(event.target.value)])
+  }
+  const handleBlur = () => {
+    if (value1[0] < 0) {
+      setValue1([0, value1[1]])
+    } else if (value1[1] > 15) {
+      setValue1([value1[0], 15])
     }
   }
 
   return (
-    <Box sx={{ width: 300 }}>
+    <Box sx={{ width: 320, display: 'flex', flexDirection: 'row' }}>
+      <Input
+        value={value1[0]}
+        size="small"
+        onChange={handleInputChange1}
+        onBlur={handleBlur}
+        inputProps={{
+          step: 1,
+          min: 0,
+          max: 15,
+          type: 'number',
+          'aria-labelledby': 'input-slider',
+        }}
+      />
       <Slider
         getAriaLabel={() => 'Minimum distance'}
         value={value1}
+        max={15}
         onChange={handleChange1}
         valueLabelDisplay="auto"
-        getAriaValueText={valuetext}
         disableSwap
       />
-      <Input value={value1} size="small" onChange={handleChange} />
+      <Input
+        value={value1[1]}
+        size="small"
+        onChange={handleInputChange2}
+        inputProps={{
+          step: 1,
+          min: 0,
+          max: 15,
+          type: 'number',
+          'aria-labelledby': 'input-slider',
+        }}
+      />
     </Box>
   )
 }

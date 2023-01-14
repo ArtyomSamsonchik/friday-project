@@ -8,6 +8,7 @@ import { SuperInputText } from '../shared/SuperInputText/SuperInputText'
 import { SuperRadio } from '../shared/SuperRadio/SuperRadio'
 import { SuperSelect } from '../shared/SuperSelect/SuperSelect'
 import MinimumDistanceSlider from '../Slider/Slider'
+import InputSlider from '../Slider/Slider'
 
 import s from './Test.module.css'
 
@@ -42,8 +43,8 @@ export const Test = () => {
       <h3>Super input</h3>
       <div className={s.container}>
         <SuperInputText placeholder="Input some text" />
-        <MinimumDistanceSlider />
       </div>
+      <MinimumDistanceSlider />
     </div>
   )
 }
