@@ -1,4 +1,8 @@
 .links_list {
+  position: fixed;
+  top: 60px;
+  left: 380px;
+
   display: flex;
   gap: 15px;
   align-items: center;
@@ -6,7 +10,7 @@
 
   padding-top: 10px;
 
-  font-size: 1.1rem;
+  font-size: 0.8rem;
 }
 
 .link {
@@ -22,3 +26,11 @@
 
   border-color: #008300;
 }
+
+.headerLogo {
+  width: 209px;
+  height: 48px;
+
+  background: url("../../assets/logo/header_logo.svg") center center/cover no-repeat;
+}
+
