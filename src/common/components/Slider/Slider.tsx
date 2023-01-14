@@ -6,7 +6,7 @@ import Slider from '@mui/material/Slider'
 
 const minDistance = 1
 
-export default function MinimumDistanceSlider() {
+export const MinimumDistanceSlider = () => {
   const [value1, setValue1] = React.useState<number[]>([2, 5])
 
   const handleChange1 = (event: Event, newValue: number | number[], activeThumb: number) => {

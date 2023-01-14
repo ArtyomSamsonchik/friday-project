@@ -7,8 +7,7 @@ import { SuperCheckbox } from '../shared/SuperCheckbox/SuperCheckbox'
 import { SuperInputText } from '../shared/SuperInputText/SuperInputText'
 import { SuperRadio } from '../shared/SuperRadio/SuperRadio'
 import { SuperSelect } from '../shared/SuperSelect/SuperSelect'
-import MinimumDistanceSlider from '../Slider/Slider'
-import InputSlider from '../Slider/Slider'
+import { MinimumDistanceSlider } from '../Slider/Slider'
 
 import s from './Test.module.css'
 
