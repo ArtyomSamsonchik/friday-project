@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+import { CardPack } from '../../../features/cards/components/cardPack/CardPack'
 import commonS from '../../styles/common.module.css'
 import { OutlinedButton } from '../shared/OutlinedButton'
 import { SuperButton } from '../shared/SuperButton/SuperButton'
@@ -24,6 +25,24 @@ export const Test = () => {
         <SuperButton red>red button</SuperButton>
         <SuperButton disabled>disabled</SuperButton>
         <OutlinedButton>button</OutlinedButton>
+      </div>
+      <h3>Cards</h3>
+      <div className={s.container}>
+        <CardPack
+          packName={'Test card pack'}
+          totalCards={20}
+          lastUpdated={'14.01.2023'}
+          creator={'Artyom'}
+          openCardPack={() => {
+            alert('opened pack')
+          }}
+          deleteCardPack={() => {
+            alert('deleted pack')
+          }}
+          editCardPack={() => {
+            alert('edited pack')
+          }}
+        />
       </div>
       <h3>Super checkbox</h3>
       <div className={s.container}>
