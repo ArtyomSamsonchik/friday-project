@@ -25,17 +25,17 @@ export const cardsPackApi = {
   },
 }
 
-type AddPackData = {
+export type AddPackData = {
   name: string
   deckCover?: string
   private?: boolean
 }
 
-type GetCardPackQueryParams = {
+export type GetCardPacksQueryParams = {
   packName?: string
   min?: number
   max?: number
-  sortPacks?: SortPacksParams
+  sortPacks?: string
   page?: number
   pageCount?: number
 
@@ -48,7 +48,7 @@ export type SortPacksParams = {
   column: 'name' | 'cardsCount' | 'created' | 'updated'
 }
 
-export type CardType = {
+export type CardPackType = {
   _id: string
   user_id: string
   name: string
@@ -71,7 +71,7 @@ export type CardType = {
 }
 
 export type GetCardPackResponse = {
-  cardPacks: CardType[]
+  cardPacks: CardPackType[]
   cardPacksTotalCount: number
   minCardsCount: number
   maxCardsCount: number
@@ -79,12 +79,12 @@ export type GetCardPackResponse = {
   pageCount: number
 } & CardPackResponse
 
-export type AddCardPackResponse = { newCardsPack: CardType } & CardPackResponse
+type AddCardPackResponse = { newCardsPack: CardPackType } & CardPackResponse
 
-export type DeleteCardPackResponse = { deletedCardsPack: CardType } & CardPackResponse
-export type UpdateCardPackResponse = { updatedCardsPack: CardType } & CardPackResponse
+type DeleteCardPackResponse = { deletedCardsPack: CardPackType } & CardPackResponse
+type UpdateCardPackResponse = { updatedCardsPack: CardPackType } & CardPackResponse
 
-export type CardPackResponse = {
+type CardPackResponse = {
   token: string
   tokenDeathTime: number
 }

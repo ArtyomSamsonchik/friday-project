@@ -7,7 +7,7 @@ export const handleError = (e: Error | AxiosError<{ error: string }>, dispatch: 
   let message = e.message
 
   if (isAxiosError(e)) {
-    message = e.response?.data?.error
+    message = e.response?.data?.error || e.message
   }
   dispatch(setAppError(message))
   dispatch(setAppStatus('failure'))

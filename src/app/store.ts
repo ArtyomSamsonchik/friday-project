@@ -7,6 +7,7 @@ import {
 import thunkMiddleware, { ThunkAction, ThunkDispatch } from 'redux-thunk'
 
 import { authSlice, AuthSliceActionType } from '../features/auth/auth-slice'
+import { cardsPackSlice, CardsPackSliceActionsType } from '../features/cardsPack/cards-pack-slice'
 import { profileSlice, ProfileSliceActionsType } from '../features/profile/profile-slice'
 
 import { appSlice, GlobalAppActionsType } from './app-slice'
@@ -15,13 +16,18 @@ const rootReducer = combineReducers({
   app: appSlice,
   auth: authSlice,
   profile: profileSlice,
+  cardPacks: cardsPackSlice,
 })
 
 export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
 
 export type RootStateType = ReturnType<typeof store.getState>
 export type AppDispatch = ThunkDispatch<RootStateType, unknown, AnyAction>
-export type AppActionsType = AuthSliceActionType | ProfileSliceActionsType | GlobalAppActionsType
+export type AppActionsType =
+  | AuthSliceActionType
+  | ProfileSliceActionsType
+  | GlobalAppActionsType
+  | CardsPackSliceActionsType
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootStateType,
