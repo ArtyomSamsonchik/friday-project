@@ -1,4 +1,4 @@
-import { SortPacksParams } from '../features/cards/cards-api'
+import { SortPacksParams } from '../features/cardsPack/cards-pack-api'
 
 //Use this function to get sortPacks query parameter for cardsApi
 export const getSortPacksQueryParam = ({ order, column }: SortPacksParams) =>

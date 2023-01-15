@@ -1,7 +1,7 @@
 import { instance } from '../../app/api-instance'
 import { getSortPacksQueryParam } from '../../utils/getSortPacksQueryParam'
 
-export const cardsApi = {
+export const cardsPackApi = {
   getPacks({ sortPacks, ...params }: GetCardPackQueryParams = {}) {
     let sortQueryParam = sortPacks ? getSortPacksQueryParam(sortPacks) : {}
 
