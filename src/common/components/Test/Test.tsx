@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { CardPack } from '../../../features/cards/components/cardPack/CardPack'
+import { CardPack } from '../../../features/cardsPack/components/cardPack/CardPack'
 import commonS from '../../styles/common.module.css'
 import { OutlinedButton } from '../shared/OutlinedButton'
 import { SuperButton } from '../shared/SuperButton/SuperButton'
