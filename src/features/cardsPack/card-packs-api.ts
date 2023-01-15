@@ -1,12 +1,9 @@
 import { instance } from '../../app/api-instance'
-import { getSortPacksQueryParam } from '../../utils/getSortPacksQueryParam'
 
-export const cardsPackApi = {
-  getPacks({ sortPacks, ...params }: GetCardPackQueryParams = {}) {
-    let sortQueryParam = sortPacks ? getSortPacksQueryParam(sortPacks) : {}
-
+export const cardPacksApi = {
+  getPacks(params: GetCardPacksQueryParams) {
     return instance.get<GetCardPackResponse>('cards/pack', {
-      params: { ...params, ...sortQueryParam },
+      params: { ...params },
     })
   },
   addPack(data: AddPackData) {
