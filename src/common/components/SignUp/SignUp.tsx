@@ -65,7 +65,6 @@ export const SignUp = () => {
       if (values.password !== values.confirmPassword) {
         errors.confirmPassword = 'passwords not match'
       }
-      console.log(errors)
 
       return errors
     },
