@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
 
+import { fetchCardPacksTC, selectAllPacks } from '../../../features/cardsPack/cards-pack-slice'
 import { CardPack } from '../../../features/cardsPack/components/cardPack/CardPack'
+import { useAppDispatch, useAppSelector } from '../../../utils/hooks'
 import commonS from '../../styles/common.module.css'
+import { CardsContainer } from '../CardsContainer'
+import { CustomContainer } from '../CustomContainer'
 import { OutlinedButton } from '../shared/OutlinedButton'
 import { SuperButton } from '../shared/SuperButton/SuperButton'
 import { SuperCheckbox } from '../shared/SuperCheckbox/SuperCheckbox'
@@ -15,35 +19,57 @@ import s from './Test.module.css'
 export const Test = () => {
   const options = ['x', 'y', 'z']
   const [selected, setSelected] = useState(options[1])
+  const cards = useAppSelector(selectAllPacks)
+  const dispatch = useAppDispatch()
 
   return (
     <div className={commonS.demo}>
       <h1>Super components demo</h1>
       <h3>Super button</h3>
       <div className={s.container}>
-        <SuperButton>button</SuperButton>
+        <SuperButton onClick={() => dispatch(fetchCardPacksTC())}>button</SuperButton>
         <SuperButton red>red button</SuperButton>
         <SuperButton disabled>disabled</SuperButton>
         <OutlinedButton>button</OutlinedButton>
       </div>
       <h3>Cards</h3>
-      <div className={s.container}>
-        <CardPack
-          packName={'Test card pack'}
-          totalCards={20}
-          lastUpdated={'14.01.2023'}
-          creator={'Artyom'}
-          openCardPack={() => {
-            alert('opened pack')
-          }}
-          deleteCardPack={() => {
-            alert('deleted pack')
-          }}
-          editCardPack={() => {
-            alert('edited pack')
-          }}
-        />
-      </div>
+      <CustomContainer>
+        <CardsContainer>
+          {cards.map(c => (
+            <CardPack
+              key={c._id}
+              packName={c.name}
+              totalCards={c.cardsCount}
+              lastUpdated={c.updated}
+              creator={c.user_name}
+              openCardPack={() => {
+                alert('opened pack')
+              }}
+              deleteCardPack={() => {
+                alert('deleted pack')
+              }}
+              editCardPack={() => {
+                alert('edited pack')
+              }}
+            />
+          ))}
+        </CardsContainer>
+        {/*<CardPack*/}
+        {/*  packName={'Test card pack'}*/}
+        {/*  totalCards={20}*/}
+        {/*  lastUpdated={'14.01.2023'}*/}
+        {/*  creator={'Artyom'}*/}
+        {/*  openCardPack={() => {*/}
+        {/*    alert('opened pack')*/}
+        {/*  }}*/}
+        {/*  deleteCardPack={() => {*/}
+        {/*    alert('deleted pack')*/}
+        {/*  }}*/}
+        {/*  editCardPack={() => {*/}
+        {/*    alert('edited pack')*/}
+        {/*  }}*/}
+        {/*/>*/}
+      </CustomContainer>
       <h3>Super checkbox</h3>
       <div className={s.container}>
         <SuperCheckbox />
