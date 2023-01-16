@@ -16,7 +16,10 @@ import { PATH } from '../../../app/path'
 import { setNewPasswordTC, setNewPasswordToken } from '../../../features/auth/auth-slice'
 import { selectIsStateToken } from '../../../selectors/loginSelectors'
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks'
-import { basicFormValidationSchema } from '../../formValidation/basicFormValidationSchema'
+import {
+  loginFormValidationSchema,
+  newPasswordFormValidationSchema,
+} from '../../formValidation/basicFormValidationSchema'
 import common from '../../styles/common.module.css'
 import { CustomPaperContainer } from '../CustomPaperContainer/CustomPaperContainer'
 
@@ -37,7 +40,7 @@ export const NewPassword = () => {
     initialValues: {
       newPassword: '',
     },
-    validationSchema: basicFormValidationSchema,
+    validationSchema: newPasswordFormValidationSchema,
     onSubmit: values => {
       token && dispatch(setNewPasswordTC(values.newPassword, token))
     },

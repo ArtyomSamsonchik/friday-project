@@ -13,7 +13,10 @@ import { PATH } from '../../../app/path'
 import { recallPasswordTC } from '../../../features/auth/auth-slice'
 import { selectIsRecalled } from '../../../selectors/loginSelectors'
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks'
-import { basicFormValidationSchema } from '../../formValidation/basicFormValidationSchema'
+import {
+  emailFormValidationSchema,
+  loginFormValidationSchema,
+} from '../../formValidation/basicFormValidationSchema'
 import common from '../../styles/common.module.css'
 import { CustomPaperContainer } from '../CustomPaperContainer/CustomPaperContainer'
 
@@ -24,7 +27,7 @@ export const RestorePassword = () => {
     initialValues: {
       email: '',
     },
-    validationSchema: basicFormValidationSchema,
+    validationSchema: emailFormValidationSchema,
     onSubmit: values => {
       dispatch(recallPasswordTC(values.email))
     },

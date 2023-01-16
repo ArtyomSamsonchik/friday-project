@@ -20,7 +20,7 @@ import { PATH } from '../../../app/path'
 import { loginTC } from '../../../features/auth/auth-slice'
 import { selectIsLoggedIn } from '../../../selectors/loginSelectors'
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks'
-import { basicFormValidationSchema } from '../../formValidation/basicFormValidationSchema'
+import { loginFormValidationSchema } from '../../formValidation/basicFormValidationSchema'
 import common from '../../styles/common.module.css'
 import { CustomPaperContainer } from '../CustomPaperContainer/CustomPaperContainer'
 
@@ -42,7 +42,7 @@ export const Login = () => {
       password: '',
       rememberMe: false,
     },
-    validationSchema: basicFormValidationSchema,
+    validationSchema: loginFormValidationSchema,
     onSubmit: values => {
       dispatch(loginTC(values))
     },
