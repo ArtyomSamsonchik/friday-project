@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 import { fetchCardPacksTC, selectAllPacks } from '../../../features/cardsPack/cards-pack-slice'
 import { CardPack } from '../../../features/cardsPack/components/cardPack/CardPack'
+import { selectProfile } from '../../../features/profile/profile-slice'
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks'
 import commonS from '../../styles/common.module.css'
 import { CardsContainer } from '../CardsContainer'
@@ -20,6 +21,7 @@ export const Test = () => {
   const options = ['x', 'y', 'z']
   const [selected, setSelected] = useState(options[1])
   const cards = useAppSelector(selectAllPacks)
+  const profile = useAppSelector(selectProfile)
   const dispatch = useAppDispatch()
 
   return (
@@ -35,6 +37,22 @@ export const Test = () => {
       <h3>Cards</h3>
       <CustomContainer>
         <CardsContainer>
+          <CardPack
+            packName={'Test card pack'}
+            totalCards={20}
+            lastUpdated={'14.01.2023'}
+            creator={'Artyom'}
+            isMyPack={true}
+            openCardPack={() => {
+              alert('opened pack')
+            }}
+            deleteCardPack={() => {
+              alert('deleted pack')
+            }}
+            editCardPack={() => {
+              alert('edited pack')
+            }}
+          />
           {cards.map(c => (
             <CardPack
               key={c._id}
@@ -42,6 +60,7 @@ export const Test = () => {
               totalCards={c.cardsCount}
               lastUpdated={c.updated}
               creator={c.user_name}
+              isMyPack={profile._id === c.user_id}
               openCardPack={() => {
                 alert('opened pack')
               }}
@@ -54,21 +73,6 @@ export const Test = () => {
             />
           ))}
         </CardsContainer>
-        {/*<CardPack*/}
-        {/*  packName={'Test card pack'}*/}
-        {/*  totalCards={20}*/}
-        {/*  lastUpdated={'14.01.2023'}*/}
-        {/*  creator={'Artyom'}*/}
-        {/*  openCardPack={() => {*/}
-        {/*    alert('opened pack')*/}
-        {/*  }}*/}
-        {/*  deleteCardPack={() => {*/}
-        {/*    alert('deleted pack')*/}
-        {/*  }}*/}
-        {/*  editCardPack={() => {*/}
-        {/*    alert('edited pack')*/}
-        {/*  }}*/}
-        {/*/>*/}
       </CustomContainer>
       <h3>Super checkbox</h3>
       <div className={s.container}>

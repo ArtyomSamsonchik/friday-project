@@ -17,6 +17,7 @@ type CardPackProps = {
   totalCards: number
   lastUpdated: string
   creator: string
+  isMyPack: boolean
   imageSrc?: string
   openCardPack?: () => void
   editCardPack?: () => void
@@ -32,6 +33,7 @@ export const CardPack: FC<CardPackProps> = memo(props => {
     creator,
     lastUpdated,
     totalCards,
+    isMyPack,
     imageSrc,
     openCardPack,
     deleteCardPack,
@@ -45,10 +47,10 @@ export const CardPack: FC<CardPackProps> = memo(props => {
         <ActonIconButton onClick={openCardPack} title="open pack">
           <TeacherSVG />
         </ActonIconButton>
-        <ActonIconButton onClick={editCardPack} title="edit pack">
+        <ActonIconButton isHidden={!isMyPack} onClick={editCardPack} title="edit pack">
           <EditSVG />
         </ActonIconButton>
-        <ActonIconButton onClick={deleteCardPack} title="delete pack">
+        <ActonIconButton isHidden={!isMyPack} onClick={deleteCardPack} title="delete pack">
           <DeleteSVG />
         </ActonIconButton>
       </ActionButtonsContainer>
@@ -63,3 +65,4 @@ export const CardPack: FC<CardPackProps> = memo(props => {
 })
 
 // TODO: remove card pack image placeholder later
+// TODO: add time formatted helper for last updated card field
