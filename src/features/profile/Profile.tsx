@@ -1,10 +1,13 @@
 import React, { useCallback } from 'react'
 
 import { LogoutOutlined } from '@mui/icons-material'
-import { Avatar, Box, Container, Paper, Typography } from '@mui/material'
+import { Avatar, Box, Typography } from '@mui/material'
 import { Navigate } from 'react-router-dom'
 
 import { PATH } from '../../app/path'
+import { BackLink } from '../../common/components/BackLink'
+import { CustomContainer } from '../../common/components/CustomContainer'
+import { CustomPaper } from '../../common/components/CustomPaper'
 import { OutlinedButton } from '../../common/components/shared/OutlinedButton'
 import { getUserNameInitials } from '../../utils/getUserNameInitials'
 import { useAppDispatch, useAppSelector } from '../../utils/hooks'
@@ -35,14 +38,15 @@ export const Profile = () => {
   }
 
   return (
-    <Container
-      maxWidth={'xs'}
-      sx={{
-        mt: 10,
-        animation: ({ transitions }) => `0.4s slide-up ${transitions.easing.easeInOut}`,
-      }}
-    >
-      <Paper elevation={1} square>
+    <CustomContainer>
+      <BackLink title="test link to card packs" to="/cards/pack" />
+      <CustomPaper
+        sx={{
+          maxWidth: '413px',
+          mx: 'auto',
+          animation: ({ transitions }) => `0.4s slide-up ${transitions.easing.easeInOut}`,
+        }}
+      >
         <Box px={4} pt="24px" pb="44px" display="flex" flexDirection="column" alignItems="center">
           <Typography
             variant="h3"
@@ -71,8 +75,8 @@ export const Profile = () => {
             log out
           </OutlinedButton>
         </Box>
-      </Paper>
-    </Container>
+      </CustomPaper>
+    </CustomContainer>
   )
 }
 
