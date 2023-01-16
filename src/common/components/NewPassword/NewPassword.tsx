@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
@@ -10,17 +10,18 @@ import FormLabel from '@mui/material/FormLabel'
 import InputAdornment from '@mui/material/InputAdornment'
 import InputLabel from '@mui/material/InputLabel'
 import { useFormik } from 'formik'
-import { Navigate, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { PATH } from '../../../app/path'
 import { setNewPasswordTC, setNewPasswordToken } from '../../../features/auth/auth-slice'
+import { selectIsStateToken } from '../../../selectors/loginSelectors'
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks'
+import { basicFormValidationSchema } from '../../formValidation/basicFormValidationSchema'
 import common from '../../styles/common.module.css'
 import { CustomPaperContainer } from '../CustomPaperContainer/CustomPaperContainer'
-import { FormikErrorType } from '../RestorePassword/RestorePassword'
 
-export const NewPassword = React.memo(() => {
-  const [showPassword, setShowPassword] = React.useState(false)
+export const NewPassword = () => {
+  const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
 
   const handleClickShowPassword = () => setShowPassword(show => !show)
@@ -30,25 +31,15 @@ export const NewPassword = React.memo(() => {
   }
   const dispatch = useAppDispatch()
   const { token } = useParams()
-  const isStateToken = useAppSelector<string>(state => state.auth.isStateToken)
+  const isStateToken = useAppSelector(selectIsStateToken)
 
   const formik = useFormik({
     initialValues: {
-      password: '',
+      newPassword: '',
     },
-    validate: values => {
-      const errors: FormikErrorType = {}
-
-      if (!values.password) {
-        errors.password = 'Required'
-      } else if (values.password.length < 7) {
-        errors.password = 'Invalid password. Password length must be more then 7 '
-      }
-
-      return errors
-    },
+    validationSchema: basicFormValidationSchema,
     onSubmit: values => {
-      token && dispatch(setNewPasswordTC(values.password, token))
+      token && dispatch(setNewPasswordTC(values.newPassword, token))
     },
   })
 
@@ -63,7 +54,7 @@ export const NewPassword = React.memo(() => {
     <CustomPaperContainer>
       <FormControl fullWidth>
         <FormLabel>
-          <h3 className={common.h3Label}>Forgot your password?</h3>
+          <h3 className={common.h3Label}>Write new password</h3>
         </FormLabel>
         <form onSubmit={formik.handleSubmit}>
           <FormGroup sx={{ gap: '30px' }}>
@@ -100,4 +91,4 @@ export const NewPassword = React.memo(() => {
       </FormControl>
     </CustomPaperContainer>
   )
-})
+}
