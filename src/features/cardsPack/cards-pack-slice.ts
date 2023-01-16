@@ -1,5 +1,6 @@
 import { setAppStatus } from '../../app/app-slice'
 import { AppThunk, RootStateType } from '../../app/store'
+import { getFetchCardPacksQueryParams } from '../../utils/getFetchCardPacksQueryParams'
 import { getSortPacksQueryParam } from '../../utils/getSortPacksQueryParam'
 import { handleError } from '../../utils/handleError'
 
@@ -8,23 +9,16 @@ import {
   cardPacksApi,
   CardPackType,
   GetCardPackResponse,
-  GetCardPacksQueryParams,
   SortPacksParams,
 } from './card-packs-api'
 
-type InitState = Omit<GetCardPackResponse, 'token' | 'tokenDeathTime'> & {
-  packName: string
-  sortPacks: string
-  loadPrivatePacks: boolean
-}
-
-const initState: InitState = {
+const initState = {
   cardPacks: [] as CardPackType[],
-  packName: '',
-  page: 1,
-  pageCount: 12,
-  sortPacks: getSortPacksQueryParam({ order: 'asc', column: 'updated' }),
-  loadPrivatePacks: false,
+  packSearchName: '',
+  currentPage: 1,
+  itemsPerPage: 12,
+  sortPacksOrder: getSortPacksQueryParam({ order: 'asc', column: 'updated' }),
+  loadPersonalPacks: false,
   minCardsCount: 0,
   maxCardsCount: 25,
   cardPacksTotalCount: 0,
@@ -35,12 +29,33 @@ export const cardsPackSlice = (
   action: CardsPackSliceActionsType
 ): typeof initState => {
   switch (action.type) {
-    case 'CARD_PACKS/LOADED':
-      return { ...state, ...action.payload }
-    case 'CARD_PACKS/NAME_CHANGED':
-      return { ...state, packName: action.payload }
+    case 'CARD_PACKS/LOADED': {
+      const { cardPacks, cardPacksTotalCount } = action.payload
+
+      return { ...state, cardPacks, cardPacksTotalCount }
+    }
+    case 'CARD_PACKS/SEARCH_NAME_CHANGED':
+      return { ...state, packSearchName: action.payload }
     case 'CARD_PACKS/SORT_ORDER_CHANGED':
-      return { ...state, sortPacks: getSortPacksQueryParam(action.payload) }
+      return { ...state, sortPacksOrder: getSortPacksQueryParam(action.payload) }
+    case 'CARD_PACKS/MIN_COUNT_CHANGED':
+      return { ...state, minCardsCount: action.payload }
+    case 'CARD_PACKS/MAX_COUNT_CHANGED':
+      return { ...state, maxCardsCount: action.payload }
+    case 'CARD_PACKS/PAGE_CHANGED':
+      return { ...state, currentPage: action.payload }
+    case 'CARD_PACKS/ITEMS_COUNT_PER_PAGE_CHANGED':
+      return { ...state, itemsPerPage: action.payload }
+    case 'CARD_PACKS/PERSONAL_PACKS_PARAM_CHANGED':
+      return { ...state, loadPersonalPacks: action.payload }
+    case 'CARD_PACKS/FILTERS_CLEARED': {
+      const initStateCopy: Partial<typeof initState> = { ...initState }
+
+      delete initStateCopy.cardPacks
+      delete initStateCopy.cardPacksTotalCount
+
+      return { ...state, ...initStateCopy }
+    }
     default:
       return state
   }
@@ -50,65 +65,43 @@ export const cardsPackSlice = (
 const setCardPacks = (cardPacksData: Omit<GetCardPackResponse, 'token' | 'tokenDeathTime'>) => {
   return { type: 'CARD_PACKS/LOADED', payload: cardPacksData } as const
 }
-
-//Use this 2 AC to save data for re-fetch packs from another place of app
-const setPackName = (name: string) => {
-  return { type: 'CARD_PACKS/NAME_CHANGED', payload: name } as const
+const setPackSearchName = (name: string) => {
+  return { type: 'CARD_PACKS/SEARCH_NAME_CHANGED', payload: name } as const
 }
-
 const setPacksSortOrder = (orderParams: SortPacksParams) => {
   return { type: 'CARD_PACKS/SORT_ORDER_CHANGED', payload: orderParams } as const
 }
-
-// TODO: didn't find use to this 3 AC. Think again
-export const addCardPack = (pack: CardPackType) =>
-  ({ type: 'CARD_PACKS/ADDED/', payload: pack } as const)
-
-export const deleteCardPack = (packId: string) =>
-  ({ type: 'CARD_PACKS/DELETED', payload: packId } as const)
-
-export const updateCardPack = (packId: string, name: string) =>
-  ({ type: 'CARD_PACKS/UPDATED', payload: { packId, name } } as const)
+const setMinCardsCount = (count: number) => {
+  return { type: 'CARD_PACKS/MIN_COUNT_CHANGED', payload: count } as const
+}
+const setMaxCardsCount = (count: number) => {
+  return { type: 'CARD_PACKS/MAX_COUNT_CHANGED', payload: count } as const
+}
+const setCurrentPage = (page: number) => {
+  return { type: 'CARD_PACKS/PAGE_CHANGED', payload: page } as const
+}
+const setItemsPerPage = (count: number) => {
+  return { type: 'CARD_PACKS/ITEMS_COUNT_PER_PAGE_CHANGED', payload: count } as const
+}
+const setPersonalPacksParam = (isPersonal: boolean) => {
+  return { type: 'CARD_PACKS/PERSONAL_PACKS_PARAM_CHANGED', payload: isPersonal } as const
+}
+const clearPacksFilters = () => ({ type: 'CARD_PACKS/FILTERS_CLEARED' } as const)
 
 //thunks
-export const fetchCardPacksTC =
-  (params?: GetCardPacksQueryParams): AppThunk =>
-  async (dispatch, getState) => {
-    const {
-      profile: {
-        userData: { _id },
-      },
-      cardPacks: {
-        minCardsCount,
-        maxCardsCount,
-        page,
-        pageCount,
-        packName,
-        loadPrivatePacks,
-        sortPacks,
-      },
-    } = getState()
-    const requestData: GetCardPacksQueryParams = {
-      packName: packName || undefined,
-      min: minCardsCount,
-      max: maxCardsCount,
-      sortPacks,
-      page,
-      pageCount,
-      user_id: loadPrivatePacks ? _id : undefined,
-      ...params,
-    }
+export const fetchCardPacksTC = (): AppThunk => async (dispatch, getState) => {
+  const requestData = getFetchCardPacksQueryParams(getState())
 
-    try {
-      dispatch(setAppStatus('loading'))
-      const { data } = await cardPacksApi.getPacks(requestData)
+  try {
+    dispatch(setAppStatus('loading'))
+    const { data } = await cardPacksApi.getPacks(requestData)
 
-      dispatch(setCardPacks(data))
-      dispatch(setAppStatus('success'))
-    } catch (e) {
-      handleError(e as Error, dispatch)
-    }
+    dispatch(setCardPacks(data))
+    dispatch(setAppStatus('success'))
+  } catch (e) {
+    handleError(e as Error, dispatch)
   }
+}
 
 export const addCardPackTC =
   (packData: AddPackData): AppThunk =>
@@ -150,7 +143,8 @@ export const updateCardPackTC =
   }
 
 //selectors
-export const selectAllPacks = (state: RootStateType) => state.cardPacks.cardPacks
+export const selectCardPacksSlice = (state: RootStateType) => state.cardPacks
+export const selectAllPacks = (state: RootStateType) => selectCardPacksSlice(state).cardPacks
 export const selectAllPacksIds = (state: RootStateType) => selectAllPacks(state).map(p => p._id)
 export const selectCardPack = (state: RootStateType, id: string) => {
   return selectAllPacks(state).find(p => p._id === id) as CardPackType
@@ -158,19 +152,25 @@ export const selectCardPack = (state: RootStateType, id: string) => {
 
 //types
 type SetCardsPacksAT = ReturnType<typeof setCardPacks>
-type addCardPackAT = ReturnType<typeof addCardPack>
-type deleteCardPackAT = ReturnType<typeof deleteCardPack>
-type updateCardPackAT = ReturnType<typeof updateCardPack>
-type setPackNameAT = ReturnType<typeof setPackName>
+type setPackNameAT = ReturnType<typeof setPackSearchName>
 type setPacksSortOrderAT = ReturnType<typeof setPacksSortOrder>
+type setMinCardsCountAT = ReturnType<typeof setMinCardsCount>
+type setMaxCardsCountAT = ReturnType<typeof setMaxCardsCount>
+type setCurrentPageAT = ReturnType<typeof setCurrentPage>
+type setItemsPerPageAT = ReturnType<typeof setItemsPerPage>
+type setPersonalPacksParamAT = ReturnType<typeof setPersonalPacksParam>
+type clearPacksFiltersAT = ReturnType<typeof clearPacksFilters>
 
 export type CardsPackSliceActionsType =
   | SetCardsPacksAT
-  | addCardPackAT
-  | deleteCardPackAT
-  | updateCardPackAT
   | setPackNameAT
   | setPacksSortOrderAT
+  | setMinCardsCountAT
+  | setMaxCardsCountAT
+  | setCurrentPageAT
+  | setItemsPerPageAT
+  | setPersonalPacksParamAT
+  | clearPacksFiltersAT
 
 // TODO: add app status processing via dispatching in every thunk
 // TODO: think about useless types from API response
