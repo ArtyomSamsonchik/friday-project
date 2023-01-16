@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
@@ -18,19 +18,16 @@ import { Navigate } from 'react-router-dom'
 
 import { PATH } from '../../../app/path'
 import { loginTC } from '../../../features/auth/auth-slice'
+import { selectIsLoggedIn } from '../../../selectors/loginSelectors'
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks'
+import { basicFormValidationSchema } from '../../formValidation/basicFormValidationSchema'
 import common from '../../styles/common.module.css'
 import { CustomPaperContainer } from '../CustomPaperContainer/CustomPaperContainer'
 
 import s from './Login.module.css'
 
-type FormikErrorType = {
-  email?: string
-  password?: string
-  rememberMe?: boolean
-}
-export const Login = React.memo(() => {
-  const [showPassword, setShowPassword] = React.useState(false)
+export const Login = () => {
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleClickShowPassword = () => setShowPassword(show => !show)
 
@@ -38,29 +35,14 @@ export const Login = React.memo(() => {
     event.preventDefault()
   }
   const dispatch = useAppDispatch()
-  const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn)
+  const isLoggedIn = useAppSelector(selectIsLoggedIn)
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
       rememberMe: false,
     },
-    validate: values => {
-      const errors: FormikErrorType = {}
-
-      if (!values.email) {
-        errors.email = 'Required'
-      } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-        errors.email = 'Invalid email address'
-      }
-      if (!values.password) {
-        errors.password = 'Required'
-      } else if (values.password.length < 7) {
-        errors.password = 'Invalid password'
-      }
-
-      return errors
-    },
+    validationSchema: basicFormValidationSchema,
     onSubmit: values => {
       dispatch(loginTC(values))
     },
@@ -144,4 +126,4 @@ export const Login = React.memo(() => {
       </Box>
     </CustomPaperContainer>
   )
-})
+}
