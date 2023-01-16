@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { Link } from '@mui/material'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
@@ -15,6 +14,7 @@ import common from '../../../styles/common.module.css'
 import { CustomPaperContainer } from '../../CustomPaperContainer/CustomPaperContainer'
 
 import s from './CheckEmail.module.css'
+
 export const CheckEmail = () => {
   const navigate = useNavigate()
   const redirectToLoginHandler = () => {

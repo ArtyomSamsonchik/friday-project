@@ -1,7 +1,5 @@
-import { Dispatch } from 'redux'
-
 import { setAppStatus } from '../../app/app-slice'
-import { AppThunk, RootStateType } from '../../app/store'
+import { AppThunk } from '../../app/store'
 import { handleError } from '../../utils/handleError'
 import { setProfile } from '../profile/profile-slice'
 
@@ -85,34 +83,40 @@ export const loginTC =
 
 export const recallPasswordTC =
   (email: string): AppThunk =>
-  (dispatch: Dispatch) => {
-    const data: ForgotRequestType = {
-      email,
-      from: 'admin <samvelbagdasaryan1@gmail.com>',
-      message: `<div style="background-color: lime; padding: 15px">
+  async dispatch => {
+    try {
+      const data: ForgotRequestType = {
+        email,
+        from: 'admin <samvelbagdasaryan1@gmail.com>',
+        message: `<div style="background-color: lime; padding: 15px">
                   password recovery link: 
                   <a href='https://artyomsamsonchik.github.io/friday-project/#/new-password/$token$'>
                   link</a>
                 </div>`,
-    }
+      }
 
-    authAPI.forgot(data).then(res => {
+      await authAPI.forgot(data)
       dispatch(setRecallPassword(true))
-    })
+    } catch (e) {
+      handleError(e as Error, dispatch)
+    }
   }
 
 export const setNewPasswordTC =
   (password: string, token: string): AppThunk =>
-  (dispatch: Dispatch) => {
-    const data: NewPasswordRequestType = {
-      password,
-      resetPasswordToken: token,
-    }
+  async dispatch => {
+    try {
+      const data: NewPasswordRequestType = {
+        password,
+        resetPasswordToken: token,
+      }
 
-    authAPI.setNewPassword(data).then(res => {
+      await authAPI.setNewPassword(data)
+
       dispatch(setNewPasswordToken(''))
-      console.log(res.data.info)
-    })
+    } catch (e) {
+      handleError(e as Error, dispatch)
+    }
   }
 export const authTC = (): AppThunk => async dispatch => {
   try {
@@ -126,9 +130,6 @@ export const authTC = (): AppThunk => async dispatch => {
     handleError(e as Error, dispatch)
   }
 }
-
-export const selectIsLoggedIn = (state: RootStateType) => state.auth.isLoggedIn
-export const selectIsRegistered = (state: RootStateType) => state.auth.registered
 
 //types
 type LoginAT = ReturnType<typeof setLoggedIn>
