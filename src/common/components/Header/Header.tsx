@@ -25,7 +25,13 @@ export const Header = () => {
   }
 
   // Temporary construction. For development.
-  const links = Object.entries(PATH).map(([name, path], i) => {
+  const pathCopy = { ...PATH }
+
+  //@ts-ignore
+  delete pathCopy.CARDS
+  //@ts-ignore
+  pathCopy.PACK = `${PATH.CARDS}/${PATH.PACK}`
+  const links = Object.entries(pathCopy).map(([name, path], i) => {
     name = name.replace('_', ' ').toLowerCase()
 
     return (
@@ -38,8 +44,8 @@ export const Header = () => {
   })
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" color={'inherit'}>
+    <Box>
+      <AppBar color={'inherit'}>
         <Toolbar sx={{ justifyContent: 'space-between', width: '1280px', margin: '0 auto' }}>
           <div
             onClick={() => alert('"INCUBATOR" is a best education programm')}
@@ -81,7 +87,11 @@ export const Header = () => {
       </AppBar>
 
       {/*Temporary construction. For development.*/}
-      <ul className={s.links_list}>{links}</ul>
+      <Box
+        sx={{ position: 'fixed', bottom: 25, left: 20, zIndex: 1000, backgroundColor: '#a6a3a3cf' }}
+      >
+        <ul className={s.links_list}>{links}</ul>
+      </Box>
     </Box>
   )
 }

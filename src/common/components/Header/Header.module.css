@@ -1,24 +1,24 @@
 .links_list {
-  position: fixed;
-  top: 60px;
-  left: 380px;
+  /*position: fixed;*/
+  /*top: 60px;*/
+  /*left: 380px;*/
 
   display: flex;
   gap: 15px;
   align-items: center;
   justify-content: center;
 
-  padding-top: 10px;
+  /*padding-top: 10px;*/
 
   font-size: 0.8rem;
 }
 
 .link {
-  display: inline-block;
+  /*display: inline-block;*/
 
-  padding: 5px;
+  /*padding: 5px;*/
 
-  border: 1px solid;
+  /*border: 1px solid;*/
 }
 
 .link.active {
