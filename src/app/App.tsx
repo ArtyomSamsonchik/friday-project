@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 
+import { CircularProgress } from '@mui/material'
 import { Outlet } from 'react-router-dom'
 
-import DirectionSnackbar from '../common/components/ErrorSnackbar/ErrorSnackbar'
-import CustomizedSnackbars from '../common/components/ErrorSnackbar/ErrorSnackbar'
+import { ErrorSnackbar } from '../common/components/ErrorSnackbar/ErrorSnackbar'
 import { Header } from '../common/components/Header/Header'
 import { authTC } from '../features/auth/auth-slice'
 import { useAppDispatch, useAppSelector } from '../utils/hooks'
@@ -19,13 +19,25 @@ export const App = () => {
     dispatch(authTC())
   }, [])
 
-  if (appStatus === 'loading') {
-    return <h1>Loading...</h1>
+  if (appStatus === 'init loading') {
+    return (
+      <CircularProgress
+        size={70}
+        thickness={5}
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          translate: '-50% -50%',
+          color: '#366EFF',
+        }}
+      />
+    )
   }
 
   return (
     <div className={s.app}>
-      <CustomizedSnackbars />
+      <ErrorSnackbar />
       <Header />
       <Outlet />
     </div>
