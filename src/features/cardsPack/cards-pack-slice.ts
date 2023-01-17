@@ -9,6 +9,7 @@ import {
   cardPacksApi,
   CardPackType,
   GetCardPackResponse,
+  GetCardPacksQueryParams,
   SortPacksParams,
 } from './card-packs-api'
 
@@ -91,19 +92,23 @@ export const setPersonalPacksParam = (isPersonal: boolean) => {
 export const clearPacksFilters = () => ({ type: 'CARD_PACKS/FILTERS_CLEARED' } as const)
 
 //thunks
-export const fetchCardPacksTC = (): AppThunk => async (dispatch, getState) => {
-  const requestData = getFetchCardPacksQueryParams(getState())
+export const fetchCardPacksTC =
+  (params?: GetCardPacksQueryParams): AppThunk =>
+  async (dispatch, getState) => {
+    const requestData = getFetchCardPacksQueryParams(getState())
+    const sortData = { ...requestData, ...params }
 
-  try {
-    dispatch(setAppStatus('loading'))
-    const { data } = await cardPacksApi.getPacks(requestData)
+    try {
+      dispatch(setAppStatus('loading'))
+      const { data } = await cardPacksApi.getPacks(sortData)
 
-    dispatch(setCardPacks(data))
-    dispatch(setAppStatus('success'))
-  } catch (e) {
-    handleError(e as Error, dispatch)
+      console.log(sortData)
+      dispatch(setCardPacks(data))
+      dispatch(setAppStatus('success'))
+    } catch (e) {
+      handleError(e as Error, dispatch)
+    }
   }
-}
 
 export const addCardPackTC =
   (packData: AddPackData): AppThunk =>
