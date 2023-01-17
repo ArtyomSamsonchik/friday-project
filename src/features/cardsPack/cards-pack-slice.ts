@@ -62,31 +62,33 @@ export const cardsPackSlice = (
 }
 
 //actions
-const setCardPacks = (cardPacksData: Omit<GetCardPackResponse, 'token' | 'tokenDeathTime'>) => {
+export const setCardPacks = (
+  cardPacksData: Omit<GetCardPackResponse, 'token' | 'tokenDeathTime'>
+) => {
   return { type: 'CARD_PACKS/LOADED', payload: cardPacksData } as const
 }
-const setPackSearchName = (name: string) => {
+export const setPackSearchName = (name: string) => {
   return { type: 'CARD_PACKS/SEARCH_NAME_CHANGED', payload: name } as const
 }
-const setPacksSortOrder = (orderParams: SortPacksParams) => {
+export const setPacksSortOrder = (orderParams: SortPacksParams) => {
   return { type: 'CARD_PACKS/SORT_ORDER_CHANGED', payload: orderParams } as const
 }
-const setMinCardsCount = (count: number) => {
+export const setMinCardsCount = (count: number) => {
   return { type: 'CARD_PACKS/MIN_COUNT_CHANGED', payload: count } as const
 }
-const setMaxCardsCount = (count: number) => {
+export const setMaxCardsCount = (count: number) => {
   return { type: 'CARD_PACKS/MAX_COUNT_CHANGED', payload: count } as const
 }
-const setCurrentPage = (page: number) => {
+export const setCurrentPage = (page: number) => {
   return { type: 'CARD_PACKS/PAGE_CHANGED', payload: page } as const
 }
-const setItemsPerPage = (count: number) => {
+export const setItemsPerPage = (count: number) => {
   return { type: 'CARD_PACKS/ITEMS_COUNT_PER_PAGE_CHANGED', payload: count } as const
 }
-const setPersonalPacksParam = (isPersonal: boolean) => {
+export const setPersonalPacksParam = (isPersonal: boolean) => {
   return { type: 'CARD_PACKS/PERSONAL_PACKS_PARAM_CHANGED', payload: isPersonal } as const
 }
-const clearPacksFilters = () => ({ type: 'CARD_PACKS/FILTERS_CLEARED' } as const)
+export const clearPacksFilters = () => ({ type: 'CARD_PACKS/FILTERS_CLEARED' } as const)
 
 //thunks
 export const fetchCardPacksTC = (): AppThunk => async (dispatch, getState) => {

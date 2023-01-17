@@ -27,3 +27,18 @@ export const BackLink = styled(component, { name: 'BackLink' })(({ theme }) => (
     marginBottom: theme.spacing(3.5),
   },
 }))
+
+//Test: Maybe add button-like link with ripple effect in future
+
+// const component: FC<BackLinkProps> = ({ title, ...props }) => (
+//   <Button
+//     variant="outlined"
+//     component={forwardRef<HTMLAnchorElement, AProps>(({ children, ...rest }, ref) => (
+//       <a ref={ref} {...rest}>
+//         {children}
+//       </a>
+//     ))}
+//   >
+//     sfsdsdfs
+//   </Button>
+// )
