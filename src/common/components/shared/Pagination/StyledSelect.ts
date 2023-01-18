@@ -24,16 +24,3 @@ export const StyledSelect = styled(NativeSelect)<NativeSelectProps>(({ theme }) 
     },
   },
 }))
-
-/*
-* border-bottom: 1px solid rgba(0, 0, 0, 0.42);
-    left: 0;
-    bottom: 0;
-    content: "\00a0";
-    position: absolute;
-    right: 0;
-    -webkit-transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    transition: border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    pointer-events: none;
-}
-* */

@@ -78,7 +78,6 @@ export const Test = () => {
           ))}
         </CardsContainer>
       </CustomContainer>
-      <PaginationBar />
       <h3>Super checkbox</h3>
       <div className={s.container}>
         <SuperCheckbox />

@@ -5,6 +5,12 @@ import TextField from '@mui/material/TextField'
 import { BackLink } from '../../../common/components/BackLink'
 import { CardsContainer } from '../../../common/components/CardsContainer'
 import { FilledButton } from '../../../common/components/FilledButton'
+import { PaginationBar } from '../../../common/components/shared/Pagination/PaginationBar'
+import {
+  selectCardPacksTotalCount,
+  selectCurrentPage,
+  selectItemsPerPage,
+} from '../../../selectors/cardsPackSelectors'
 import { useAppDispatch, useAppSelector, useDebounce } from '../../../utils/hooks'
 import { selectProfile } from '../../profile/profile-slice'
 import {
@@ -21,6 +27,9 @@ import { CardPack } from './cardPack/CardPack'
 export const CardPacksPage = () => {
   const packs = useAppSelector(selectAllPacks)
   const packSearchName = useAppSelector(state => state.cardPacks.packSearchName)
+  const cardPacksTotalCount = useAppSelector(selectCardPacksTotalCount)
+  const itemsPerPage = useAppSelector(selectItemsPerPage)
+  const currentPage = useAppSelector(selectCurrentPage)
   const profile = useAppSelector(selectProfile)
   const dispatch = useAppDispatch()
   const debouncedTitle = useDebounce(packSearchName)
@@ -64,6 +73,11 @@ export const CardPacksPage = () => {
           />
         ))}
       </CardsContainer>
+      <PaginationBar
+        pagesCount={cardPacksTotalCount}
+        itemsPerPage={itemsPerPage}
+        currentPage={currentPage}
+      />
     </>
   )
 }
