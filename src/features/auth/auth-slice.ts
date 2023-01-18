@@ -1,3 +1,5 @@
+import { AxiosError, HttpStatusCode } from 'axios'
+
 import { setAppStatus } from '../../app/app-slice'
 import { AppThunk } from '../../app/store'
 import { handleError } from '../../utils/handleError'
@@ -120,14 +122,18 @@ export const setNewPasswordTC =
   }
 export const authTC = (): AppThunk => async dispatch => {
   try {
-    dispatch(setAppStatus('loading'))
+    dispatch(setAppStatus('init loading'))
     const { data } = await authAPI.me()
 
     dispatch(setLoggedIn(true))
     dispatch(setProfile(data))
     dispatch(setAppStatus('success'))
   } catch (e) {
-    handleError(e as Error, dispatch)
+    //skip auth error handling at init app loading
+    let isUnauthorized = (e as AxiosError)?.response?.status === HttpStatusCode.Unauthorized
+
+    if (!isUnauthorized) handleError(e as Error, dispatch)
+    else dispatch(setAppStatus('failure'))
   }
 }
 

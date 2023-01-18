@@ -12,6 +12,7 @@ import { selectProfile } from '../../../features/profile/profile-slice'
 import { selectIsLoggedIn } from '../../../selectors/loginSelectors'
 import { getUserNameInitials } from '../../../utils/getUserNameInitials'
 import { useAppSelector } from '../../../utils/hooks'
+import { ProgressBar } from '../ProgressBar'
 
 import s from './Header.module.css'
 
@@ -46,6 +47,7 @@ export const Header = () => {
   return (
     <Box>
       <AppBar color={'inherit'}>
+        <ProgressBar />
         <Toolbar sx={{ justifyContent: 'space-between', width: '1280px', margin: '0 auto' }}>
           <div
             onClick={() => alert('"INCUBATOR" is a best education programm')}

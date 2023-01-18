@@ -9,6 +9,7 @@ import {
   cardPacksApi,
   CardPackType,
   GetCardPackResponse,
+  GetCardPacksQueryParams,
   SortPacksParams,
 } from './card-packs-api'
 
@@ -17,7 +18,7 @@ const initState = {
   packSearchName: '',
   currentPage: 1,
   itemsPerPage: 12,
-  sortPacksOrder: getSortPacksQueryParam({ order: 'asc', column: 'updated' }),
+  sortPacksOrder: getSortPacksQueryParam({ order: 'desc', column: 'updated' }),
   loadPersonalPacks: false,
   minCardsCount: 0,
   maxCardsCount: 25,
@@ -62,33 +63,53 @@ export const cardsPackSlice = (
 }
 
 //actions
-const setCardPacks = (cardPacksData: Omit<GetCardPackResponse, 'token' | 'tokenDeathTime'>) => {
+export const setCardPacks = (
+  cardPacksData: Omit<GetCardPackResponse, 'token' | 'tokenDeathTime'>
+) => {
   return { type: 'CARD_PACKS/LOADED', payload: cardPacksData } as const
 }
-const setPackSearchName = (name: string) => {
+export const setPackSearchName = (name: string) => {
   return { type: 'CARD_PACKS/SEARCH_NAME_CHANGED', payload: name } as const
 }
-const setPacksSortOrder = (orderParams: SortPacksParams) => {
+export const setPacksSortOrder = (orderParams: SortPacksParams) => {
   return { type: 'CARD_PACKS/SORT_ORDER_CHANGED', payload: orderParams } as const
 }
-const setMinCardsCount = (count: number) => {
+export const setMinCardsCount = (count: number) => {
   return { type: 'CARD_PACKS/MIN_COUNT_CHANGED', payload: count } as const
 }
-const setMaxCardsCount = (count: number) => {
+export const setMaxCardsCount = (count: number) => {
   return { type: 'CARD_PACKS/MAX_COUNT_CHANGED', payload: count } as const
 }
-const setCurrentPage = (page: number) => {
+export const setCurrentPage = (page: number) => {
   return { type: 'CARD_PACKS/PAGE_CHANGED', payload: page } as const
 }
-const setItemsPerPage = (count: number) => {
+export const setItemsPerPage = (count: number) => {
   return { type: 'CARD_PACKS/ITEMS_COUNT_PER_PAGE_CHANGED', payload: count } as const
 }
-const setPersonalPacksParam = (isPersonal: boolean) => {
+export const setPersonalPacksParam = (isPersonal: boolean) => {
   return { type: 'CARD_PACKS/PERSONAL_PACKS_PARAM_CHANGED', payload: isPersonal } as const
 }
-const clearPacksFilters = () => ({ type: 'CARD_PACKS/FILTERS_CLEARED' } as const)
+export const clearPacksFilters = () => ({ type: 'CARD_PACKS/FILTERS_CLEARED' } as const)
 
 //thunks
+export const DEPRECATED_fetchCardPacksTC =
+  (params?: GetCardPacksQueryParams): AppThunk =>
+  async (dispatch, getState) => {
+    const requestData = getFetchCardPacksQueryParams(getState())
+    const sortData = { ...requestData, ...params }
+
+    try {
+      dispatch(setAppStatus('loading'))
+      const { data } = await cardPacksApi.getPacks(sortData)
+
+      console.log(sortData)
+      dispatch(setCardPacks(data))
+      dispatch(setAppStatus('success'))
+    } catch (e) {
+      handleError(e as Error, dispatch)
+    }
+  }
+
 export const fetchCardPacksTC = (): AppThunk => async (dispatch, getState) => {
   const requestData = getFetchCardPacksQueryParams(getState())
 
@@ -109,7 +130,7 @@ export const addCardPackTC =
     try {
       dispatch(setAppStatus('loading'))
       await cardPacksApi.addPack(packData)
-      await dispatch(fetchCardPacksTC())
+      await dispatch(DEPRECATED_fetchCardPacksTC())
       dispatch(setAppStatus('success'))
     } catch (e) {
       handleError(e as Error, dispatch)
@@ -122,7 +143,7 @@ export const deleteCardPackTC =
     try {
       dispatch(setAppStatus('loading'))
       await cardPacksApi.deletePack(packId)
-      await dispatch(fetchCardPacksTC())
+      await dispatch(DEPRECATED_fetchCardPacksTC())
       dispatch(setAppStatus('success'))
     } catch (e) {
       handleError(e as Error, dispatch)
@@ -135,7 +156,7 @@ export const updateCardPackTC =
     try {
       dispatch(setAppStatus('loading'))
       await cardPacksApi.updatePack(packId, newName)
-      await dispatch(fetchCardPacksTC())
+      await dispatch(DEPRECATED_fetchCardPacksTC())
       dispatch(setAppStatus('success'))
     } catch (e) {
       handleError(e as Error, dispatch)

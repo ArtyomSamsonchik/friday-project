@@ -1,7 +1,7 @@
 import { RootStateType } from './store'
 
 const initState = {
-  status: 'loading' as RequestStatusType,
+  status: 'init loading' as AppRequestStatus,
   error: null as string | null,
 }
 
@@ -16,7 +16,7 @@ export const appSlice = (state = initState, action: GlobalAppActionsType): typeo
   }
 }
 
-export const setAppStatus = (status: RequestStatusType) =>
+export const setAppStatus = (status: AppRequestStatus) =>
   ({
     type: 'APP/SET-STATUS',
     payload: status,
@@ -29,8 +29,10 @@ export const setAppError = (error: string | null) =>
   } as const)
 
 export const selectAppStatus = (state: RootStateType) => state.app.status
+export const selectAppError = (state: RootStateType) => state.app.error
 
-export type RequestStatusType = 'idle' | 'loading' | 'success' | 'failure'
+export type RequestStatus = 'idle' | 'loading' | 'success' | 'failure'
+export type AppRequestStatus = RequestStatus | 'init loading'
 
 type SetAppStatusAT = ReturnType<typeof setAppStatus>
 type SetAppErrorAT = ReturnType<typeof setAppError>

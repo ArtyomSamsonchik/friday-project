@@ -1,13 +1,23 @@
 import * as React from 'react'
+import { useEffect } from 'react'
 
 import { Input } from '@mui/material'
 import Box from '@mui/material/Box'
 import Slider from '@mui/material/Slider'
 
+import { DEPRECATED_fetchCardPacksTC } from '../../../features/cardsPack/cards-pack-slice'
+import { useAppDispatch, useDebounce } from '../../../utils/hooks'
+
 const minDistance = 1
 
 export const MinimumDistanceSlider = () => {
-  const [value1, setValue1] = React.useState<number[]>([2, 5])
+  const [value1, setValue1] = React.useState<number[]>([0, 110])
+  const debouncedValue = useDebounce<number[]>(value1, 500)
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(DEPRECATED_fetchCardPacksTC({ min: debouncedValue[0], max: debouncedValue[1] }))
+  }, [debouncedValue])
 
   const handleChange1 = (event: Event, newValue: number | number[], activeThumb: number) => {
     if (!Array.isArray(newValue)) {
@@ -29,8 +39,8 @@ export const MinimumDistanceSlider = () => {
   const handleBlur = () => {
     if (value1[0] < 0) {
       setValue1([0, value1[1]])
-    } else if (value1[1] > 15) {
-      setValue1([value1[0], 15])
+    } else if (value1[1] > 110) {
+      setValue1([value1[0], 110])
     }
   }
 
@@ -44,7 +54,7 @@ export const MinimumDistanceSlider = () => {
         inputProps={{
           step: 1,
           min: 0,
-          max: 15,
+          max: 110,
           type: 'number',
           'aria-labelledby': 'input-slider',
         }}
@@ -52,7 +62,7 @@ export const MinimumDistanceSlider = () => {
       <Slider
         getAriaLabel={() => 'Minimum distance'}
         value={value1}
-        max={15}
+        max={110}
         onChange={handleChange1}
         valueLabelDisplay="auto"
         disableSwap
@@ -64,7 +74,7 @@ export const MinimumDistanceSlider = () => {
         inputProps={{
           step: 1,
           min: 0,
-          max: 15,
+          max: 110,
           type: 'number',
           'aria-labelledby': 'input-slider',
         }}

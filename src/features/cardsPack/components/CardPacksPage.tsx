@@ -1,28 +1,48 @@
-import React from 'react'
+import React, { ChangeEvent, useEffect } from 'react'
+
+import TextField from '@mui/material/TextField'
 
 import { BackLink } from '../../../common/components/BackLink'
 import { CardsContainer } from '../../../common/components/CardsContainer'
 import { FilledButton } from '../../../common/components/FilledButton'
-import { useAppDispatch, useAppSelector } from '../../../utils/hooks'
+import { useAppDispatch, useAppSelector, useDebounce } from '../../../utils/hooks'
 import { selectProfile } from '../../profile/profile-slice'
-import { fetchCardPacksTC, selectAllPacks } from '../cards-pack-slice'
+import {
+  addCardPackTC,
+  deleteCardPackTC,
+  fetchCardPacksTC,
+  selectAllPacks,
+  setPackSearchName,
+  updateCardPackTC,
+} from '../cards-pack-slice'
 
 import { CardPack } from './cardPack/CardPack'
 
 export const CardPacksPage = () => {
   const packs = useAppSelector(selectAllPacks)
+  const packSearchName = useAppSelector(state => state.cardPacks.packSearchName)
   const profile = useAppSelector(selectProfile)
   const dispatch = useAppDispatch()
+  const debouncedTitle = useDebounce(packSearchName)
 
-  const handleLoadPacks = () => {
+  useEffect(() => {
     dispatch(fetchCardPacksTC())
+  }, [debouncedTitle])
+
+  const handleLoadPacksClick = (name: string) => {
+    dispatch(addCardPackTC({ name }))
+  }
+
+  const handleSearchNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    dispatch(setPackSearchName(e.currentTarget.value))
   }
 
   return (
     <>
       {/*Toolbar with search, range slider, personal cards' toggle switch, filter reset etc*/}
       <BackLink title="test link to profile" to="/profile" />
-      <FilledButton onClick={handleLoadPacks}>load card packs</FilledButton>
+      <TextField value={packSearchName} onChange={handleSearchNameChange} />
+      <FilledButton onClick={() => handleLoadPacksClick('New pack')}>add card pack</FilledButton>
       <CardsContainer>
         {packs.map(p => (
           <CardPack
@@ -36,10 +56,10 @@ export const CardPacksPage = () => {
               alert('opened pack')
             }}
             deleteCardPack={() => {
-              alert('deleted pack')
+              dispatch(deleteCardPackTC(p._id))
             }}
             editCardPack={() => {
-              alert('edited pack')
+              dispatch(updateCardPackTC(p._id, 'Updated pack'))
             }}
           />
         ))}
