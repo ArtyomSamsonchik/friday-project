@@ -17,7 +17,7 @@ const initState = {
   packSearchName: '',
   currentPage: 1,
   itemsPerPage: 12,
-  sortPacksOrder: getSortPacksQueryParam({ order: 'asc', column: 'updated' }),
+  sortPacksOrder: getSortPacksQueryParam({ order: 'desc', column: 'updated' }),
   loadPersonalPacks: false,
   minCardsCount: 0,
   maxCardsCount: 25,
