@@ -74,14 +74,14 @@ export type GetCardPackResponse = {
   maxCardsCount: number
   page: number
   pageCount: number
-} & CardPackResponse
+} & ResponseTokenData
 
-type AddCardPackResponse = { newCardsPack: CardPackType } & CardPackResponse
+type AddCardPackResponse = { newCardsPack: CardPackType } & ResponseTokenData
 
-type DeleteCardPackResponse = { deletedCardsPack: CardPackType } & CardPackResponse
-type UpdateCardPackResponse = { updatedCardsPack: CardPackType } & CardPackResponse
+type DeleteCardPackResponse = { deletedCardsPack: CardPackType } & ResponseTokenData
+type UpdateCardPackResponse = { updatedCardsPack: CardPackType } & ResponseTokenData
 
-type CardPackResponse = {
+export type ResponseTokenData = {
   token: string
   tokenDeathTime: number
 }
