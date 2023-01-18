@@ -43,14 +43,14 @@ export const Test = memo(() => {
     dispatch(DEPRECATED_fetchCardPacksTC(currentParams))
   }
   /*const myOrAllPacks = (belongsPacks: string) => {
-                                  if (belongsPacks === 'my') {
-                                    setIsMyPack(true)
-                                    sort({ user_id: profile._id, min: value1[0], max: value1[1] })
-                                  } else {
-                                    setIsMyPack(false)
-                                    sort({ min: value1[0], max: value1[1] })
-                                  }
-                                }*/
+                                      if (belongsPacks === 'my') {
+                                        setIsMyPack(true)
+                                        sort({ user_id: profile._id, min: value1[0], max: value1[1] })
+                                      } else {
+                                        setIsMyPack(false)
+                                        sort({ min: value1[0], max: value1[1] })
+                                      }
+                                    }*/
 
   return (
     <div className={commonS.demo}>
