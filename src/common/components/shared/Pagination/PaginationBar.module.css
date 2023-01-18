@@ -1,0 +1,8 @@
+.paginationBarContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: auto;
+    margin-top: 10px;
+}

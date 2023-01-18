@@ -8,6 +8,7 @@ import commonS from '../../styles/common.module.css'
 import { CardsContainer } from '../CardsContainer'
 import { CustomContainer } from '../CustomContainer'
 import { OutlinedButton } from '../shared/OutlinedButton'
+import { PaginationBar } from '../shared/Pagination/PaginationBar'
 import { SuperButton } from '../shared/SuperButton/SuperButton'
 import { SuperCheckbox } from '../shared/SuperCheckbox/SuperCheckbox'
 import { SuperInputText } from '../shared/SuperInputText/SuperInputText'
@@ -74,6 +75,7 @@ export const Test = () => {
           ))}
         </CardsContainer>
       </CustomContainer>
+      <PaginationBar />
       <h3>Super checkbox</h3>
       <div className={s.container}>
         <SuperCheckbox />
