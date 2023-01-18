@@ -7,7 +7,14 @@ import { CardsContainer } from '../../../common/components/CardsContainer'
 import { FilledButton } from '../../../common/components/FilledButton'
 import { useAppDispatch, useAppSelector, useDebounce } from '../../../utils/hooks'
 import { selectProfile } from '../../profile/profile-slice'
-import { fetchCardPacksTC, selectAllPacks, setPackSearchName } from '../cards-pack-slice'
+import {
+  addCardPackTC,
+  deleteCardPackTC,
+  fetchCardPacksTC,
+  selectAllPacks,
+  setPackSearchName,
+  updateCardPackTC,
+} from '../cards-pack-slice'
 
 import { CardPack } from './cardPack/CardPack'
 
@@ -22,8 +29,8 @@ export const CardPacksPage = () => {
     dispatch(fetchCardPacksTC())
   }, [debouncedTitle])
 
-  const handleLoadPacksClick = () => {
-    dispatch(fetchCardPacksTC())
+  const handleLoadPacksClick = (name: string) => {
+    dispatch(addCardPackTC({ name }))
   }
 
   const handleSearchNameChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +42,7 @@ export const CardPacksPage = () => {
       {/*Toolbar with search, range slider, personal cards' toggle switch, filter reset etc*/}
       <BackLink title="test link to profile" to="/profile" />
       <TextField value={packSearchName} onChange={handleSearchNameChange} />
-      <FilledButton onClick={handleLoadPacksClick}>load card packs</FilledButton>
+      <FilledButton onClick={() => handleLoadPacksClick('New pack')}>add card pack</FilledButton>
       <CardsContainer>
         {packs.map(p => (
           <CardPack
@@ -49,10 +56,10 @@ export const CardPacksPage = () => {
               alert('opened pack')
             }}
             deleteCardPack={() => {
-              alert('deleted pack')
+              dispatch(deleteCardPackTC(p._id))
             }}
             editCardPack={() => {
-              alert('edited pack')
+              dispatch(updateCardPackTC(p._id, 'Updated pack'))
             }}
           />
         ))}
