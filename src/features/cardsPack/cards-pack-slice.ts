@@ -57,12 +57,21 @@ export const cardsPackSlice = (
 
       return { ...state, ...initStateCopy }
     }
+    case 'CARD_PACK/GET_MY_PACKS':
+      return {
+        ...state,
+        cardPacks: state.cardPacks.filter(packs => packs.user_id === action.payload),
+      }
+
     default:
       return state
   }
 }
 
 //actions
+export const getMyPacks = (userId: string) => {
+  return { type: 'CARD_PACK/GET_MY_PACKS', payload: userId } as const
+}
 export const setCardPacks = (
   cardPacksData: Omit<GetCardPackResponse, 'token' | 'tokenDeathTime'>
 ) => {
@@ -181,6 +190,7 @@ type setCurrentPageAT = ReturnType<typeof setCurrentPage>
 type setItemsPerPageAT = ReturnType<typeof setItemsPerPage>
 type setPersonalPacksParamAT = ReturnType<typeof setPersonalPacksParam>
 type clearPacksFiltersAT = ReturnType<typeof clearPacksFilters>
+type getMyPacksAT = ReturnType<typeof getMyPacks>
 
 export type CardsPackSliceActionsType =
   | SetCardsPacksAT
@@ -192,6 +202,7 @@ export type CardsPackSliceActionsType =
   | setItemsPerPageAT
   | setPersonalPacksParamAT
   | clearPacksFiltersAT
+  | getMyPacksAT
 
 // TODO: add app status processing via dispatching in every thunk
 // TODO: think about useless types from API response

@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 
+import { GetCardPacksQueryParams } from '../../../features/cardsPack/card-packs-api'
 import {
   DEPRECATED_fetchCardPacksTC,
   selectAllPacks,
@@ -20,12 +21,36 @@ import { MinimumDistanceSlider } from '../Slider/Slider'
 
 import s from './Test.module.css'
 
-export const Test = () => {
+export const Test = memo(() => {
   const options = ['x', 'y', 'z']
   const [selected, setSelected] = useState(options[1])
   const cards = useAppSelector(selectAllPacks)
   const profile = useAppSelector(selectProfile)
   const dispatch = useAppDispatch()
+  const [isMyPack, setIsMyPack] = useState(false)
+  const [showNew, setShowNew] = useState(true)
+  const [value1, setValue1] = useState<number[]>([0, 110])
+
+  const currentParams: GetCardPacksQueryParams = {
+    min: value1[0],
+    max: value1[1],
+    sortPacks: showNew ? '0updated' : '1updated',
+    user_id: isMyPack ? profile._id : '',
+  }
+
+  console.log(currentParams)
+  const sort = () => {
+    dispatch(DEPRECATED_fetchCardPacksTC(currentParams))
+  }
+  /*const myOrAllPacks = (belongsPacks: string) => {
+                                  if (belongsPacks === 'my') {
+                                    setIsMyPack(true)
+                                    sort({ user_id: profile._id, min: value1[0], max: value1[1] })
+                                  } else {
+                                    setIsMyPack(false)
+                                    sort({ min: value1[0], max: value1[1] })
+                                  }
+                                }*/
 
   return (
     <div className={commonS.demo}>
@@ -37,6 +62,30 @@ export const Test = () => {
         <SuperButton disabled>disabled</SuperButton>
         <OutlinedButton>button</OutlinedButton>
       </div>
+      <div>
+        <SuperButton
+          style={isMyPack ? { backgroundColor: 'blue' } : { backgroundColor: 'white' }}
+          onClick={() => setIsMyPack(true)}
+        >
+          my
+        </SuperButton>
+        <SuperButton
+          style={isMyPack ? { backgroundColor: 'white' } : { backgroundColor: 'blue' }}
+          onClick={() => setIsMyPack(false)}
+        >
+          all
+        </SuperButton>
+      </div>
+      <SuperButton style={{ backgroundColor: 'blue' }} onClick={() => setShowNew(!showNew)}>
+        {showNew ? 'show old' : 'show new'}
+      </SuperButton>
+      <MinimumDistanceSlider
+        sort={sort}
+        isMyPack={isMyPack}
+        value1={value1}
+        setValue1={setValue1}
+        showNew={showNew}
+      />
       <h3>Cards</h3>
       <CustomContainer>
         <CardsContainer>
@@ -95,7 +144,6 @@ export const Test = () => {
       <div className={s.container}>
         <SuperInputText placeholder="Input some text" />
       </div>
-      <MinimumDistanceSlider />
     </div>
   )
-}
+})
