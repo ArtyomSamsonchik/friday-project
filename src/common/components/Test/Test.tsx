@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 
-import { fetchCardPacksTC, selectAllPacks } from '../../../features/cardsPack/cards-pack-slice'
+import {
+  DEPRECATED_fetchCardPacksTC,
+  selectAllPacks,
+} from '../../../features/cardsPack/cards-pack-slice'
 import { CardPack } from '../../../features/cardsPack/components/cardPack/CardPack'
 import { selectProfile } from '../../../features/profile/profile-slice'
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks'
@@ -29,7 +32,7 @@ export const Test = () => {
       <h1>Super components demo</h1>
       <h3>Super button</h3>
       <div className={s.container}>
-        <SuperButton onClick={() => dispatch(fetchCardPacksTC())}>button</SuperButton>
+        <SuperButton onClick={() => dispatch(DEPRECATED_fetchCardPacksTC())}>button</SuperButton>
         <SuperButton red>red button</SuperButton>
         <SuperButton disabled>disabled</SuperButton>
         <OutlinedButton>button</OutlinedButton>

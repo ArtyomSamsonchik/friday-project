@@ -5,7 +5,7 @@ import { Input } from '@mui/material'
 import Box from '@mui/material/Box'
 import Slider from '@mui/material/Slider'
 
-import { fetchCardPacksTC } from '../../../features/cardsPack/cards-pack-slice'
+import { DEPRECATED_fetchCardPacksTC } from '../../../features/cardsPack/cards-pack-slice'
 import { useAppDispatch, useDebounce } from '../../../utils/hooks'
 
 const minDistance = 1
@@ -16,7 +16,7 @@ export const MinimumDistanceSlider = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(fetchCardPacksTC({ min: debouncedValue[0], max: debouncedValue[1] }))
+    dispatch(DEPRECATED_fetchCardPacksTC({ min: debouncedValue[0], max: debouncedValue[1] }))
   }, [debouncedValue])
 
   const handleChange1 = (event: Event, newValue: number | number[], activeThumb: number) => {
