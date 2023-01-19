@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react'
+import React, { FC, memo, MouseEventHandler } from 'react'
 
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
@@ -19,9 +19,9 @@ type CardPackProps = {
   creator: string
   isMyPack: boolean
   imageSrc?: string
-  openCardPack?: () => void
-  editCardPack?: () => void
-  deleteCardPack?: () => void
+  openCardPack?: MouseEventHandler<HTMLButtonElement>
+  editCardPack?: MouseEventHandler<HTMLButtonElement>
+  deleteCardPack?: MouseEventHandler<HTMLButtonElement>
 }
 
 //image src placeholder
@@ -44,7 +44,7 @@ export const CardPack: FC<CardPackProps> = memo(props => {
     <CustomCard sx={{ minHeight: '200px' }}>
       <CardMedia sx={{ height: 150, backgroundSize: 'cover' }} image={imageSrc || globalImageSrc} />
       <ActionButtonsContainer sx={{ position: 'absolute', top: '12px', right: '12px' }}>
-        <ActonIconButton onClick={openCardPack} title="open pack">
+        <ActonIconButton disabled={totalCards === 0} onClick={openCardPack} title="open pack">
           <TeacherSVG />
         </ActonIconButton>
         <ActonIconButton isHidden={!isMyPack} onClick={editCardPack} title="edit pack">

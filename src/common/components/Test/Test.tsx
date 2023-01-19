@@ -1,5 +1,6 @@
 import React, { memo, useState } from 'react'
 
+import { QuestionCard } from '../../../features/cards/components/QuestionCard'
 import { GetCardPacksQueryParams } from '../../../features/cardsPack/card-packs-api'
 import {
   DEPRECATED_fetchCardPacksTC,
@@ -12,7 +13,6 @@ import commonS from '../../styles/common.module.css'
 import { CardsContainer } from '../CardsContainer'
 import { CustomContainer } from '../CustomContainer'
 import { OutlinedButton } from '../shared/OutlinedButton'
-import { PaginationBar } from '../shared/Pagination/PaginationBar'
 import { SuperButton } from '../shared/SuperButton/SuperButton'
 import { SuperCheckbox } from '../shared/SuperCheckbox/SuperCheckbox'
 import { SuperInputText } from '../shared/SuperInputText/SuperInputText'
@@ -104,6 +104,15 @@ export const Test = memo(() => {
             editCardPack={() => {
               alert('edited pack')
             }}
+          />
+          <QuestionCard
+            question={'Lorem ipsum dolor sit amet'}
+            answer={'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'}
+            isMyCard={true}
+            lastUpdated="19.01.2023"
+            rating={2.7}
+            editCard={() => alert('card edited')}
+            deleteCard={() => alert('card deleted')}
           />
           {cards.map(c => (
             <CardPack

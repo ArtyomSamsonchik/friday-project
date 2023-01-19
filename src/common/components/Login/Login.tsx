@@ -38,8 +38,8 @@ export const Login = () => {
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
   const formik = useFormik({
     initialValues: {
-      email: 'platonoff9168@gmail.com',
-      password: 'hellokitty',
+      email: '',
+      password: '',
       rememberMe: false,
     },
     validationSchema: loginFormValidationSchema,
