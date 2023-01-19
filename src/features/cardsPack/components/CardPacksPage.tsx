@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect } from 'react'
+import React, { ChangeEvent, useCallback, useEffect } from 'react'
 
 import TextField from '@mui/material/TextField'
 
@@ -18,6 +18,8 @@ import {
   deleteCardPackTC,
   fetchCardPacksTC,
   selectAllPacks,
+  setCurrentPage,
+  setItemsPerPage,
   setPackSearchName,
   updateCardPackTC,
 } from '../cards-pack-slice'
@@ -31,12 +33,13 @@ export const CardPacksPage = () => {
   const itemsPerPage = useAppSelector(selectItemsPerPage)
   const currentPage = useAppSelector(selectCurrentPage)
   const profile = useAppSelector(selectProfile)
+
   const dispatch = useAppDispatch()
   const debouncedTitle = useDebounce(packSearchName)
 
   useEffect(() => {
     dispatch(fetchCardPacksTC())
-  }, [debouncedTitle])
+  }, [debouncedTitle, itemsPerPage, currentPage])
 
   const handleLoadPacksClick = (name: string) => {
     dispatch(addCardPackTC({ name }))
@@ -45,6 +48,20 @@ export const CardPacksPage = () => {
   const handleSearchNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(setPackSearchName(e.currentTarget.value))
   }
+
+  const changePageHandler = useCallback(
+    (event: ChangeEvent<unknown>, page: number) => {
+      dispatch(setCurrentPage(page))
+    },
+    [dispatch]
+  )
+
+  const changeItemsPerPageHandler = useCallback(
+    (event: ChangeEvent<HTMLSelectElement>) => {
+      dispatch(setItemsPerPage(+event.target.value))
+    },
+    [dispatch]
+  )
 
   return (
     <>
@@ -74,9 +91,10 @@ export const CardPacksPage = () => {
         ))}
       </CardsContainer>
       <PaginationBar
-        pagesCount={cardPacksTotalCount}
+        pagesCount={Math.ceil(cardPacksTotalCount / itemsPerPage)}
         itemsPerPage={itemsPerPage}
-        currentPage={currentPage}
+        onPageChange={changePageHandler}
+        onItemsCountChange={changeItemsPerPageHandler}
       />
     </>
   )

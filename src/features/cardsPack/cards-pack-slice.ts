@@ -139,7 +139,7 @@ export const addCardPackTC =
     try {
       dispatch(setAppStatus('loading'))
       await cardPacksApi.addPack(packData)
-      await dispatch(DEPRECATED_fetchCardPacksTC())
+      await dispatch(fetchCardPacksTC())
       dispatch(setAppStatus('success'))
     } catch (e) {
       handleError(e as Error, dispatch)
@@ -152,7 +152,7 @@ export const deleteCardPackTC =
     try {
       dispatch(setAppStatus('loading'))
       await cardPacksApi.deletePack(packId)
-      await dispatch(DEPRECATED_fetchCardPacksTC())
+      await dispatch(fetchCardPacksTC())
       dispatch(setAppStatus('success'))
     } catch (e) {
       handleError(e as Error, dispatch)
@@ -165,7 +165,7 @@ export const updateCardPackTC =
     try {
       dispatch(setAppStatus('loading'))
       await cardPacksApi.updatePack(packId, newName)
-      await dispatch(DEPRECATED_fetchCardPacksTC())
+      await dispatch(fetchCardPacksTC())
       dispatch(setAppStatus('success'))
     } catch (e) {
       handleError(e as Error, dispatch)
