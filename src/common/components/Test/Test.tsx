@@ -35,6 +35,7 @@ export const Test = memo(() => {
   const currentParams: GetCardPacksQueryParams = {
     min: value1[0],
     max: value1[1],
+
     sortPacks: showNew ? '0updated' : '1updated',
     user_id: isMyPack ? profile._id : '',
   }
@@ -43,14 +44,14 @@ export const Test = memo(() => {
     dispatch(DEPRECATED_fetchCardPacksTC(currentParams))
   }
   /*const myOrAllPacks = (belongsPacks: string) => {
-                                        if (belongsPacks === 'my') {
-                                          setIsMyPack(true)
-                                          sort({ user_id: profile._id, min: value1[0], max: value1[1] })
-                                        } else {
-                                          setIsMyPack(false)
-                                          sort({ min: value1[0], max: value1[1] })
-                                        }
-                                      }*/
+                                          if (belongsPacks === 'my') {
+                                            setIsMyPack(true)
+                                            sort({ user_id: profile._id, min: value1[0], max: value1[1] })
+                                          } else {
+                                            setIsMyPack(false)
+                                            sort({ min: value1[0], max: value1[1] })
+                                          }
+                                        }*/
 
   return (
     <div className={commonS.demo}>
@@ -79,13 +80,13 @@ export const Test = memo(() => {
       <SuperButton style={{ backgroundColor: 'blue' }} onClick={() => setShowNew(!showNew)}>
         {showNew ? 'show old' : 'show new'}
       </SuperButton>
-      <MinimumDistanceSlider
+      {/*   <MinimumDistanceSlider
         sort={sort}
         isMyPack={isMyPack}
         value1={value1}
         setValue1={setValue1}
         showNew={showNew}
-      />
+      />*/}
       <h3>Cards</h3>
       <CustomContainer>
         <CardsContainer>

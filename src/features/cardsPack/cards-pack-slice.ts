@@ -21,8 +21,9 @@ const initState = {
   sortPacksOrder: getSortPacksQueryParam({ order: 'desc', column: 'updated' }),
   loadPersonalPacks: false,
   minCardsCount: 0,
-  maxCardsCount: 25,
+  maxCardsCount: 110,
   cardPacksTotalCount: 0,
+  sliderMinMAxValues: [0, 110],
 }
 
 export const cardsPackSlice = (
@@ -40,9 +41,9 @@ export const cardsPackSlice = (
     case 'CARD_PACKS/SORT_ORDER_CHANGED':
       return { ...state, sortPacksOrder: getSortPacksQueryParam(action.payload) }
     case 'CARD_PACKS/MIN_COUNT_CHANGED':
-      return { ...state, minCardsCount: action.payload }
-    case 'CARD_PACKS/MAX_COUNT_CHANGED':
-      return { ...state, maxCardsCount: action.payload }
+      return { ...state, minCardsCount: action.payload[0], maxCardsCount: action.payload[1] }
+    /* case 'CARD_PACKS/MAX_COUNT_CHANGED':
+                                                                                                                                         return { ...state, maxCardsCount: action.payload }*/
     case 'CARD_PACKS/PAGE_CHANGED':
       return { ...state, currentPage: action.payload }
     case 'CARD_PACKS/ITEMS_COUNT_PER_PAGE_CHANGED':
@@ -62,7 +63,9 @@ export const cardsPackSlice = (
         ...state,
         cardPacks: state.cardPacks.filter(packs => packs.user_id === action.payload),
       }
-
+    case 'CARD_PACK/GET_SLIDER_MIN_MAX_VALUES': {
+      return { ...state, sliderMinMAxValues: action.values }
+    }
     default:
       return state
   }
@@ -83,11 +86,11 @@ export const setPackSearchName = (name: string) => {
 export const setPacksSortOrder = (orderParams: SortPacksParams) => {
   return { type: 'CARD_PACKS/SORT_ORDER_CHANGED', payload: orderParams } as const
 }
-export const setMinCardsCount = (count: number) => {
+export const setMinMaxCardsCount = (count: number[]) => {
   return { type: 'CARD_PACKS/MIN_COUNT_CHANGED', payload: count } as const
 }
-export const setMaxCardsCount = (count: number) => {
-  return { type: 'CARD_PACKS/MAX_COUNT_CHANGED', payload: count } as const
+export const getSliderMinMaxValues = (values: number[]) => {
+  return { type: 'CARD_PACK/GET_SLIDER_MIN_MAX_VALUES', values } as const
 }
 export const setCurrentPage = (page: number) => {
   return { type: 'CARD_PACKS/PAGE_CHANGED', payload: page } as const
@@ -111,7 +114,6 @@ export const DEPRECATED_fetchCardPacksTC =
       dispatch(setAppStatus('loading'))
       const { data } = await cardPacksApi.getPacks(sortData)
 
-      console.log(sortData)
       dispatch(setCardPacks(data))
       dispatch(setAppStatus('success'))
     } catch (e) {
@@ -127,6 +129,7 @@ export const fetchCardPacksTC = (): AppThunk => async (dispatch, getState) => {
     const { data } = await cardPacksApi.getPacks(requestData)
 
     dispatch(setCardPacks(data))
+    dispatch(getSliderMinMaxValues([data.minCardsCount, data.maxCardsCount]))
     dispatch(setAppStatus('success'))
   } catch (e) {
     handleError(e as Error, dispatch)
@@ -184,25 +187,25 @@ export const selectCardPack = (state: RootStateType, id: string) => {
 type SetCardsPacksAT = ReturnType<typeof setCardPacks>
 type setPackNameAT = ReturnType<typeof setPackSearchName>
 type setPacksSortOrderAT = ReturnType<typeof setPacksSortOrder>
-type setMinCardsCountAT = ReturnType<typeof setMinCardsCount>
-type setMaxCardsCountAT = ReturnType<typeof setMaxCardsCount>
+type setMinMaxCardsCountAT = ReturnType<typeof setMinMaxCardsCount>
 type setCurrentPageAT = ReturnType<typeof setCurrentPage>
 type setItemsPerPageAT = ReturnType<typeof setItemsPerPage>
 type setPersonalPacksParamAT = ReturnType<typeof setPersonalPacksParam>
 type clearPacksFiltersAT = ReturnType<typeof clearPacksFilters>
 type getMyPacksAT = ReturnType<typeof getMyPacks>
+type getSliderMinMaxValuesAT = ReturnType<typeof getSliderMinMaxValues>
 
 export type CardsPackSliceActionsType =
   | SetCardsPacksAT
   | setPackNameAT
   | setPacksSortOrderAT
-  | setMinCardsCountAT
-  | setMaxCardsCountAT
+  | setMinMaxCardsCountAT
   | setCurrentPageAT
   | setItemsPerPageAT
   | setPersonalPacksParamAT
   | clearPacksFiltersAT
   | getMyPacksAT
+  | getSliderMinMaxValuesAT
 
 // TODO: add app status processing via dispatching in every thunk
 // TODO: think about useless types from API response

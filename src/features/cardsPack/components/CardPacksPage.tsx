@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useEffect } from 'react'
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react'
 
 import TextField from '@mui/material/TextField'
 
@@ -6,6 +6,8 @@ import { BackLink } from '../../../common/components/BackLink'
 import { CardsContainer } from '../../../common/components/CardsContainer'
 import { FilledButton } from '../../../common/components/FilledButton'
 import { PaginationBar } from '../../../common/components/shared/Pagination/PaginationBar'
+import { SuperButton } from '../../../common/components/shared/SuperButton/SuperButton'
+import { MinimumDistanceSlider } from '../../../common/components/Slider/Slider'
 import {
   selectCardPacksTotalCount,
   selectCurrentPage,
@@ -20,7 +22,9 @@ import {
   selectAllPacks,
   setCurrentPage,
   setItemsPerPage,
+  setMinMaxCardsCount,
   setPackSearchName,
+  setPersonalPacksParam,
   updateCardPackTC,
 } from '../cards-pack-slice'
 
@@ -37,9 +41,16 @@ export const CardPacksPage = () => {
   const dispatch = useAppDispatch()
   const debouncedTitle = useDebounce(packSearchName)
 
+  const minMaxSliderRange = useAppSelector(state => state.cardPacks.sliderMinMAxValues)
+  const sliderCurrensMAX = useAppSelector(state => state.cardPacks.maxCardsCount)
+  const sliderCurrentMIN = useAppSelector(state => state.cardPacks.minCardsCount)
+  const isMyPack = useAppSelector(state => state.cardPacks.loadPersonalPacks)
+  const sliderCurrent = [sliderCurrentMIN, sliderCurrensMAX]
+  const debouncedSliderCurrentValues = useDebounce(JSON.stringify(sliderCurrent))
+
   useEffect(() => {
     dispatch(fetchCardPacksTC())
-  }, [debouncedTitle, itemsPerPage, currentPage])
+  }, [debouncedTitle, itemsPerPage, currentPage, isMyPack, debouncedSliderCurrentValues])
 
   const handleLoadPacksClick = (name: string) => {
     dispatch(addCardPackTC({ name }))
@@ -69,6 +80,11 @@ export const CardPacksPage = () => {
       <BackLink title="test link to profile" to="/profile" />
       <TextField value={packSearchName} onChange={handleSearchNameChange} />
       <FilledButton onClick={() => handleLoadPacksClick('New pack')}>add card pack</FilledButton>
+      <MinimumDistanceSlider minMaxSliderRange={minMaxSliderRange} sliderCurrent={sliderCurrent} />
+      <div>
+        <SuperButton onClick={() => dispatch(setPersonalPacksParam(true))}>my</SuperButton>
+        <SuperButton onClick={() => dispatch(setPersonalPacksParam(false))}>all</SuperButton>
+      </div>
       <CardsContainer>
         {packs.map(p => (
           <CardPack
