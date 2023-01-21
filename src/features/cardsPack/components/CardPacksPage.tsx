@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useEffect } from 'react'
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react'
 
 import TextField from '@mui/material/TextField'
 
@@ -7,7 +7,10 @@ import { CardsContainer } from '../../../common/components/CardsContainer'
 import { FilledButton } from '../../../common/components/FilledButton'
 import { PaginationBar } from '../../../common/components/shared/Pagination/PaginationBar'
 import { SuperButton } from '../../../common/components/shared/SuperButton/SuperButton'
+import { SuperSelect } from '../../../common/components/shared/SuperSelect/SuperSelect'
 import { MinimumDistanceSlider } from '../../../common/components/Slider/Slider'
+import { SortPacks } from '../../../common/components/SortPacks/SortPacks'
+import s from '../../../common/components/Test/Test.module.css'
 import {
   selectCardPacksTotalCount,
   selectCurrentPage,
@@ -15,6 +18,7 @@ import {
 } from '../../../selectors/cardsPackSelectors'
 import { useAppDispatch, useAppSelector, useDebounce } from '../../../utils/hooks'
 import { selectProfile } from '../../profile/profile-slice'
+import { SortPacksParams } from '../card-packs-api'
 import {
   addCardPackTC,
   deleteCardPackTC,
@@ -23,6 +27,7 @@ import {
   setCurrentPage,
   setItemsPerPage,
   setPackSearchName,
+  setPacksSortOrder,
   setPersonalPacksParam,
   updateCardPackTC,
 } from '../cards-pack-slice'
@@ -39,17 +44,26 @@ export const CardPacksPage = () => {
 
   const dispatch = useAppDispatch()
   const debouncedTitle = useDebounce(packSearchName)
-
+  const sortPackOrder = useAppSelector(state => state.cardPacks.sortPacksOrder)
   const minMaxSliderRange = useAppSelector(state => state.cardPacks.sliderMinMAxValues)
   const sliderCurrentMAX = useAppSelector(state => state.cardPacks.maxCardsCount)
   const sliderCurrentMIN = useAppSelector(state => state.cardPacks.minCardsCount)
   const isMyPack = useAppSelector(state => state.cardPacks.loadPersonalPacks)
   const sliderCurrent = [sliderCurrentMIN, sliderCurrentMAX]
   const debouncedSliderCurrentValues = useDebounce(JSON.stringify(sliderCurrent))
+  const [showSort, setShowSort] = useState(false)
 
+  console.log(sortPackOrder)
   useEffect(() => {
     dispatch(fetchCardPacksTC())
-  }, [debouncedTitle, itemsPerPage, currentPage, isMyPack, debouncedSliderCurrentValues])
+  }, [
+    debouncedTitle,
+    itemsPerPage,
+    currentPage,
+    isMyPack,
+    debouncedSliderCurrentValues,
+    sortPackOrder,
+  ])
 
   const handleLoadPacksClick = (name: string) => {
     dispatch(addCardPackTC({ name }))
@@ -81,9 +95,24 @@ export const CardPacksPage = () => {
       <FilledButton onClick={() => handleLoadPacksClick('New pack')}>add card pack</FilledButton>
       <MinimumDistanceSlider minMaxSliderRange={minMaxSliderRange} sliderCurrent={sliderCurrent} />
       <div>
-        <SuperButton onClick={() => dispatch(setPersonalPacksParam(true))}>my</SuperButton>
-        <SuperButton onClick={() => dispatch(setPersonalPacksParam(false))}>all</SuperButton>
+        <SuperButton
+          style={isMyPack ? { backgroundColor: 'blue' } : { backgroundColor: 'white' }}
+          onClick={() => dispatch(setPersonalPacksParam(true))}
+        >
+          my
+        </SuperButton>
+        <SuperButton
+          style={isMyPack ? { backgroundColor: 'white' } : { backgroundColor: 'blue' }}
+          onClick={() => dispatch(setPersonalPacksParam(false))}
+        >
+          all
+        </SuperButton>
       </div>
+      <div style={{ textAlign: 'center' }} onClick={() => setShowSort(!showSort)}>
+        <h3>sort params</h3>
+      </div>
+      {showSort && <SortPacks sortPackOrder={sortPackOrder} />}
+
       <CardsContainer>
         {packs.map(p => (
           <CardPack

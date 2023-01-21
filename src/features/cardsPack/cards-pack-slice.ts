@@ -43,7 +43,7 @@ export const cardsPackSlice = (
     case 'CARD_PACKS/MIN_COUNT_CHANGED':
       return { ...state, minCardsCount: action.payload[0], maxCardsCount: action.payload[1] }
     /* case 'CARD_PACKS/MAX_COUNT_CHANGED':
-                                                                                                                                         return { ...state, maxCardsCount: action.payload }*/
+                                                                                                                                           return { ...state, maxCardsCount: action.payload }*/
     case 'CARD_PACKS/PAGE_CHANGED':
       return { ...state, currentPage: action.payload }
     case 'CARD_PACKS/ITEMS_COUNT_PER_PAGE_CHANGED':
@@ -129,6 +129,7 @@ export const fetchCardPacksTC = (): AppThunk => async (dispatch, getState) => {
     const { data } = await cardPacksApi.getPacks(requestData)
 
     dispatch(setCardPacks(data))
+
     dispatch(getSliderMinMaxValues([data.minCardsCount, data.maxCardsCount]))
     dispatch(setAppStatus('success'))
   } catch (e) {
