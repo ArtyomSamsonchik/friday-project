@@ -7,10 +7,8 @@ import { CardsContainer } from '../../../common/components/CardsContainer'
 import { FilledButton } from '../../../common/components/FilledButton'
 import { PaginationBar } from '../../../common/components/shared/Pagination/PaginationBar'
 import { SuperButton } from '../../../common/components/shared/SuperButton/SuperButton'
-import { SuperSelect } from '../../../common/components/shared/SuperSelect/SuperSelect'
 import { MinimumDistanceSlider } from '../../../common/components/Slider/Slider'
 import { SortPacks } from '../../../common/components/SortPacks/SortPacks'
-import s from '../../../common/components/Test/Test.module.css'
 import {
   selectCardPacksTotalCount,
   selectCurrentPage,
@@ -18,16 +16,14 @@ import {
 } from '../../../selectors/cardsPackSelectors'
 import { useAppDispatch, useAppSelector, useDebounce } from '../../../utils/hooks'
 import { selectProfile } from '../../profile/profile-slice'
-import { SortPacksParams } from '../card-packs-api'
 import {
   addCardPackTC,
   deleteCardPackTC,
-  fetchCardPacksTC,
+  DEPRECATED_fetchCardPacksTC,
   selectAllPacks,
   setCurrentPage,
   setItemsPerPage,
   setPackSearchName,
-  setPacksSortOrder,
   setPersonalPacksParam,
   updateCardPackTC,
 } from '../cards-pack-slice'
@@ -45,23 +41,32 @@ export const CardPacksPage = () => {
   const dispatch = useAppDispatch()
   const debouncedTitle = useDebounce(packSearchName)
   const sortPackOrder = useAppSelector(state => state.cardPacks.sortPacksOrder)
-  const minMaxSliderRange = useAppSelector(state => state.cardPacks.sliderMinMAxValues)
-  const sliderCurrentMAX = useAppSelector(state => state.cardPacks.maxCardsCount)
-  const sliderCurrentMIN = useAppSelector(state => state.cardPacks.minCardsCount)
-  const isMyPack = useAppSelector(state => state.cardPacks.loadPersonalPacks)
-  const sliderCurrent = [sliderCurrentMIN, sliderCurrentMAX]
-  const debouncedSliderCurrentValues = useDebounce(JSON.stringify(sliderCurrent))
   const [showSort, setShowSort] = useState(false)
+  const isMyPack = useAppSelector(state => state.cardPacks.loadPersonalPacks)
+
+  const sliderMIN = useAppSelector(state => state.cardPacks.minCardsCount)
+  const sliderMAX = useAppSelector(state => state.cardPacks.maxCardsCount)
+  const [sliderCurrentMIN, setSliderCurrentMIN] = useState(sliderMIN)
+  const [sliderCurrentMAX, setSliderCurrentMAX] = useState(sliderMAX)
+
+  const debouncedSliderMINValue = useDebounce(sliderCurrentMIN)
+  const debouncedSliderMAXValue = useDebounce(sliderCurrentMAX)
 
   console.log(sortPackOrder)
   useEffect(() => {
-    dispatch(fetchCardPacksTC())
+    dispatch(
+      DEPRECATED_fetchCardPacksTC({
+        min: debouncedSliderMINValue,
+        max: debouncedSliderMAXValue,
+      })
+    )
   }, [
     debouncedTitle,
     itemsPerPage,
     currentPage,
     isMyPack,
-    debouncedSliderCurrentValues,
+    debouncedSliderMINValue,
+    debouncedSliderMAXValue,
     sortPackOrder,
   ])
 
@@ -87,13 +92,26 @@ export const CardPacksPage = () => {
     [dispatch]
   )
 
+  const handleSliderChange = (minValue: number, maxValue: number) => {
+    setSliderCurrentMIN(minValue)
+    setSliderCurrentMAX(maxValue)
+  }
+
   return (
     <>
       {/*Toolbar with search, range slider, personal cards' toggle switch, filter reset etc*/}
       <BackLink title="test link to profile" to="/profile" />
       <TextField value={packSearchName} onChange={handleSearchNameChange} />
       <FilledButton onClick={() => handleLoadPacksClick('New pack')}>add card pack</FilledButton>
-      <MinimumDistanceSlider minMaxSliderRange={minMaxSliderRange} sliderCurrent={sliderCurrent} />
+      <MinimumDistanceSlider
+        minValue={sliderMIN}
+        maxValue={sliderMAX}
+        currentMinValue={sliderCurrentMIN}
+        currentMaxValue={sliderCurrentMAX}
+        onSliderChange={handleSliderChange}
+        // minMaxSliderRange={minMaxSliderRange}
+        // sliderCurrent={sliderCurrent}
+      />
       <div>
         <SuperButton
           style={isMyPack ? { backgroundColor: 'blue' } : { backgroundColor: 'white' }}

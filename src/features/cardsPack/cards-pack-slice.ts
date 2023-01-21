@@ -32,9 +32,9 @@ export const cardsPackSlice = (
 ): typeof initState => {
   switch (action.type) {
     case 'CARD_PACKS/LOADED': {
-      const { cardPacks, cardPacksTotalCount } = action.payload
+      const { cardPacks, cardPacksTotalCount, minCardsCount, maxCardsCount } = action.payload
 
-      return { ...state, cardPacks, cardPacksTotalCount }
+      return { ...state, cardPacks, cardPacksTotalCount, minCardsCount, maxCardsCount }
     }
     case 'CARD_PACKS/SEARCH_NAME_CHANGED':
       return { ...state, packSearchName: action.payload }
@@ -42,8 +42,8 @@ export const cardsPackSlice = (
       return { ...state, sortPacksOrder: getSortPacksQueryParam(action.payload) }
     case 'CARD_PACKS/MIN_COUNT_CHANGED':
       return { ...state, minCardsCount: action.payload[0], maxCardsCount: action.payload[1] }
-    /* case 'CARD_PACKS/MAX_COUNT_CHANGED':
-                                                                                                                                           return { ...state, maxCardsCount: action.payload }*/
+    // case 'CARD_PACKS/MAX_COUNT_CHANGED':
+    //   return { ...state, maxCardsCount: action.payload }
     case 'CARD_PACKS/PAGE_CHANGED':
       return { ...state, currentPage: action.payload }
     case 'CARD_PACKS/ITEMS_COUNT_PER_PAGE_CHANGED':

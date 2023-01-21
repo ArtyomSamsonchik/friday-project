@@ -5,22 +5,22 @@ import { Input } from '@mui/material'
 import Box from '@mui/material/Box'
 import Slider from '@mui/material/Slider'
 
-import { setMinMaxCardsCount } from '../../../features/cardsPack/cards-pack-slice'
-import { useAppDispatch } from '../../../utils/hooks'
-
-const minDistance = 1
+const minThumbDistance = 1
 
 type MinimumDistanceSliderType = {
-  minMaxSliderRange: number[]
-  sliderCurrent: number[]
+  minValue: number
+  maxValue: number
+  currentMinValue: number
+  currentMaxValue: number
+  onSliderChange: (minValue: number, maxValue: number) => void
 }
 
 export const MinimumDistanceSlider = memo((props: MinimumDistanceSliderType) => {
-  const dispatch = useAppDispatch()
+  const { minValue, maxValue, currentMinValue, currentMaxValue, onSliderChange } = props
 
   useEffect(() => {
-    dispatch(setMinMaxCardsCount([props.minMaxSliderRange[0], props.minMaxSliderRange[1]]))
-  }, [JSON.stringify(props.minMaxSliderRange)])
+    onSliderChange(Math.min(minValue, 0), maxValue)
+  }, [minValue, maxValue])
 
   const handleChange1 = (event: Event, newValue: number | number[], activeThumb: number) => {
     if (!Array.isArray(newValue)) {
@@ -28,58 +28,47 @@ export const MinimumDistanceSlider = memo((props: MinimumDistanceSliderType) => 
     }
 
     if (activeThumb === 0) {
-      dispatch(
-        setMinMaxCardsCount([
-          Math.min(newValue[0], props.sliderCurrent[1] - minDistance),
-          props.sliderCurrent[1],
-        ])
-      )
+      onSliderChange(Math.min(newValue[0], currentMaxValue - minThumbDistance), currentMaxValue)
     } else {
-      dispatch(
-        setMinMaxCardsCount([
-          props.sliderCurrent[0],
-          Math.max(newValue[1], props.sliderCurrent[0] + minDistance),
-        ])
-      )
+      onSliderChange(currentMinValue, Math.max(newValue[1], currentMinValue + minThumbDistance))
     }
   }
-  const handleInputChange1 = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setMinMaxCardsCount([Number(event.target.value), props.sliderCurrent[1]]))
+  const handleInputChange1 = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onSliderChange(Number(e.currentTarget.value), currentMaxValue)
   }
-  const handleInputChange2 = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setMinMaxCardsCount([props.sliderCurrent[0], Number(event.target.value)]))
+  const handleInputChange2 = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onSliderChange(currentMinValue, Number(e.currentTarget.value))
   }
 
   return (
     <Box sx={{ width: 320, display: 'flex', flexDirection: 'row' }}>
       <Input
-        value={props.sliderCurrent[0]}
+        value={currentMinValue}
         size="small"
         onChange={handleInputChange1}
         inputProps={{
           step: 1,
-          min: props.minMaxSliderRange[0],
-          max: props.minMaxSliderRange[1],
+          min: minValue,
+          max: currentMaxValue - 1,
           type: 'number',
           'aria-labelledby': 'input-slider',
         }}
       />
       <Slider
-        getAriaLabel={() => 'Minimum distance'}
-        value={props.sliderCurrent}
-        max={props.minMaxSliderRange[1]}
+        value={[currentMinValue, currentMaxValue]}
+        max={maxValue}
         onChange={handleChange1}
         valueLabelDisplay="auto"
         disableSwap
       />
       <Input
-        value={props.sliderCurrent[1]}
+        value={currentMaxValue}
         size="small"
         onChange={handleInputChange2}
         inputProps={{
           step: 1,
-          min: props.minMaxSliderRange[0],
-          max: props.minMaxSliderRange[1],
+          min: currentMinValue + 1,
+          max: maxValue,
           type: 'number',
           'aria-labelledby': 'input-slider',
         }}
