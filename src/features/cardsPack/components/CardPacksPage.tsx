@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react'
+import React, { ChangeEvent, useCallback, useEffect } from 'react'
 
 import TextField from '@mui/material/TextField'
 
@@ -22,7 +22,6 @@ import {
   selectAllPacks,
   setCurrentPage,
   setItemsPerPage,
-  setMinMaxCardsCount,
   setPackSearchName,
   setPersonalPacksParam,
   updateCardPackTC,
@@ -42,10 +41,10 @@ export const CardPacksPage = () => {
   const debouncedTitle = useDebounce(packSearchName)
 
   const minMaxSliderRange = useAppSelector(state => state.cardPacks.sliderMinMAxValues)
-  const sliderCurrensMAX = useAppSelector(state => state.cardPacks.maxCardsCount)
+  const sliderCurrentMAX = useAppSelector(state => state.cardPacks.maxCardsCount)
   const sliderCurrentMIN = useAppSelector(state => state.cardPacks.minCardsCount)
   const isMyPack = useAppSelector(state => state.cardPacks.loadPersonalPacks)
-  const sliderCurrent = [sliderCurrentMIN, sliderCurrensMAX]
+  const sliderCurrent = [sliderCurrentMIN, sliderCurrentMAX]
   const debouncedSliderCurrentValues = useDebounce(JSON.stringify(sliderCurrent))
 
   useEffect(() => {
