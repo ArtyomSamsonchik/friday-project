@@ -16,12 +16,9 @@ type MinimumDistanceSliderType = {
 }
 
 export const MinimumDistanceSlider = memo((props: MinimumDistanceSliderType) => {
-  console.log(props.sliderCurrent)
-  console.log(props.minMaxSliderRange)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    console.log('eeefect ')
     dispatch(setMinMaxCardsCount([props.minMaxSliderRange[0], props.minMaxSliderRange[1]]))
   }, [JSON.stringify(props.minMaxSliderRange)])
 
