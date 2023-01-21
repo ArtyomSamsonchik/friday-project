@@ -15,8 +15,6 @@ type PaginationBarPropsType = {
 export const PaginationBar = memo((props: PaginationBarPropsType) => {
   const { pagesCount, itemsPerPage, onItemsCountChange, onPageChange } = props
 
-  console.log('pagination', pagesCount, itemsPerPage)
-
   return (
     <div className={s.paginationBarContainer}>
       <StyledPagination

@@ -1,10 +1,12 @@
-import React, { ChangeEvent, useCallback, useEffect } from 'react'
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react'
 
+import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 
 import { BackLink } from '../../../common/components/BackLink'
 import { CardsContainer } from '../../../common/components/CardsContainer'
 import { FilledButton } from '../../../common/components/FilledButton'
+import { RangeSlider } from '../../../common/components/RangeSlider'
 import { PaginationBar } from '../../../common/components/shared/Pagination/PaginationBar'
 import {
   selectCardPacksTotalCount,
@@ -16,11 +18,12 @@ import { selectProfile } from '../../profile/profile-slice'
 import {
   addCardPackTC,
   deleteCardPackTC,
-  fetchCardPacksTC,
+  DEPRECATED_fetchCardPacksTC,
   selectAllPacks,
   setCurrentPage,
   setItemsPerPage,
   setPackSearchName,
+  setPersonalPacksParam,
   updateCardPackTC,
 } from '../cards-pack-slice'
 
@@ -33,13 +36,25 @@ export const CardPacksPage = () => {
   const itemsPerPage = useAppSelector(selectItemsPerPage)
   const currentPage = useAppSelector(selectCurrentPage)
   const profile = useAppSelector(selectProfile)
+  const minCardsCount = useAppSelector(state => state.cardPacks.minCardsCount)
+  const maxCardsCount = useAppSelector(state => state.cardPacks.maxCardsCount)
+  const isPersonalPacks = useAppSelector(state => state.cardPacks.loadPersonalPacks)
+  const [currentCardsCountRange, setCurrentCardsCountRange] = useState<[number, number]>([
+    minCardsCount,
+    maxCardsCount,
+  ])
 
   const dispatch = useAppDispatch()
   const debouncedTitle = useDebounce(packSearchName)
 
   useEffect(() => {
-    dispatch(fetchCardPacksTC())
-  }, [debouncedTitle, itemsPerPage, currentPage])
+    dispatch(
+      DEPRECATED_fetchCardPacksTC({
+        min: currentCardsCountRange[0],
+        max: currentCardsCountRange[1],
+      })
+    )
+  }, [debouncedTitle, itemsPerPage, currentPage, currentCardsCountRange, isPersonalPacks])
 
   const handleLoadPacksClick = (name: string) => {
     dispatch(addCardPackTC({ name }))
@@ -63,12 +78,20 @@ export const CardPacksPage = () => {
     [dispatch]
   )
 
+  const handleRangeChange = (values: [number, number]) => {
+    setCurrentCardsCountRange(values)
+  }
+
   return (
     <>
       {/*Toolbar with search, range slider, personal cards' toggle switch, filter reset etc*/}
       <BackLink title="test link to profile" to="/profile" />
       <TextField value={packSearchName} onChange={handleSearchNameChange} />
       <FilledButton onClick={() => handleLoadPacksClick('New pack')}>add card pack</FilledButton>
+      <RangeSlider range={[minCardsCount, maxCardsCount]} onRangeChange={handleRangeChange} />
+      <Button onClick={() => dispatch(setPersonalPacksParam(!isPersonalPacks))}>
+        Load personal
+      </Button>
       <CardsContainer>
         {packs.map(p => (
           <CardPack

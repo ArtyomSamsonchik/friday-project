@@ -1,7 +1,6 @@
 import React, { memo, useState } from 'react'
 
 import { QuestionCard } from '../../../features/cards/components/QuestionCard'
-import { GetCardPacksQueryParams } from '../../../features/cardsPack/card-packs-api'
 import {
   DEPRECATED_fetchCardPacksTC,
   selectAllPacks,
@@ -18,7 +17,6 @@ import { SuperCheckbox } from '../shared/SuperCheckbox/SuperCheckbox'
 import { SuperInputText } from '../shared/SuperInputText/SuperInputText'
 import { SuperRadio } from '../shared/SuperRadio/SuperRadio'
 import { SuperSelect } from '../shared/SuperSelect/SuperSelect'
-import { MinimumDistanceSlider } from '../Slider/Slider'
 
 import s from './Test.module.css'
 
@@ -30,27 +28,6 @@ export const Test = memo(() => {
   const dispatch = useAppDispatch()
   const [isMyPack, setIsMyPack] = useState(false)
   const [showNew, setShowNew] = useState(true)
-  const [value1, setValue1] = useState<number[]>([0, 110])
-
-  const currentParams: GetCardPacksQueryParams = {
-    min: value1[0],
-    max: value1[1],
-    sortPacks: showNew ? '0updated' : '1updated',
-    user_id: isMyPack ? profile._id : '',
-  }
-
-  const sort = () => {
-    dispatch(DEPRECATED_fetchCardPacksTC(currentParams))
-  }
-  /*const myOrAllPacks = (belongsPacks: string) => {
-                                        if (belongsPacks === 'my') {
-                                          setIsMyPack(true)
-                                          sort({ user_id: profile._id, min: value1[0], max: value1[1] })
-                                        } else {
-                                          setIsMyPack(false)
-                                          sort({ min: value1[0], max: value1[1] })
-                                        }
-                                      }*/
 
   return (
     <div className={commonS.demo}>
@@ -79,13 +56,6 @@ export const Test = memo(() => {
       <SuperButton style={{ backgroundColor: 'blue' }} onClick={() => setShowNew(!showNew)}>
         {showNew ? 'show old' : 'show new'}
       </SuperButton>
-      <MinimumDistanceSlider
-        sort={sort}
-        isMyPack={isMyPack}
-        value1={value1}
-        setValue1={setValue1}
-        showNew={showNew}
-      />
       <h3>Cards</h3>
       <CustomContainer>
         <CardsContainer>
@@ -93,7 +63,7 @@ export const Test = memo(() => {
             packName={'Test card pack'}
             totalCards={20}
             lastUpdated={'14.01.2023'}
-            creator={'Artyom'}
+            creator={'Artyom Artyom ArtyomArtyomArtyomArtyomArtyomArtyomArtyomArtyom'}
             isMyPack={true}
             openCardPack={() => {
               alert('opened pack')

@@ -2,9 +2,7 @@ import { instance } from '../../app/api-instance'
 
 export const cardPacksApi = {
   getPacks(params: GetCardPacksQueryParams) {
-    return instance.get<GetCardPackResponse>('cards/pack', {
-      params: { ...params },
-    })
+    return instance.get<GetCardPackResponse>('cards/pack', { params })
   },
   addPack(data: AddPackData) {
     return instance.post<AddCardPackResponse>('cards/pack', { cardsPack: data })

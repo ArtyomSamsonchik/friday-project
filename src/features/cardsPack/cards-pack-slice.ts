@@ -1,8 +1,8 @@
 import { setAppStatus } from '../../app/app-slice'
 import { AppThunk, RootStateType } from '../../app/store'
 import { getFetchCardPacksQueryParams } from '../../utils/getFetchCardPacksQueryParams'
-import { getSortPacksQueryParam } from '../../utils/getSortPacksQueryParam'
 import { handleError } from '../../utils/handleError'
+import { stringifySortPacksQueryParams } from '../../utils/stringifySortPacksQueryParams'
 
 import {
   AddPackData,
@@ -18,10 +18,10 @@ const initState = {
   packSearchName: '',
   currentPage: 1,
   itemsPerPage: 12,
-  sortPacksOrder: getSortPacksQueryParam({ order: 'desc', column: 'updated' }),
+  sortPacksOrder: stringifySortPacksQueryParams({ order: 'desc', column: 'updated' }),
   loadPersonalPacks: false,
   minCardsCount: 0,
-  maxCardsCount: 25,
+  maxCardsCount: 1,
   cardPacksTotalCount: 0,
 }
 
@@ -31,14 +31,14 @@ export const cardsPackSlice = (
 ): typeof initState => {
   switch (action.type) {
     case 'CARD_PACKS/LOADED': {
-      const { cardPacks, cardPacksTotalCount } = action.payload
+      const { cardPacks, cardPacksTotalCount, minCardsCount, maxCardsCount } = action.payload
 
-      return { ...state, cardPacks, cardPacksTotalCount }
+      return { ...state, cardPacks, cardPacksTotalCount, minCardsCount, maxCardsCount }
     }
     case 'CARD_PACKS/SEARCH_NAME_CHANGED':
       return { ...state, packSearchName: action.payload }
     case 'CARD_PACKS/SORT_ORDER_CHANGED':
-      return { ...state, sortPacksOrder: getSortPacksQueryParam(action.payload) }
+      return { ...state, sortPacksOrder: stringifySortPacksQueryParams(action.payload) }
     case 'CARD_PACKS/MIN_COUNT_CHANGED':
       return { ...state, minCardsCount: action.payload }
     case 'CARD_PACKS/MAX_COUNT_CHANGED':
@@ -102,7 +102,7 @@ export const clearPacksFilters = () => ({ type: 'CARD_PACKS/FILTERS_CLEARED' } a
 
 //thunks
 export const DEPRECATED_fetchCardPacksTC =
-  (params?: GetCardPacksQueryParams): AppThunk =>
+  (params?: Pick<GetCardPacksQueryParams, 'min' | 'max'>): AppThunk =>
   async (dispatch, getState) => {
     const requestData = getFetchCardPacksQueryParams(getState())
     const sortData = { ...requestData, ...params }

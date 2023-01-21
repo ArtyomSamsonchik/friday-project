@@ -34,7 +34,7 @@ export const QuestionCard: FC<QuestionCardProps> = props => {
           <DeleteSVG />
         </ActonIconButton>
       </ActionButtonsContainer>
-      <CardContent sx={{ pt: 2.5 }}>
+      <CardContent sx={{ pt: 2.5, wordWrap: 'break-word' }}>
         <Typography variant="h5" sx={{ mb: 1 }}>
           Question:
         </Typography>
