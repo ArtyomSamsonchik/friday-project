@@ -1,10 +1,11 @@
 import React, { memo, useState } from 'react'
 
 import { QuestionCard } from '../../../features/cards/components/QuestionCard'
-import { GetCardPacksQueryParams } from '../../../features/cardsPack/card-packs-api'
 import {
   DEPRECATED_fetchCardPacksTC,
   selectAllPacks,
+  selectMaxCardsCount,
+  selectMinCardsCount,
 } from '../../../features/cardsPack/cards-pack-slice'
 import { CardPack } from '../../../features/cardsPack/components/cardPack/CardPack'
 import { selectProfile } from '../../../features/profile/profile-slice'
@@ -12,13 +13,14 @@ import { useAppDispatch, useAppSelector } from '../../../utils/hooks'
 import commonS from '../../styles/common.module.css'
 import { CardsContainer } from '../CardsContainer'
 import { CustomContainer } from '../CustomContainer'
-import { OutlinedButton } from '../shared/OutlinedButton'
+import { FilledButton } from '../FilledButton'
+import { OutlinedButton } from '../OutlinedButton'
+import { MinimumDistanceSlider } from '../RangeSlider'
 import { SuperButton } from '../shared/SuperButton/SuperButton'
 import { SuperCheckbox } from '../shared/SuperCheckbox/SuperCheckbox'
 import { SuperInputText } from '../shared/SuperInputText/SuperInputText'
 import { SuperRadio } from '../shared/SuperRadio/SuperRadio'
 import { SuperSelect } from '../shared/SuperSelect/SuperSelect'
-import { MinimumDistanceSlider } from '../Slider/Slider'
 
 import s from './Test.module.css'
 
@@ -27,40 +29,31 @@ export const Test = memo(() => {
   const [selected, setSelected] = useState(options[1])
   const cards = useAppSelector(selectAllPacks)
   const profile = useAppSelector(selectProfile)
+  const minCardsCount = useAppSelector(selectMinCardsCount)
+  const maxCardsCount = useAppSelector(selectMaxCardsCount)
   const dispatch = useAppDispatch()
   const [isMyPack, setIsMyPack] = useState(false)
   const [showNew, setShowNew] = useState(true)
-  const [value1, setValue1] = useState<number[]>([0, 110])
+  const [values, setValues] = useState([0, 110])
 
-  const currentParams: GetCardPacksQueryParams = {
-    min: value1[0],
-    max: value1[1],
-
-    sortPacks: showNew ? '0updated' : '1updated',
-    user_id: isMyPack ? profile._id : '',
+  const handleFetchPacksClick = () => {
+    dispatch(
+      DEPRECATED_fetchCardPacksTC({
+        min: values[0],
+        max: values[1],
+        sortPacks: showNew ? '0updated' : '1updated',
+        user_id: isMyPack ? profile._id : '',
+      })
+    )
   }
-
-  const sort = () => {
-    dispatch(DEPRECATED_fetchCardPacksTC(currentParams))
-  }
-  /*const myOrAllPacks = (belongsPacks: string) => {
-                                          if (belongsPacks === 'my') {
-                                            setIsMyPack(true)
-                                            sort({ user_id: profile._id, min: value1[0], max: value1[1] })
-                                          } else {
-                                            setIsMyPack(false)
-                                            sort({ min: value1[0], max: value1[1] })
-                                          }
-                                        }*/
 
   return (
     <div className={commonS.demo}>
       <h1>Super components demo</h1>
       <h3>Super button</h3>
       <div className={s.container}>
-        <SuperButton onClick={() => dispatch(DEPRECATED_fetchCardPacksTC())}>button</SuperButton>
-        <SuperButton red>red button</SuperButton>
-        <SuperButton disabled>disabled</SuperButton>
+        <FilledButton onClick={handleFetchPacksClick}>load packs for test</FilledButton>
+        <FilledButton disabled>disabled</FilledButton>
         <OutlinedButton>button</OutlinedButton>
       </div>
       <div>
@@ -80,13 +73,11 @@ export const Test = memo(() => {
       <SuperButton style={{ backgroundColor: 'blue' }} onClick={() => setShowNew(!showNew)}>
         {showNew ? 'show old' : 'show new'}
       </SuperButton>
-      {/*   <MinimumDistanceSlider
-        sort={sort}
-        isMyPack={isMyPack}
-        value1={value1}
-        setValue1={setValue1}
-        showNew={showNew}
-      />*/}
+      <MinimumDistanceSlider
+        minValue={minCardsCount}
+        maxValue={maxCardsCount}
+        onRangeChange={(min, max) => setValues([min, max])}
+      />
       <h3>Cards</h3>
       <CustomContainer>
         <CardsContainer>
