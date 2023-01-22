@@ -1,79 +1,85 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import React, { ChangeEvent, memo, useEffect, useState } from 'react'
 
-import { Input } from '@mui/material'
 import Box from '@mui/material/Box'
+import Input from '@mui/material/Input'
 import Slider from '@mui/material/Slider'
+import { shallowEqual } from 'react-redux'
 
 import { useDebounce } from '../../utils/hooks'
 
-type RangeSliderProps = {
-  range: [number, number]
-  onRangeChange: (values: [number, number]) => void
+type MinimumDistanceSliderType = {
+  minValue: number
+  maxValue: number
+  onRangeChange: (minValue: number, maxValue: number) => void
 }
 
-const minThumbsDistance = 1
+const minThumbDistance = 1
 
-export const RangeSlider = (props: RangeSliderProps) => {
-  const { range, onRangeChange } = props
+const getCorrectedInputMinValue = (min: number, max: number) =>
+  max - min < minThumbDistance ? max - minThumbDistance : min
 
-  console.log(range)
+const getCorrectedInputMaxValue = (min: number, max: number) =>
+  max - min < minThumbDistance ? min + minThumbDistance : max
 
-  const [sliderMinMax, setSliderMinMax] = useState(range)
-  const debouncedSliderMinMax = useDebounce(sliderMinMax, 700)
+export const MinimumDistanceSlider = memo((props: MinimumDistanceSliderType) => {
+  const { minValue, maxValue, onRangeChange } = props
 
-  useEffect(() => {
-    onRangeChange(debouncedSliderMinMax)
-    console.log('slider', debouncedSliderMinMax)
-  }, [debouncedSliderMinMax])
-
-  //min and max inputs change slider values with delay
-  const [inputMinMax, setInputMinMax] = useState(range)
+  const [sliderMinMax, setSliderMinMax] = useState([minValue, maxValue])
+  const [inputMinMax, setInputMinMax] = useState([minValue, maxValue])
   const debouncedInputMinMax = useDebounce(inputMinMax)
 
   useEffect(() => {
-    setSliderMinMax(debouncedInputMinMax)
-    console.log('input', debouncedInputMinMax)
-  }, [debouncedInputMinMax])
+    setSliderMinMax([0, maxValue])
+    setInputMinMax([0, maxValue])
+  }, [minValue, maxValue])
 
-  // useEffect(() => {
-  //   setSliderMinMax(range)
-  //   setInputMinMax(range)
-  // }, [range])
+  //synchronize slider with inputs when changing input field
+  useEffect(() => {
+    if (shallowEqual(sliderMinMax, debouncedInputMinMax)) return
 
-  const handleSliderChange = (event: Event, newValues: number | number[], activeThumb: number) => {
-    const [newMin, newMax] = newValues as [number, number]
+    let inputMinValue = debouncedInputMinMax[0]
+    let inputMaxValue = debouncedInputMinMax[1]
 
-    //sets min distance between slider thumbs
-    if (activeThumb === 0) {
-      newValues = [Math.min(newMin, newMax - minThumbsDistance), newMax]
-    } else {
-      newValues = [newMin, Math.max(newMax, newMin + minThumbsDistance)]
+    if (sliderMinMax[0] !== debouncedInputMinMax[0]) {
+      inputMinValue = getCorrectedInputMinValue(inputMinValue, inputMaxValue)
+    }
+    if (sliderMinMax[1] !== debouncedInputMinMax[1]) {
+      inputMaxValue = getCorrectedInputMaxValue(inputMinValue, inputMaxValue)
     }
 
-    setSliderMinMax(newValues as [number, number])
-    setInputMinMax(newValues as [number, number])
+    setSliderMinMax([inputMinValue, inputMaxValue])
+    setInputMinMax([inputMinValue, inputMaxValue])
+    onRangeChange(inputMinValue, inputMaxValue)
+  }, debouncedInputMinMax)
+
+  const handleSliderChange = (event: Event, newValues: number | number[], activeThumb: number) => {
+    let [newMinValue, newMaxValue] = newValues as number[]
+
+    if (activeThumb === 0) {
+      newMinValue = Math.min(newMinValue, sliderMinMax[1] - minThumbDistance)
+
+      setSliderMinMax([newMinValue, sliderMinMax[1]])
+      setInputMinMax([newMinValue, sliderMinMax[1]])
+    } else {
+      newMaxValue = Math.max(newMaxValue, sliderMinMax[0] + minThumbDistance)
+
+      setSliderMinMax([sliderMinMax[0], newMaxValue])
+      setInputMinMax([sliderMinMax[0], newMaxValue])
+    }
   }
 
-  //input handlers only allow set slider values between sibling thumb and range boundary
-  const handleMinInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const newValue = Math.min(
-      Math.max(range[0], Number(event.currentTarget.value)),
-      sliderMinMax[1] - minThumbsDistance
-    )
+  const handleSliderChangeCommit = () => onRangeChange(sliderMinMax[0], sliderMinMax[1])
 
-    // const newValue = Math.max(range[0], Number(event.currentTarget.value))
+  const handleMinInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newMinValue = Math.max(minValue, Number(e.currentTarget.value))
 
-    setInputMinMax([newValue, sliderMinMax[1]])
+    setInputMinMax([newMinValue, inputMinMax[1]])
   }
-  const handleMaxInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const newValue = Math.max(
-      Math.min(range[1], Number(event.currentTarget.value)),
-      sliderMinMax[0] + minThumbsDistance
-    )
 
-    // const newValue = Math.min(range[1], Number(event.currentTarget.value))
+  const handleMaxInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newMaxValue = Math.min(maxValue, Number(e.currentTarget.value))
 
-    setInputMinMax([sliderMinMax[0], newValue])
+    setInputMinMax([inputMinMax[0], newMaxValue])
   }
 
   return (
@@ -84,17 +90,16 @@ export const RangeSlider = (props: RangeSliderProps) => {
         onChange={handleMinInputChange}
         inputProps={{
           step: 1,
+          min: minValue,
+          max: sliderMinMax[1] - 1,
           type: 'number',
-          'aria-labelledby': 'input-slider',
         }}
       />
       <Slider
-        getAriaLabel={() => 'Minimum distance'}
-        step={1}
         value={sliderMinMax}
-        min={range[0]}
-        max={range[1]}
+        max={maxValue}
         onChange={handleSliderChange}
+        onChangeCommitted={handleSliderChangeCommit}
         valueLabelDisplay="auto"
         disableSwap
       />
@@ -104,10 +109,11 @@ export const RangeSlider = (props: RangeSliderProps) => {
         onChange={handleMaxInputChange}
         inputProps={{
           step: 1,
+          min: sliderMinMax[0] + 1,
+          max: maxValue,
           type: 'number',
-          'aria-labelledby': 'input-slider',
         }}
       />
     </Box>
   )
-}
+})

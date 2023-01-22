@@ -1,13 +1,14 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react'
 
-import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 
 import { BackLink } from '../../../common/components/BackLink'
 import { CardsContainer } from '../../../common/components/CardsContainer'
 import { FilledButton } from '../../../common/components/FilledButton'
-import { RangeSlider } from '../../../common/components/RangeSlider'
-import { PaginationBar } from '../../../common/components/shared/Pagination/PaginationBar'
+import { PaginationBar } from '../../../common/components/Pagination/PaginationBar'
+import { MinimumDistanceSlider } from '../../../common/components/RangeSlider'
+import { SuperButton } from '../../../common/components/shared/SuperButton/SuperButton'
+import { SortPacks } from '../../../common/components/SortPacks/SortPacks'
 import {
   selectCardPacksTotalCount,
   selectCurrentPage,
@@ -20,6 +21,11 @@ import {
   deleteCardPackTC,
   DEPRECATED_fetchCardPacksTC,
   selectAllPacks,
+  selectIsMyPacks,
+  selectMaxCardsCount,
+  selectMinCardsCount,
+  selectPackOrder,
+  selectSearchPackName,
   setCurrentPage,
   setItemsPerPage,
   setPackSearchName,
@@ -31,30 +37,25 @@ import { CardPack } from './cardPack/CardPack'
 
 export const CardPacksPage = () => {
   const packs = useAppSelector(selectAllPacks)
-  const packSearchName = useAppSelector(state => state.cardPacks.packSearchName)
   const cardPacksTotalCount = useAppSelector(selectCardPacksTotalCount)
   const itemsPerPage = useAppSelector(selectItemsPerPage)
   const currentPage = useAppSelector(selectCurrentPage)
   const profile = useAppSelector(selectProfile)
-  const minCardsCount = useAppSelector(state => state.cardPacks.minCardsCount)
-  const maxCardsCount = useAppSelector(state => state.cardPacks.maxCardsCount)
-  const isPersonalPacks = useAppSelector(state => state.cardPacks.loadPersonalPacks)
-  const [currentCardsCountRange, setCurrentCardsCountRange] = useState<[number, number]>([
-    minCardsCount,
-    maxCardsCount,
-  ])
+  const sortPackOrder = useAppSelector(selectPackOrder)
+  const isMyPacks = useAppSelector(selectIsMyPacks)
+  const minCardsCount = useAppSelector(selectMinCardsCount)
+  const maxCardsCount = useAppSelector(selectMaxCardsCount)
 
-  const dispatch = useAppDispatch()
+  const packSearchName = useAppSelector(selectSearchPackName)
   const debouncedTitle = useDebounce(packSearchName)
 
+  const dispatch = useAppDispatch()
+
+  const [showSort, setShowSort] = useState(false)
+
   useEffect(() => {
-    dispatch(
-      DEPRECATED_fetchCardPacksTC({
-        min: currentCardsCountRange[0],
-        max: currentCardsCountRange[1],
-      })
-    )
-  }, [debouncedTitle, itemsPerPage, currentPage, currentCardsCountRange, isPersonalPacks])
+    dispatch(DEPRECATED_fetchCardPacksTC())
+  }, [debouncedTitle, itemsPerPage, currentPage, isMyPacks, sortPackOrder])
 
   const handleLoadPacksClick = (name: string) => {
     dispatch(addCardPackTC({ name }))
@@ -78,9 +79,9 @@ export const CardPacksPage = () => {
     [dispatch]
   )
 
-  const handleRangeChange = (values: [number, number]) => {
-    setCurrentCardsCountRange(values)
-  }
+  const handleSliderChange = useCallback((min: number, max: number) => {
+    dispatch(DEPRECATED_fetchCardPacksTC({ min, max }))
+  }, [])
 
   return (
     <>
@@ -88,10 +89,30 @@ export const CardPacksPage = () => {
       <BackLink title="test link to profile" to="/profile" />
       <TextField value={packSearchName} onChange={handleSearchNameChange} />
       <FilledButton onClick={() => handleLoadPacksClick('New pack')}>add card pack</FilledButton>
-      <RangeSlider range={[minCardsCount, maxCardsCount]} onRangeChange={handleRangeChange} />
-      <Button onClick={() => dispatch(setPersonalPacksParam(!isPersonalPacks))}>
-        Load personal
-      </Button>
+      <MinimumDistanceSlider
+        minValue={minCardsCount}
+        maxValue={maxCardsCount}
+        onRangeChange={handleSliderChange}
+      />
+      <div>
+        <SuperButton
+          style={isMyPacks ? { backgroundColor: 'blue' } : { backgroundColor: 'white' }}
+          onClick={() => dispatch(setPersonalPacksParam(true))}
+        >
+          my
+        </SuperButton>
+        <SuperButton
+          style={isMyPacks ? { backgroundColor: 'white' } : { backgroundColor: 'blue' }}
+          onClick={() => dispatch(setPersonalPacksParam(false))}
+        >
+          all
+        </SuperButton>
+      </div>
+      <div style={{ textAlign: 'center' }} onClick={() => setShowSort(!showSort)}>
+        <h3>sort params</h3>
+      </div>
+      {showSort && <SortPacks sortPackOrder={sortPackOrder} />}
+
       <CardsContainer>
         {packs.map(p => (
           <CardPack

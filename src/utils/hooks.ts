@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { DependencyList, EffectCallback, useEffect, useRef, useState } from 'react'
 
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 
@@ -19,4 +19,18 @@ export const useDebounce = <T>(value: T, delay?: number): T => {
   }, [value, delay])
 
   return debouncedValue
+}
+
+export const useControlledUpdateEffect = (effect: EffectCallback, deps?: DependencyList) => {
+  const skipEffectRef = useRef(true)
+
+  useEffect(() => {
+    if (!skipEffectRef.current) {
+      return effect()
+    } else {
+      skipEffectRef.current = false
+    }
+  }, deps)
+
+  return skipEffectRef
 }
