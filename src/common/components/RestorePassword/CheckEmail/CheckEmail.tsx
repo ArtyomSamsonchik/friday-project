@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography'
 import { useNavigate } from 'react-router-dom'
 
 import { PATH } from '../../../../app/path'
-import emailImage from '../../../assets/email.png'
+import emailImage from '../../../assets/icons/email.svg'
 import common from '../../../styles/common.module.css'
 import { CustomPaperContainer } from '../../CustomPaperContainer/CustomPaperContainer'
 
