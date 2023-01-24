@@ -14,12 +14,9 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { PATH } from '../../../app/path'
 import { setNewPasswordTC, setNewPasswordToken } from '../../../features/auth/auth-slice'
-import { selectIsStateToken } from '../../../selectors/loginSelectors'
+import { selectIsStateToken } from '../../../features/auth/login-selectors'
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks'
-import {
-  loginFormValidationSchema,
-  newPasswordFormValidationSchema,
-} from '../../formValidation/basicFormValidationSchema'
+import { newPasswordFormValidationSchema } from '../../formValidation/basicFormValidationSchema'
 import common from '../../styles/common.module.css'
 import { CustomPaperContainer } from '../CustomPaperContainer/CustomPaperContainer'
 

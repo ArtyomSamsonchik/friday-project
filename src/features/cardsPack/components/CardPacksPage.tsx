@@ -9,25 +9,25 @@ import { PaginationBar } from '../../../common/components/Pagination/PaginationB
 import { MinimumDistanceSlider } from '../../../common/components/RangeSlider'
 import { SuperButton } from '../../../common/components/shared/SuperButton/SuperButton'
 import { SortPacks } from '../../../common/components/SortPacks/SortPacks'
-import {
-  selectCardPacksTotalCount,
-  selectCurrentPage,
-  selectItemsPerPage,
-} from '../../../selectors/cardsPackSelectors'
 import { useAppDispatch, useAppSelector, useDebounce } from '../../../utils/hooks'
 import { selectProfile } from '../../profile/profile-slice'
+import {
+  selectAllPacks,
+  selectCurrentPage,
+  selectIsMyPacks,
+  selectItemsPerPage,
+  selectMaxCardsCount,
+  selectMinCardsCount,
+  selectPackSearchName,
+  selectPacksSortOrder,
+  selectPacksTotalCount,
+} from '../cards-pack-selectors'
 import {
   addCardPackTC,
   deleteCardPackTC,
   DEPRECATED_fetchCardPacksTC,
-  selectAllPacks,
-  selectIsMyPacks,
-  selectMaxCardsCount,
-  selectMinCardsCount,
-  selectPackOrder,
-  selectSearchPackName,
-  setCurrentPage,
-  setItemsPerPage,
+  setCurrentPackPage,
+  setPackItemsPerPage,
   setPackSearchName,
   setPersonalPacksParam,
   updateCardPackTC,
@@ -37,16 +37,16 @@ import { CardPack } from './cardPack/CardPack'
 
 export const CardPacksPage = () => {
   const packs = useAppSelector(selectAllPacks)
-  const cardPacksTotalCount = useAppSelector(selectCardPacksTotalCount)
+  const cardPacksTotalCount = useAppSelector(selectPacksTotalCount)
   const itemsPerPage = useAppSelector(selectItemsPerPage)
   const currentPage = useAppSelector(selectCurrentPage)
   const profile = useAppSelector(selectProfile)
-  const sortPackOrder = useAppSelector(selectPackOrder)
+  const sortPackOrder = useAppSelector(selectPacksSortOrder)
   const isMyPacks = useAppSelector(selectIsMyPacks)
   const minCardsCount = useAppSelector(selectMinCardsCount)
   const maxCardsCount = useAppSelector(selectMaxCardsCount)
 
-  const packSearchName = useAppSelector(selectSearchPackName)
+  const packSearchName = useAppSelector(selectPackSearchName)
   const debouncedTitle = useDebounce(packSearchName)
 
   const dispatch = useAppDispatch()
@@ -67,14 +67,14 @@ export const CardPacksPage = () => {
 
   const changePageHandler = useCallback(
     (event: ChangeEvent<unknown>, page: number) => {
-      dispatch(setCurrentPage(page))
+      dispatch(setCurrentPackPage(page))
     },
     [dispatch]
   )
 
   const changeItemsPerPageHandler = useCallback(
     (event: ChangeEvent<HTMLSelectElement>) => {
-      dispatch(setItemsPerPage(+event.target.value))
+      dispatch(setPackItemsPerPage(+event.target.value))
     },
     [dispatch]
   )

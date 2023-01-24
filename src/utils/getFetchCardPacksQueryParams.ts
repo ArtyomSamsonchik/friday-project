@@ -6,7 +6,7 @@ export const getFetchCardPacksQueryParams = (state: RootStateType) => {
     profile: {
       userData: { _id },
     },
-    cardPacks: {
+    packs: {
       minCardsCount,
       maxCardsCount,
       currentPage,

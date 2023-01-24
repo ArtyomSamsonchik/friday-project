@@ -18,7 +18,7 @@ import { Navigate } from 'react-router-dom'
 
 import { PATH } from '../../../app/path'
 import { loginTC } from '../../../features/auth/auth-slice'
-import { selectIsLoggedIn } from '../../../selectors/loginSelectors'
+import { selectIsLoggedIn } from '../../../features/auth/login-selectors'
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks'
 import { loginFormValidationSchema } from '../../formValidation/basicFormValidationSchema'
 import common from '../../styles/common.module.css'

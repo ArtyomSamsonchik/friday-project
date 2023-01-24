@@ -3,9 +3,7 @@ import { ResponseTokenData } from '../cardsPack/card-packs-api'
 
 export const cardsApi = {
   getCards(params: GetCardsQueryParams) {
-    return instance.get<GetCardsResponse>('cards/card', {
-      params: { ...params },
-    })
+    return instance.get<GetCardsResponse>('cards/card', { params })
   },
   addCard(data: AddCardRequestData) {
     return instance.post<AddCardResponse>('cards/card', { card: data })
@@ -43,7 +41,7 @@ export type AddCardRequestData = {
 
 export type UpdateCardRequestData = {
   _id: string
-} & Partial<Pick<Card, 'question' | 'answer' | 'grade' | 'shots'>>
+} & Partial<Pick<Card, 'question' | 'answer' | 'grade'>>
 
 export type Card = {
   _id: string
@@ -62,7 +60,12 @@ export type Card = {
   __v: number
 }
 
-type GetCardsResponse = {
+export type SortCardsParams = {
+  order: 'asc' | 'desc'
+  column: 'grade' | 'question' | 'answer' | 'updated'
+}
+
+export type GetCardsResponse = {
   cards: Card[]
   packUserId: string
   packName: string

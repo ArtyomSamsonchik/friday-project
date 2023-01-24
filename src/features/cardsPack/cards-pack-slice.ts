@@ -1,8 +1,8 @@
 import { setAppStatus } from '../../app/app-slice'
-import { AppThunk, RootStateType } from '../../app/store'
+import { AppThunk } from '../../app/store'
 import { getFetchCardPacksQueryParams } from '../../utils/getFetchCardPacksQueryParams'
-import { getSortPacksQueryParam } from '../../utils/getSortPacksQueryParam'
 import { handleError } from '../../utils/handleError'
+import { stringifySortQueryParams } from '../../utils/stringifySortQueryParams'
 
 import {
   AddPackData,
@@ -18,7 +18,7 @@ const initState = {
   packSearchName: '',
   currentPage: 1,
   itemsPerPage: 12,
-  sortPacksOrder: getSortPacksQueryParam({ order: 'desc', column: 'updated' }),
+  sortPacksOrder: stringifySortQueryParams({ order: 'desc', column: 'updated' }),
   loadPersonalPacks: false,
   minCardsCount: 0,
   maxCardsCount: 110,
@@ -38,7 +38,7 @@ export const cardsPackSlice = (
     case 'CARD_PACKS/SEARCH_NAME_CHANGED':
       return { ...state, packSearchName: action.payload }
     case 'CARD_PACKS/SORT_ORDER_CHANGED':
-      return { ...state, sortPacksOrder: getSortPacksQueryParam(action.payload) }
+      return { ...state, sortPacksOrder: stringifySortQueryParams(action.payload) }
     case 'CARD_PACKS/PAGE_CHANGED':
       return { ...state, currentPage: action.payload }
     case 'CARD_PACKS/ITEMS_COUNT_PER_PAGE_CHANGED':
@@ -70,10 +70,10 @@ export const setPackSearchName = (name: string) => {
 export const setPacksSortOrder = (orderParams: SortPacksParams) => {
   return { type: 'CARD_PACKS/SORT_ORDER_CHANGED', payload: orderParams } as const
 }
-export const setCurrentPage = (page: number) => {
+export const setCurrentPackPage = (page: number) => {
   return { type: 'CARD_PACKS/PAGE_CHANGED', payload: page } as const
 }
-export const setItemsPerPage = (count: number) => {
+export const setPackItemsPerPage = (count: number) => {
   return { type: 'CARD_PACKS/ITEMS_COUNT_PER_PAGE_CHANGED', payload: count } as const
 }
 export const setPersonalPacksParam = (isPersonal: boolean) => {
@@ -152,25 +152,12 @@ export const updateCardPackTC =
     }
   }
 
-//selectors
-export const selectCardPacksSlice = (state: RootStateType) => state.cardPacks
-export const selectAllPacks = (state: RootStateType) => selectCardPacksSlice(state).cardPacks
-export const selectAllPacksIds = (state: RootStateType) => selectAllPacks(state).map(p => p._id)
-export const selectCardPack = (state: RootStateType, id: string) => {
-  return selectAllPacks(state).find(p => p._id === id) as CardPackType
-}
-export const selectPackOrder = (state: RootStateType) => state.cardPacks.sortPacksOrder
-export const selectIsMyPacks = (state: RootStateType) => state.cardPacks.loadPersonalPacks
-export const selectMinCardsCount = (state: RootStateType) => state.cardPacks.minCardsCount
-export const selectMaxCardsCount = (state: RootStateType) => state.cardPacks.maxCardsCount
-export const selectSearchPackName = (state: RootStateType) => state.cardPacks.packSearchName
-
 //types
 type SetCardsPacksAT = ReturnType<typeof setCardPacks>
 type setPackNameAT = ReturnType<typeof setPackSearchName>
 type setPacksSortOrderAT = ReturnType<typeof setPacksSortOrder>
-type setCurrentPageAT = ReturnType<typeof setCurrentPage>
-type setItemsPerPageAT = ReturnType<typeof setItemsPerPage>
+type setCurrentPageAT = ReturnType<typeof setCurrentPackPage>
+type setItemsPerPageAT = ReturnType<typeof setPackItemsPerPage>
 type setPersonalPacksParamAT = ReturnType<typeof setPersonalPacksParam>
 type clearPacksFiltersAT = ReturnType<typeof clearPacksFilters>
 

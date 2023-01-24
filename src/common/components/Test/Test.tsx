@@ -2,11 +2,11 @@ import React, { memo, useState } from 'react'
 
 import { QuestionCard } from '../../../features/cards/components/QuestionCard'
 import {
-  DEPRECATED_fetchCardPacksTC,
   selectAllPacks,
   selectMaxCardsCount,
   selectMinCardsCount,
-} from '../../../features/cardsPack/cards-pack-slice'
+} from '../../../features/cardsPack/cards-pack-selectors'
+import { DEPRECATED_fetchCardPacksTC } from '../../../features/cardsPack/cards-pack-slice'
 import { CardPack } from '../../../features/cardsPack/components/cardPack/CardPack'
 import { selectProfile } from '../../../features/profile/profile-slice'
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks'

@@ -37,13 +37,13 @@ export const MinimumDistanceSlider = memo((props: MinimumDistanceSliderType) => 
   useEffect(() => {
     if (shallowEqual(sliderMinMax, debouncedInputMinMax)) return
 
-    let inputMinValue = debouncedInputMinMax[0]
-    let inputMaxValue = debouncedInputMinMax[1]
+    const [sliderMinValue, sliderMaxValue] = sliderMinMax
+    let [inputMinValue, inputMaxValue] = debouncedInputMinMax
 
-    if (sliderMinMax[0] !== debouncedInputMinMax[0]) {
+    if (sliderMinValue !== inputMinValue) {
       inputMinValue = getCorrectedInputMinValue(inputMinValue, inputMaxValue)
     }
-    if (sliderMinMax[1] !== debouncedInputMinMax[1]) {
+    if (sliderMaxValue !== inputMaxValue) {
       inputMaxValue = getCorrectedInputMaxValue(inputMinValue, inputMaxValue)
     }
 

@@ -11,12 +11,9 @@ import { Navigate } from 'react-router-dom'
 
 import { PATH } from '../../../app/path'
 import { recallPasswordTC } from '../../../features/auth/auth-slice'
-import { selectIsRecalled } from '../../../selectors/loginSelectors'
+import { selectIsRecalled } from '../../../features/auth/login-selectors'
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks'
-import {
-  emailFormValidationSchema,
-  loginFormValidationSchema,
-} from '../../formValidation/basicFormValidationSchema'
+import { emailFormValidationSchema } from '../../formValidation/basicFormValidationSchema'
 import common from '../../styles/common.module.css'
 import { CustomPaperContainer } from '../CustomPaperContainer/CustomPaperContainer'
 

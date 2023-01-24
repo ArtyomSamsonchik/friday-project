@@ -16,7 +16,7 @@ import { Navigate } from 'react-router-dom'
 
 import { PATH } from '../../../app/path'
 import { isRegisterTC } from '../../../features/auth/auth-slice'
-import { selectIsRegistered } from '../../../selectors/loginSelectors'
+import { selectIsRegistered } from '../../../features/auth/login-selectors'
 import { useAppDispatch, useAppSelector } from '../../../utils/hooks'
 import common from '../../styles/common.module.css'
 import { CustomPaperContainer } from '../CustomPaperContainer/CustomPaperContainer'
