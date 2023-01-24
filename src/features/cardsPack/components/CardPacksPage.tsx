@@ -5,6 +5,8 @@ import TextField from '@mui/material/TextField'
 import { BackLink } from '../../../common/components/BackLink'
 import { CardsContainer } from '../../../common/components/CardsContainer'
 import { FilledButton } from '../../../common/components/FilledButton'
+import { AddPackModal } from '../../../common/components/Modals/AddPackModal/AddPackModal'
+import { BasicModal } from '../../../common/components/Modals/BasicModal/BasicModal'
 import { PaginationBar } from '../../../common/components/Pagination/PaginationBar'
 import { MinimumDistanceSlider } from '../../../common/components/RangeSlider'
 import { SuperButton } from '../../../common/components/shared/SuperButton/SuperButton'
@@ -88,7 +90,8 @@ export const CardPacksPage = () => {
       {/*Toolbar with search, range slider, personal cards' toggle switch, filter reset etc*/}
       <BackLink title="test link to profile" to="/profile" />
       <TextField value={packSearchName} onChange={handleSearchNameChange} />
-      <FilledButton onClick={() => handleLoadPacksClick('New pack')}>add card pack</FilledButton>
+      {/*<FilledButton onClick={() => handleLoadPacksClick('New pack')}>add card pack</FilledButton>*/}
+      <AddPackModal handleLoadPacksClick={handleLoadPacksClick} />
       <MinimumDistanceSlider
         minValue={minCardsCount}
         maxValue={maxCardsCount}
