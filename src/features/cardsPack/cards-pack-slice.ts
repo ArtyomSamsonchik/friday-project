@@ -140,11 +140,11 @@ export const deleteCardPackTC =
   }
 
 export const updateCardPackTC =
-  (packId: string, newName: string): AppThunk =>
+  (data: AddPackData): AppThunk =>
   async dispatch => {
     try {
       dispatch(setAppStatus('loading'))
-      await cardPacksApi.updatePack(packId, newName)
+      await cardPacksApi.updatePack(data)
       await dispatch(fetchCardPacksTC())
       dispatch(setAppStatus('success'))
     } catch (e) {

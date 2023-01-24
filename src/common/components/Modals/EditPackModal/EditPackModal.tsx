@@ -8,23 +8,31 @@ import { AddPackData } from '../../../../features/cardsPack/card-packs-api'
 import { BasicModal } from '../BasicModal/BasicModal'
 
 type PropsType = {
-  handleLoadPacksClick: (data: AddPackData) => void
-  icon?: JSX.Element
+  icon: JSX.Element
+  packId: string
+  editCardPack: (data: AddPackData) => void
+  packName: string
 }
 
-export const AddPackModal = (props: PropsType) => {
-  const [packTitle, SetPackTitle] = useState('')
+export const EditPackModal = (props: PropsType) => {
+  const [packTitle, SetPackTitle] = useState(props.packName)
   const [isPrivate, SetIsPrivate] = useState(false)
+
   const callback = () => {
-    props.handleLoadPacksClick({ name: packTitle, private: isPrivate })
+    const data = {
+      _id: props.packId,
+      name: packTitle,
+      private: isPrivate,
+    }
+
+    props.editCardPack(data)
     SetPackTitle('')
   }
-
   const packTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     SetPackTitle(e.currentTarget.value)
   }
   const closeModal = () => {
-    SetPackTitle('')
+    SetPackTitle(props.packName)
     SetIsPrivate(false)
   }
 
@@ -34,7 +42,7 @@ export const AddPackModal = (props: PropsType) => {
       icon={props.icon}
       closeModal={closeModal}
       callback={callback}
-      title={'Add new pack'}
+      title={'Edit pack'}
     >
       <Typography
         style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}

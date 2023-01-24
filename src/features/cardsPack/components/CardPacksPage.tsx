@@ -13,6 +13,7 @@ import { SuperButton } from '../../../common/components/shared/SuperButton/Super
 import { SortPacks } from '../../../common/components/SortPacks/SortPacks'
 import { useAppDispatch, useAppSelector, useDebounce } from '../../../utils/hooks'
 import { selectProfile } from '../../profile/profile-slice'
+import { AddPackData } from '../card-packs-api'
 import {
   selectAllPacks,
   selectCurrentPage,
@@ -59,8 +60,8 @@ export const CardPacksPage = () => {
     dispatch(DEPRECATED_fetchCardPacksTC())
   }, [debouncedTitle, itemsPerPage, currentPage, isMyPacks, sortPackOrder])
 
-  const handleLoadPacksClick = (name: string) => {
-    dispatch(addCardPackTC({ name }))
+  const handleLoadPacksClick = (data: AddPackData) => {
+    dispatch(addCardPackTC(data))
   }
 
   const handleSearchNameChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -125,15 +126,16 @@ export const CardPacksPage = () => {
             lastUpdated={p.updated}
             creator={p.user_name}
             isMyPack={profile._id === p.user_id}
+            packId={p._id}
             openCardPack={() => {
               alert('opened pack')
             }}
-            deleteCardPack={() => {
-              dispatch(deleteCardPackTC(p._id))
-            }}
-            editCardPack={() => {
-              dispatch(updateCardPackTC(p._id, 'Updated pack'))
-            }}
+            /*  deleteCardPack={() => {
+                            dispatch(deleteCardPackTC(p._id))
+                          }}*/
+            /*editCardPack={() => {
+                                      dispatch(updateCardPackTC(p._id, 'Updated pack'))
+                                    }}*/
           />
         ))}
       </CardsContainer>

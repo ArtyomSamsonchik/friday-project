@@ -5,6 +5,8 @@ import Button from '@mui/material/Button'
 import Modal from '@mui/material/Modal'
 import Typography from '@mui/material/Typography'
 
+import { ActonIconButton } from '../../../../features/cardsPack/components/cardPack/ActonIconButton'
+import { ReactComponent as EditSVG } from '../../../assets/icons/edit.svg'
 import { FilledButton } from '../../FilledButton'
 
 const style = {
@@ -22,21 +24,37 @@ const style = {
 type PropsType = {
   children: React.ReactNode
   title: string
-  callBack: () => void
+  callback: () => void
+  closeModal?: () => void
+  icon?: JSX.Element
+  buttonName: string
+  buttonColor?: 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning'
 }
 
 export const BasicModal = (props: PropsType) => {
   const [open, setOpen] = React.useState(false)
   const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
-  const addPackHandler = () => {
-    props.callBack()
+  const handleClose = () => {
+    setOpen(false)
+    props.closeModal && props.closeModal()
+  }
+
+  const modalActionButton = () => {
+    props.callback()
     handleClose()
   }
 
   return (
     <div>
-      <FilledButton onClick={handleOpen}>{props.title}</FilledButton>
+      {props.icon ? (
+        <ActonIconButton title="edit pack" onClick={handleOpen}>
+          {props.icon}
+        </ActonIconButton>
+      ) : (
+        <Button variant={'contained'} onClick={handleOpen}>
+          {props.title}
+        </Button>
+      )}
       <Modal
         open={open}
         onClose={handleClose}
@@ -44,14 +62,32 @@ export const BasicModal = (props: PropsType) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography
+            style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+          >
             {props.title}
-            <button onClick={handleClose}>x</button>
-            <div>{props.children}</div>
+            <Button variant={'text'} onClick={handleClose}>
+              x
+            </Button>
           </Typography>
+          {props.children}
+
           <Typography id="modal-modal-description" sx={{ mt: 2 }}></Typography>
-          <button onClick={handleClose}>close</button>
-          <button onClick={addPackHandler}>add</button>
+          <Typography style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Button variant={'contained'} onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button
+              variant={'contained'}
+              color={props.buttonColor ? props.buttonColor : 'primary'}
+              onClick={modalActionButton}
+            >
+              {props.buttonName}
+            </Button>
+          </Typography>
         </Box>
       </Modal>
     </div>
