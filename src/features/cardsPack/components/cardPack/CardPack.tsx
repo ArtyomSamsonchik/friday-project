@@ -34,18 +34,8 @@ type CardPackProps = {
 const globalImageSrc = 'https://tomaztsql.files.wordpress.com/2021/01/cards.png'
 
 export const CardPack: FC<CardPackProps> = memo(props => {
-  const {
-    packName,
-    creator,
-    lastUpdated,
-    totalCards,
-    isMyPack,
-    imageSrc,
-    openCardPack,
-    /*deleteCardPack,*/
-    /*editCardPack,*/
-    packId,
-  } = props
+  const { packName, creator, lastUpdated, totalCards, isMyPack, imageSrc, openCardPack, packId } =
+    props
   const dispatch = useAppDispatch()
   const editCardPack = (data: AddPackData) => {
     dispatch(updateCardPackTC(data))
@@ -81,21 +71,6 @@ export const CardPack: FC<CardPackProps> = memo(props => {
         ) : (
           ''
         )}
-        {/*    <ActonIconButton isHidden={!isMyPack} onClick={editCardPack} title="edit pack">
-          <EditSVG />
-        </ActonIconButton>*/}
-        {/*   <DeletePackModal
-          packId={packId}
-          packName={packName}
-          icon={
-            <ActonIconButton title="delete pack">
-              <DeleteSVG />
-            </ActonIconButton>
-          }
-        />*/}
-        {/*<ActonIconButton isHidden={!isMyPack} onClick={deleteCardPack} title="delete pack">
-          <DeleteSVG />
-        </ActonIconButton>*/}
       </ActionButtonsContainer>
       <CardContent sx={{ wordWrap: 'break-word' }}>
         <Typography variant="h5">{packName}</Typography>
