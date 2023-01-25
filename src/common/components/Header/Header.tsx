@@ -25,14 +25,14 @@ export const Header = () => {
     navigate(`/${PATH.LOGIN}`)
   }
 
-  // Temporary construction. For development.
-  const pathCopy = { ...PATH }
-
-  //@ts-ignore
-  delete pathCopy.CARDS
-  //@ts-ignore
-  pathCopy.PACK = `${PATH.CARDS}/${PATH.PACK}`
-  const links = Object.entries(pathCopy).map(([name, path], i) => {
+  // // Temporary construction. For development.
+  // const pathCopy = { ...PATH }
+  //
+  // //@ts-ignore
+  // delete pathCopy.CARDS
+  // //@ts-ignore
+  // pathCopy.PACKS = `${PATH.CARDS}/${PATH.PACKS}`
+  const links = Object.entries(PATH).map(([name, path], i) => {
     name = name.replace('_', ' ').toLowerCase()
 
     return (
