@@ -11,6 +11,7 @@ import {
   GetCardPackResponse,
   GetCardPacksQueryParams,
   SortPacksParams,
+  UpdatePackData,
 } from './card-packs-api'
 
 const initState = {
@@ -140,7 +141,7 @@ export const deleteCardPackTC =
   }
 
 export const updateCardPackTC =
-  (data: AddPackData): AppThunk =>
+  (data: UpdatePackData): AppThunk =>
   async dispatch => {
     try {
       dispatch(setAppStatus('loading'))

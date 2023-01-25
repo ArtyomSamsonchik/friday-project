@@ -10,7 +10,7 @@ export const cardPacksApi = {
   deletePack(packId: string) {
     return instance.delete<DeleteCardPackResponse>(`cards/pack?id=${packId}`)
   },
-  updatePack(data: AddPackData) {
+  updatePack(data: UpdatePackData) {
     return instance.put<UpdateCardPackResponse>('cards/pack', { cardsPack: data })
   },
 }
@@ -19,8 +19,10 @@ export type AddPackData = {
   name: string
   deckCover?: string
   private?: boolean
-  _id?: string
+  // _id: string
 }
+
+export type UpdatePackData = AddPackData & { _id: string }
 
 export type GetCardPacksQueryParams = {
   packName?: string

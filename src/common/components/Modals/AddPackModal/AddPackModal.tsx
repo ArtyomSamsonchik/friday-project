@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ChangeEventHandler, useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 
 import { Typography } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
@@ -8,7 +8,7 @@ import { AddPackData } from '../../../../features/cardsPack/card-packs-api'
 import { BasicModal } from '../BasicModal/BasicModal'
 
 type PropsType = {
-  handleLoadPacksClick: (data: AddPackData) => void
+  handleLoadPacksClick: (data: Omit<AddPackData, '_id'>) => void
   icon?: JSX.Element
 }
 

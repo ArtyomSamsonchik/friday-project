@@ -1,22 +1,22 @@
-import React, { ChangeEvent, ChangeEventHandler, useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 
 import { Typography } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
 import TextField from '@mui/material/TextField'
 
-import { AddPackData } from '../../../../features/cardsPack/card-packs-api'
+import { UpdatePackData } from '../../../../features/cardsPack/card-packs-api'
 import { BasicModal } from '../BasicModal/BasicModal'
 
 type PropsType = {
   icon: JSX.Element
   packId: string
-  editCardPack: (data: AddPackData) => void
+  editCardPack: (data: UpdatePackData) => void
   packName: string
 }
 
 export const EditPackModal = (props: PropsType) => {
-  const [packTitle, SetPackTitle] = useState(props.packName)
-  const [isPrivate, SetIsPrivate] = useState(false)
+  const [packTitle, setPackTitle] = useState(props.packName)
+  const [isPrivate, setIsPrivate] = useState(false)
 
   const callback = () => {
     const data = {
@@ -26,18 +26,18 @@ export const EditPackModal = (props: PropsType) => {
     }
 
     props.editCardPack(data)
-    SetPackTitle('')
+    setPackTitle('')
   }
   const packTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    SetPackTitle(e.currentTarget.value)
+    setPackTitle(e.currentTarget.value)
   }
   const closeModal = () => {
-    SetPackTitle(props.packName)
-    SetIsPrivate(false)
+    setIsPrivate(false)
   }
 
   return (
     <BasicModal
+      handleOpen={() => setPackTitle(props.packName)}
       buttonName={'Save'}
       icon={props.icon}
       closeModal={closeModal}
@@ -56,7 +56,8 @@ export const EditPackModal = (props: PropsType) => {
           onChange={packTitleChange}
         />
         <span style={{ marginBottom: '30px', marginTop: '30px' }}>
-          <Checkbox checked={isPrivate} onChange={() => SetIsPrivate(!isPrivate)} /> Private
+          <Checkbox checked={isPrivate} onChange={() => setIsPrivate(!isPrivate)} />
+          Make private
         </span>
       </Typography>
     </BasicModal>

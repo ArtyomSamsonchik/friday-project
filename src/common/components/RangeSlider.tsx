@@ -29,8 +29,8 @@ export const MinimumDistanceSlider = memo((props: MinimumDistanceSliderType) => 
   const debouncedInputMinMax = useDebounce(inputMinMax)
 
   useEffect(() => {
-    setSliderMinMax([0, maxValue])
-    setInputMinMax([0, maxValue])
+    setSliderMinMax([0, maxValue || 1])
+    setInputMinMax([0, maxValue || 1])
   }, [minValue, maxValue])
 
   //synchronize slider with inputs when changing input field

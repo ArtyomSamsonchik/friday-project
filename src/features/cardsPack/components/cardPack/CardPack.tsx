@@ -11,7 +11,7 @@ import { CustomCard } from '../../../../common/components/CustomCard'
 import { DeletePackModal } from '../../../../common/components/Modals/DeletePackModal/DeletePackModal'
 import { EditPackModal } from '../../../../common/components/Modals/EditPackModal/EditPackModal'
 import { useAppDispatch } from '../../../../utils/hooks'
-import { AddPackData } from '../../card-packs-api'
+import { UpdatePackData } from '../../card-packs-api'
 import { deleteCardPackTC, updateCardPackTC } from '../../cards-pack-slice'
 
 import { ActionButtonsContainer } from './ActionButtonsContainer'
@@ -37,7 +37,7 @@ export const CardPack: FC<CardPackProps> = memo(props => {
   const { packName, creator, lastUpdated, totalCards, isMyPack, imageSrc, openCardPack, packId } =
     props
   const dispatch = useAppDispatch()
-  const editCardPack = (data: AddPackData) => {
+  const editCardPack = (data: UpdatePackData) => {
     dispatch(updateCardPackTC(data))
   }
   const deleteCardPack = (packId: string) => {
@@ -51,25 +51,21 @@ export const CardPack: FC<CardPackProps> = memo(props => {
         <ActonIconButton disabled={totalCards === 0} onClick={openCardPack} title="open pack">
           <TeacherSVG />
         </ActonIconButton>
-        {isMyPack ? (
+        {isMyPack && (
           <EditPackModal
             editCardPack={editCardPack}
             packId={packId}
             packName={packName}
             icon={<EditSVG />}
           />
-        ) : (
-          ''
-        )}{' '}
-        {isMyPack ? (
+        )}
+        {isMyPack && (
           <DeletePackModal
             deleteCardPack={deleteCardPack}
             packId={packId}
             packName={packName}
             icon={<DeleteSVG />}
           />
-        ) : (
-          ''
         )}
       </ActionButtonsContainer>
       <CardContent sx={{ wordWrap: 'break-word' }}>

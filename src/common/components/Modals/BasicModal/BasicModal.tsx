@@ -1,42 +1,34 @@
 import * as React from 'react'
+import { ReactNode } from 'react'
 
+import { ButtonProps } from '@mui/material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Modal from '@mui/material/Modal'
 import Typography from '@mui/material/Typography'
 
 import { ActonIconButton } from '../../../../features/cardsPack/components/cardPack/ActonIconButton'
-import { ReactComponent as EditSVG } from '../../../assets/icons/edit.svg'
-import { FilledButton } from '../../FilledButton'
-
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-}
 
 type PropsType = {
-  children: React.ReactNode
+  children: ReactNode
   title: string
   callback: () => void
   closeModal?: () => void
   icon?: JSX.Element
   buttonName: string
-  buttonColor?: 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning'
+  handleOpen?: () => void
+  buttonColor?: ButtonProps['color']
 }
 
 export const BasicModal = (props: PropsType) => {
   const [open, setOpen] = React.useState(false)
-  const handleOpen = () => setOpen(true)
+  const handleOpen = () => {
+    props.handleOpen?.()
+    setOpen(true)
+  }
   const handleClose = () => {
     setOpen(false)
-    props.closeModal && props.closeModal()
+    props.closeModal?.()
   }
 
   const modalActionButton = () => {
@@ -45,7 +37,7 @@ export const BasicModal = (props: PropsType) => {
   }
 
   return (
-    <div>
+    <>
       {props.icon ? (
         <ActonIconButton title="edit pack" onClick={handleOpen}>
           {props.icon}
@@ -56,40 +48,37 @@ export const BasicModal = (props: PropsType) => {
         </Button>
       )}
       <Modal
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
         open={open}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
-          <Typography
-            style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
+        <Box px={3} width={1} maxWidth={400} boxSizing="content-box">
+          <Box
+            p={4}
+            border="2px solid #000"
+            sx={{ backgroundColor: 'background.paper', boxShadow: 24 }}
           >
-            {props.title}
-            <Button variant={'text'} onClick={handleClose}>
-              x
-            </Button>
-          </Typography>
-          {props.children}
+            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Typography component="h2" variant="h6">
+                {props.title}
+              </Typography>
+              <Button variant={'text'} onClick={handleClose}>
+                x
+              </Button>
+            </Box>
+            {props.children}
 
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}></Typography>
-          <Typography style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Button variant={'contained'} onClick={handleClose}>
-              Cancel
-            </Button>
-            <Button
-              variant={'contained'}
-              color={props.buttonColor ? props.buttonColor : 'primary'}
-              onClick={modalActionButton}
-            >
-              {props.buttonName}
-            </Button>
-          </Typography>
+            <Box display="flex" justifyContent="space-between">
+              <Button variant={'contained'} onClick={handleClose}>
+                Cancel
+              </Button>
+              <Button variant={'contained'} color={props.buttonColor} onClick={modalActionButton}>
+                {props.buttonName}
+              </Button>
+            </Box>
+          </Box>
         </Box>
       </Modal>
-    </div>
+    </>
   )
 }

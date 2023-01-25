@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { Typography } from '@mui/material'
+import Box from '@mui/material/Box'
 
 import { BasicModal } from '../BasicModal/BasicModal'
 
@@ -24,18 +25,13 @@ export const DeletePackModal = (props: PropsType) => {
       callback={callback}
       title={'Delete pack'}
     >
-      <Typography
-        style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
-      >
-        <span
-          style={{
-            marginBottom: '30px',
-            marginTop: '30px',
-          }}
-        >
-          Do you really want to remove <b>{props.packName}</b>?<div>All Cards will be deleted.</div>
-        </span>
-      </Typography>
+      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <Typography component="span" sx={{ my: '30px' }}>
+          Do you really want to remove <b>{props.packName}</b>?
+          <br />
+          All Cards will be deleted.
+        </Typography>
+      </Box>
     </BasicModal>
   )
 }
