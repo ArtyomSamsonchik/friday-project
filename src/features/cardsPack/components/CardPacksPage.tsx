@@ -4,9 +4,8 @@ import TextField from '@mui/material/TextField'
 
 import { BackLink } from '../../../common/components/BackLink'
 import { CardsContainer } from '../../../common/components/CardsContainer'
-import { FilledButton } from '../../../common/components/FilledButton'
+import { CustomContainer } from '../../../common/components/CustomContainer'
 import { AddPackModal } from '../../../common/components/Modals/AddPackModal/AddPackModal'
-import { BasicModal } from '../../../common/components/Modals/BasicModal/BasicModal'
 import { PaginationBar } from '../../../common/components/Pagination/PaginationBar'
 import { MinimumDistanceSlider } from '../../../common/components/RangeSlider'
 import { SuperButton } from '../../../common/components/shared/SuperButton/SuperButton'
@@ -27,13 +26,11 @@ import {
 } from '../cards-pack-selectors'
 import {
   addCardPackTC,
-  deleteCardPackTC,
   DEPRECATED_fetchCardPacksTC,
   setCurrentPackPage,
   setPackItemsPerPage,
   setPackSearchName,
   setPersonalPacksParam,
-  updateCardPackTC,
 } from '../cards-pack-slice'
 
 import { CardPack } from './cardPack/CardPack'
@@ -87,7 +84,7 @@ export const CardPacksPage = () => {
   }, [])
 
   return (
-    <>
+    <CustomContainer>
       {/*Toolbar with search, range slider, personal cards' toggle switch, filter reset etc*/}
       <BackLink title="test link to profile" to="/profile" />
       <TextField value={packSearchName} onChange={handleSearchNameChange} />
@@ -145,6 +142,6 @@ export const CardPacksPage = () => {
         onPageChange={changePageHandler}
         onItemsCountChange={changeItemsPerPageHandler}
       />
-    </>
+    </CustomContainer>
   )
 }

@@ -39,7 +39,7 @@ export const Profile = () => {
 
   return (
     <CustomContainer>
-      <BackLink title="test link to card packs" to="/cards/pack" />
+      <BackLink title="test link to card packs" to={`/${PATH.PACKS}`} />
       <CustomPaper
         sx={{
           maxWidth: '413px',
