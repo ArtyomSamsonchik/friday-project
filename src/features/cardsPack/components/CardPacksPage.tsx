@@ -126,6 +126,7 @@ export const CardPacksPage = () => {
       <CardsContainer>
         {packs.map(p => (
           <CardPack
+            isPrivate={p.private}
             key={p._id}
             packName={p.name}
             totalCards={p.cardsCount}
