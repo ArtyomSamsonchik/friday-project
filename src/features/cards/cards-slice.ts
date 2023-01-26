@@ -15,7 +15,6 @@ import {
 
 const initState = {
   cards: [] as Card[],
-  packId: '',
   packName: '',
   cardSearchName: '',
   cardsSortOrder: stringifySortQueryParams({ order: 'asc', column: 'updated' }),
@@ -23,9 +22,9 @@ const initState = {
   page: 1,
   pageCount: 12,
   cardsTotalCount: 0,
+  packUserId: '',
   // maxGrade: 0,
   // minGrade: 0,
-  // packUserId: '',
   // packUpdated: string
   // packCreated: string
 }
@@ -33,12 +32,19 @@ const initState = {
 export const cardsSlice = (state = initState, action: CardsSliceActions): typeof initState => {
   switch (action.type) {
     case 'CARDS/LOADED': {
-      const payloadCopy = { ...action.payload } as Partial<SetCardsData>
-      const { packPrivate: packIsPrivate } = action.payload
+      const { cards, packName, packPrivate, page, pageCount, cardsTotalCount, packUserId } =
+        action.payload
 
-      delete payloadCopy.packPrivate
-
-      return { ...state, ...payloadCopy, packIsPrivate }
+      return {
+        ...state,
+        cards,
+        packName,
+        packIsPrivate: packPrivate,
+        page,
+        pageCount,
+        cardsTotalCount,
+        packUserId,
+      } as typeof initState
     }
     case 'CARDS/SEARCH_NAME_CHANGED':
       return { ...state, cardSearchName: action.payload }
@@ -54,7 +60,7 @@ export const cardsSlice = (state = initState, action: CardsSliceActions): typeof
 }
 
 //actions
-export const setCards = (cardsData: SetCardsData) => {
+export const setCards = (cardsData: GetCardsResponse) => {
   return { type: 'CARDS/LOADED', payload: cardsData } as const
 }
 export const setCardsSearchName = (name: string) => {
@@ -74,13 +80,13 @@ export const setCardItemsPerPage = (count: number) => {
 export const fetchCardsTC =
   (packId: string): AppThunk =>
   async (dispatch, getState) => {
-    const requestData = getFetchCardsQueryParams(getState())
+    const requestData = getFetchCardsQueryParams(getState(), packId)
 
     try {
       dispatch(setAppStatus('loading'))
       const { data } = await cardsApi.getCards(requestData)
 
-      dispatch(setCards({ ...data, packId }))
+      dispatch(setCards(data))
       dispatch(setAppStatus('success'))
     } catch (e) {
       handleError(e as Error, dispatch)
@@ -88,15 +94,13 @@ export const fetchCardsTC =
   }
 
 export const addCardTC =
-  (cardData: Omit<AddCardRequestData, 'cardsPack_id'>): AppThunk =>
-  async (dispatch, getState) => {
+  (cardData: AddCardRequestData): AppThunk =>
+  async dispatch => {
     try {
-      const { packId } = getState().cards
-
       dispatch(setAppStatus('loading'))
-      await cardsApi.addCard({ ...cardData, cardsPack_id: packId })
+      await cardsApi.addCard(cardData)
 
-      dispatch(fetchCardsTC(packId))
+      dispatch(fetchCardsTC(cardData.cardsPack_id))
       dispatch(setAppStatus('success'))
     } catch (e) {
       handleError(e as Error, dispatch)
@@ -104,11 +108,9 @@ export const addCardTC =
   }
 
 export const deleteCardTC =
-  (cardId: string): AppThunk =>
-  async (dispatch, getState) => {
+  (packId: string, cardId: string): AppThunk =>
+  async dispatch => {
     try {
-      const { packId } = getState().cards
-
       dispatch(setAppStatus('loading'))
       await cardsApi.deleteCard(cardId)
 
@@ -121,14 +123,12 @@ export const deleteCardTC =
 
 export const updateCardTC =
   (data: UpdateCardRequestData): AppThunk =>
-  async (dispatch, getState) => {
+  async dispatch => {
     try {
-      const { packId } = getState().cards
-
       dispatch(setAppStatus('loading'))
       await cardsApi.updateCard(data)
 
-      dispatch(fetchCardsTC(packId))
+      dispatch(fetchCardsTC(data.packId))
       dispatch(setAppStatus('success'))
     } catch (e) {
       handleError(e as Error, dispatch)
@@ -136,11 +136,6 @@ export const updateCardTC =
   }
 
 //types
-type SetCardsData = Pick<
-  GetCardsResponse,
-  'cards' | 'packName' | 'cardsTotalCount' | 'page' | 'pageCount' | 'packPrivate'
-> & { packId: string }
-
 type SetCardsAT = ReturnType<typeof setCards>
 type SetCardsSearchNameAT = ReturnType<typeof setCardsSearchName>
 type SetCardsSortOrderAT = ReturnType<typeof setCardsSortOrder>

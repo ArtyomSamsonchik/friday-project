@@ -17,9 +17,9 @@ export const cardsApi = {
 }
 
 export type GetCardsQueryParams = {
+  cardsPack_id: string
   cardAnswer?: string
   cardQuestion?: string
-  cardsPack_id: string
   min?: number
   max?: number
   sortCards?: string
@@ -41,6 +41,7 @@ export type AddCardRequestData = {
 
 export type UpdateCardRequestData = {
   _id: string
+  packId: string
 } & Partial<Pick<Card, 'question' | 'answer' | 'grade'>>
 
 export type Card = {

@@ -16,6 +16,7 @@ import { CheckEmail } from './common/components/RestorePassword/CheckEmail/Check
 import { RestorePassword } from './common/components/RestorePassword/RestorePassword'
 import { SignUp } from './common/components/SignUp/SignUp'
 import { Test } from './common/components/Test/Test'
+import { CardsPage } from './features/cards/components/CardsPage'
 import { CardPacksPage } from './features/cardsPack/components/CardPacksPage'
 import { Profile } from './features/profile/Profile'
 
@@ -26,6 +27,8 @@ const router = createHashRouter(
       <Route path={PATH.LOGIN} element={<Login />} />
       <Route path={PATH.SIGN_UP} element={<SignUp />} />
       <Route path={PATH.PROFILE} element={<Profile />} />
+      <Route path={PATH.PACKS} element={<CardPacksPage />} />
+      <Route path={`${PATH.CARDS}/:packId`} element={<CardsPage />} />
       <Route path={PATH.CARDS} element={<CardsLayout />}>
         <Route path={PATH.PACK} element={<CardPacksPage />} />
       </Route>
