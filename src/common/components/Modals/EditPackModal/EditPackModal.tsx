@@ -1,41 +1,49 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, ChangeEventHandler, useState } from 'react'
 
 import { Typography } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
 import TextField from '@mui/material/TextField'
 
-import { AddPackData } from '../../../../features/cardsPack/card-packs-api'
+import { UpdatePackData } from '../../../../features/cardsPack/card-packs-api'
 import { BasicModal } from '../BasicModal/BasicModal'
 
 type PropsType = {
-  handleLoadPacksClick: (data: Omit<AddPackData, '_id'>) => void
-  icon?: JSX.Element
+  icon: JSX.Element
+  packId: string
+  editCardPack: (data: UpdatePackData) => void
+  packName: string
+  isPrivate: boolean
 }
 
-export const AddPackModal = (props: PropsType) => {
-  const { handleLoadPacksClick } = props
-  const [packTitle, SetPackTitle] = useState('')
-  const [isPrivate, SetIsPrivate] = useState(false)
+export const EditPackModal = (props: PropsType) => {
+  const { icon, packId, editCardPack, packName, isPrivate } = props
+  const [packTitle, setPackTitle] = useState(packName)
+  const [privatePack, setPrivatePack] = useState(isPrivate)
   const callback = () => {
-    handleLoadPacksClick({ name: packTitle, private: isPrivate })
-    SetPackTitle('')
-  }
+    const data = {
+      _id: packId,
+      name: packTitle,
+      private: privatePack,
+    }
 
+    editCardPack(data)
+    setPackTitle('')
+  }
   const packTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    SetPackTitle(e.currentTarget.value)
+    setPackTitle(e.currentTarget.value)
   }
   const closeModal = () => {
-    SetPackTitle('')
-    SetIsPrivate(false)
+    setPackTitle(packName)
+    setPrivatePack(isPrivate)
   }
 
   return (
     <BasicModal
       buttonName={'Save'}
-      icon={props.icon}
+      icon={icon}
       closeModal={closeModal}
       callback={callback}
-      title={'Add new pack'}
+      title={'Edit pack'}
     >
       <Typography
         style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
@@ -49,7 +57,7 @@ export const AddPackModal = (props: PropsType) => {
           onChange={packTitleChange}
         />
         <span style={{ marginBottom: '30px', marginTop: '30px' }}>
-          <Checkbox checked={isPrivate} onChange={() => SetIsPrivate(!isPrivate)} /> Private
+          <Checkbox checked={isPrivate} onChange={() => setPrivatePack(!privatePack)} /> Private
         </span>
       </Typography>
     </BasicModal>

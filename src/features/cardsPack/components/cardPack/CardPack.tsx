@@ -8,6 +8,11 @@ import { ReactComponent as DeleteSVG } from '../../../../common/assets/icons/del
 import { ReactComponent as EditSVG } from '../../../../common/assets/icons/edit.svg'
 import { ReactComponent as TeacherSVG } from '../../../../common/assets/icons/teacher.svg'
 import { CustomCard } from '../../../../common/components/CustomCard'
+import { DeletePackModal } from '../../../../common/components/Modals/DeletePackModal/DeletePackModal'
+import { EditPackModal } from '../../../../common/components/Modals/EditPackModal/EditPackModal'
+import { useAppDispatch } from '../../../../utils/hooks'
+import { UpdatePackData } from '../../card-packs-api'
+import { deleteCardPackTC, updateCardPackTC } from '../../cards-pack-slice'
 
 import { ActionButtonsContainer } from './ActionButtonsContainer'
 import { ActonIconButton } from './ActonIconButton'
@@ -19,6 +24,8 @@ type CardPackProps = {
   creator: string
   isMyPack: boolean
   imageSrc?: string
+  packId: string
+  isPrivate: boolean
   openCardPack?: MouseEventHandler<HTMLButtonElement>
   editCardPack?: MouseEventHandler<HTMLButtonElement>
   deleteCardPack?: MouseEventHandler<HTMLButtonElement>
@@ -36,9 +43,16 @@ export const CardPack: FC<CardPackProps> = memo(props => {
     isMyPack,
     imageSrc,
     openCardPack,
-    deleteCardPack,
-    editCardPack,
+    packId,
+    isPrivate,
   } = props
+  const dispatch = useAppDispatch()
+  const editCardPack = (data: UpdatePackData) => {
+    dispatch(updateCardPackTC(data))
+  }
+  const deleteCardPack = (packId: string) => {
+    dispatch(deleteCardPackTC(packId))
+  }
 
   return (
     <CustomCard sx={{ minHeight: '200px' }}>
@@ -47,12 +61,23 @@ export const CardPack: FC<CardPackProps> = memo(props => {
         <ActonIconButton disabled={totalCards === 0} onClick={openCardPack} title="open pack">
           <TeacherSVG />
         </ActonIconButton>
-        <ActonIconButton isHidden={!isMyPack} onClick={editCardPack} title="edit pack">
-          <EditSVG />
-        </ActonIconButton>
-        <ActonIconButton isHidden={!isMyPack} onClick={deleteCardPack} title="delete pack">
-          <DeleteSVG />
-        </ActonIconButton>
+        {isMyPack && (
+          <EditPackModal
+            editCardPack={editCardPack}
+            packId={packId}
+            packName={packName}
+            isPrivate={isPrivate}
+            icon={<EditSVG />}
+          />
+        )}
+        {isMyPack && (
+          <DeletePackModal
+            deleteCardPack={deleteCardPack}
+            packId={packId}
+            packName={packName}
+            icon={<DeleteSVG />}
+          />
+        )}
       </ActionButtonsContainer>
       <CardContent sx={{ wordWrap: 'break-word' }}>
         <Typography variant="h5">{packName}</Typography>

@@ -1,59 +1,84 @@
 import * as React from 'react'
+import { ReactNode } from 'react'
 
+import { ButtonProps } from '@mui/material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Modal from '@mui/material/Modal'
 import Typography from '@mui/material/Typography'
 
-import { FilledButton } from '../../FilledButton'
-
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-}
+import { ActonIconButton } from '../../../../features/cardsPack/components/cardPack/ActonIconButton'
 
 type PropsType = {
-  children: React.ReactNode
+  children: ReactNode
   title: string
-  callBack: () => void
+  callback: () => void
+  closeModal?: () => void
+  icon?: JSX.Element
+  buttonName: string
+  handleOpen?: () => void
+  buttonColor?: ButtonProps['color']
 }
 
 export const BasicModal = (props: PropsType) => {
   const [open, setOpen] = React.useState(false)
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
-  const addPackHandler = () => {
-    props.callBack()
+  const handleOpen = () => {
+    props.handleOpen?.()
+    setOpen(true)
+  }
+  const handleClose = () => {
+    setOpen(false)
+    props.closeModal?.()
+  }
+
+  const modalActionButton = () => {
+    props.callback()
     handleClose()
   }
 
   return (
-    <div>
-      <FilledButton onClick={handleOpen}>{props.title}</FilledButton>
+    <>
+      {props.icon ? (
+        <ActonIconButton title="edit pack" onClick={handleOpen}>
+          {props.icon}
+        </ActonIconButton>
+      ) : (
+        <Button variant={'contained'} onClick={handleOpen}>
+          {props.title}
+        </Button>
+      )}
       <Modal
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
         open={open}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            {props.title}
-            <button onClick={handleClose}>x</button>
-            <div>{props.children}</div>
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}></Typography>
-          <button onClick={handleClose}>close</button>
-          <button onClick={addPackHandler}>add</button>
+        <Box px={3} width={1} maxWidth={400} boxSizing="content-box">
+          <Box
+            p={4}
+            border="2px solid #000"
+            sx={{ backgroundColor: 'background.paper', boxShadow: 24 }}
+          >
+            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Typography component="h2" variant="h6">
+                {props.title}
+              </Typography>
+              <Button variant={'text'} onClick={handleClose}>
+                x
+              </Button>
+            </Box>
+            {props.children}
+
+            <Box display="flex" justifyContent="space-between">
+              <Button variant={'contained'} onClick={handleClose}>
+                Cancel
+              </Button>
+              <Button variant={'contained'} color={props.buttonColor} onClick={modalActionButton}>
+                {props.buttonName}
+              </Button>
+            </Box>
+          </Box>
         </Box>
       </Modal>
-    </div>
+    </>
   )
 }
