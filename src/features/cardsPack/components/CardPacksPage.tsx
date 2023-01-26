@@ -13,6 +13,7 @@ import { PaginationBar } from '../../../common/components/Pagination/PaginationB
 import { MinimumDistanceSlider } from '../../../common/components/RangeSlider'
 import { SuperButton } from '../../../common/components/shared/SuperButton/SuperButton'
 import { SortPacks } from '../../../common/components/SortPacks/SortPacks'
+import { SortPackButton } from '../../../common/components/SortPacks/SortPacksButton'
 import { useAppDispatch, useAppSelector, useDebounce } from '../../../utils/hooks'
 import { selectProfile } from '../../profile/profile-slice'
 import { AddPackData } from '../card-packs-api'
@@ -122,7 +123,7 @@ export const CardPacksPage = () => {
         <h3>sort params</h3>
       </div>
       {showSort && <SortPacks sortPackOrder={sortPackOrder} />}
-
+      <SortPackButton sortPackOrder={sortPackOrder} />
       <CardsContainer>
         {packs.map(p => (
           <CardPack
