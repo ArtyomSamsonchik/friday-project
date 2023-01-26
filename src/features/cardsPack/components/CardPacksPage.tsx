@@ -127,15 +127,16 @@ export const CardPacksPage = () => {
             creator={p.user_name}
             isMyPack={profile._id === p.user_id}
             packId={p._id}
+            isPrivate={p.private}
             openCardPack={() => {
               alert('opened pack')
             }}
             /*  deleteCardPack={() => {
-                            dispatch(deleteCardPackTC(p._id))
-                          }}*/
+                                        dispatch(deleteCardPackTC(p._id))
+                                      }}*/
             /*editCardPack={() => {
-                                      dispatch(updateCardPackTC(p._id, 'Updated pack'))
-                                    }}*/
+                                                  dispatch(updateCardPackTC(p._id, 'Updated pack'))
+                                                }}*/
           />
         ))}
       </CardsContainer>

@@ -1,45 +1,46 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, ChangeEventHandler, useState } from 'react'
 
 import { Typography } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
 import TextField from '@mui/material/TextField'
 
-import { UpdatePackData } from '../../../../features/cardsPack/card-packs-api'
+import { AddPackData } from '../../../../features/cardsPack/card-packs-api'
 import { BasicModal } from '../BasicModal/BasicModal'
 
 type PropsType = {
   icon: JSX.Element
   packId: string
-  editCardPack: (data: UpdatePackData) => void
+  editCardPack: (data: AddPackData) => void
   packName: string
+  isPrivate: boolean
 }
 
 export const EditPackModal = (props: PropsType) => {
-  const [packTitle, setPackTitle] = useState(props.packName)
-  const [isPrivate, setIsPrivate] = useState(false)
-
+  const { icon, packId, editCardPack, packName, isPrivate } = props
+  const [packTitle, setPackTitle] = useState(packName)
+  const [privatePack, setPrivatePack] = useState(isPrivate)
   const callback = () => {
     const data = {
-      _id: props.packId,
+      _id: packId,
       name: packTitle,
-      private: isPrivate,
+      private: privatePack,
     }
 
-    props.editCardPack(data)
+    editCardPack(data)
     setPackTitle('')
   }
   const packTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPackTitle(e.currentTarget.value)
   }
   const closeModal = () => {
-    setIsPrivate(false)
+    setPackTitle(packName)
+    setPrivatePack(isPrivate)
   }
 
   return (
     <BasicModal
-      handleOpen={() => setPackTitle(props.packName)}
       buttonName={'Save'}
-      icon={props.icon}
+      icon={icon}
       closeModal={closeModal}
       callback={callback}
       title={'Edit pack'}
@@ -56,8 +57,7 @@ export const EditPackModal = (props: PropsType) => {
           onChange={packTitleChange}
         />
         <span style={{ marginBottom: '30px', marginTop: '30px' }}>
-          <Checkbox checked={isPrivate} onChange={() => setIsPrivate(!isPrivate)} />
-          Make private
+          <Checkbox checked={isPrivate} onChange={() => setPrivatePack(!privatePack)} /> Private
         </span>
       </Typography>
     </BasicModal>

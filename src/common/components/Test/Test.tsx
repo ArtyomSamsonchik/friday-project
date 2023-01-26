@@ -82,6 +82,7 @@ export const Test = memo(() => {
       <CustomContainer>
         <CardsContainer>
           <CardPack
+            isPrivate={false}
             packId={'as'} ///  что бы не ругался тест
             packName={'Test card pack'}
             totalCards={20}
@@ -109,6 +110,7 @@ export const Test = memo(() => {
           />
           {cards.map(c => (
             <CardPack
+              isPrivate={false}
               key={c._id}
               packId={c._id}
               packName={c.name}

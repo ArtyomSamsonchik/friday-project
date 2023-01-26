@@ -25,6 +25,7 @@ type CardPackProps = {
   isMyPack: boolean
   imageSrc?: string
   packId: string
+  isPrivate: boolean
   openCardPack?: MouseEventHandler<HTMLButtonElement>
   editCardPack?: MouseEventHandler<HTMLButtonElement>
   deleteCardPack?: MouseEventHandler<HTMLButtonElement>
@@ -34,8 +35,17 @@ type CardPackProps = {
 const globalImageSrc = 'https://tomaztsql.files.wordpress.com/2021/01/cards.png'
 
 export const CardPack: FC<CardPackProps> = memo(props => {
-  const { packName, creator, lastUpdated, totalCards, isMyPack, imageSrc, openCardPack, packId } =
-    props
+  const {
+    packName,
+    creator,
+    lastUpdated,
+    totalCards,
+    isMyPack,
+    imageSrc,
+    openCardPack,
+    packId,
+    isPrivate,
+  } = props
   const dispatch = useAppDispatch()
   const editCardPack = (data: UpdatePackData) => {
     dispatch(updateCardPackTC(data))
@@ -56,6 +66,7 @@ export const CardPack: FC<CardPackProps> = memo(props => {
             editCardPack={editCardPack}
             packId={packId}
             packName={packName}
+            isPrivate={isPrivate}
             icon={<EditSVG />}
           />
         )}
