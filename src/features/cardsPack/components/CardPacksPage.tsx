@@ -29,13 +29,11 @@ import {
 } from '../cards-pack-selectors'
 import {
   addCardPackTC,
-  deleteCardPackTC,
   DEPRECATED_fetchCardPacksTC,
   setCurrentPackPage,
   setPackItemsPerPage,
   setPackSearchName,
   setPersonalPacksParam,
-  updateCardPackTC,
 } from '../cards-pack-slice'
 
 import { CardPack } from './cardPack/CardPack'
@@ -128,6 +126,7 @@ export const CardPacksPage = () => {
       <CardsContainer>
         {packs.map(p => (
           <CardPack
+            isPrivate={p.private}
             key={p._id}
             packName={p.name}
             totalCards={p.cardsCount}
@@ -135,7 +134,6 @@ export const CardPacksPage = () => {
             creator={p.user_name}
             isMyPack={profile._id === p.user_id}
             packId={p._id}
-            isPrivate={p.private}
             openCardPack={() => navigate(`/${PATH.CARDS}/${p._id}`)}
             // deleteCardPack={() => {
             //   dispatch(deleteCardPackTC(p._id))

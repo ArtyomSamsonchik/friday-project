@@ -8,7 +8,6 @@ import { createHashRouter, createRoutesFromElements, Route, RouterProvider } fro
 import { App } from './app/App'
 import { PATH } from './app/path'
 import { store } from './app/store'
-import { CardsLayout } from './common/components/CardsLayout'
 import { ErrorPage } from './common/components/ErrorPage/ErrorPage'
 import { Login } from './common/components/Login/Login'
 import { NewPassword } from './common/components/NewPassword/NewPassword'
@@ -29,9 +28,6 @@ const router = createHashRouter(
       <Route path={PATH.PROFILE} element={<Profile />} />
       <Route path={PATH.PACKS} element={<CardPacksPage />} />
       <Route path={`${PATH.CARDS}/:packId`} element={<CardsPage />} />
-      <Route path={PATH.CARDS} element={<CardsLayout />}>
-        <Route path={PATH.PACK} element={<CardPacksPage />} />
-      </Route>
       <Route path={PATH.NEW_PASSWORD} element={<NewPassword />} />
       <Route path={PATH.RESTORE_PASSWORD} element={<RestorePassword />} />
       <Route path={PATH.CHECK_EMAIL} element={<CheckEmail />} />
