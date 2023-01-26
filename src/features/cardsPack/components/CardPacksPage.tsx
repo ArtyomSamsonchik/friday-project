@@ -135,12 +135,6 @@ export const CardPacksPage = () => {
             isMyPack={profile._id === p.user_id}
             packId={p._id}
             openCardPack={() => navigate(`/${PATH.CARDS}/${p._id}`)}
-            // deleteCardPack={() => {
-            //   dispatch(deleteCardPackTC(p._id))
-            // }}
-            // editCardPack={() => {
-            //   dispatch(updateCardPackTC(p._id, 'Updated pack'))
-            // }}
           />
         ))}
       </CardsContainer>
