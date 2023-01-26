@@ -16,3 +16,5 @@ export const selectCardsCurrentPage = (state: RootStateType) => selectCardsSlice
 export const selectCardItemsPerPage = (state: RootStateType) => selectCardsSlice(state).pageCount
 export const selectCardsTotalCount = (state: RootStateType) =>
   selectCardsSlice(state).cardsTotalCount
+
+export const selectCardsUserId = (state: RootStateType) => selectCardsSlice(state).packUserId

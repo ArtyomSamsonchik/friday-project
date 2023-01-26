@@ -1,10 +1,13 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react'
 
 import TextField from '@mui/material/TextField'
+import { useNavigate } from 'react-router-dom'
 
+import { PATH } from '../../../app/path'
 import { BackLink } from '../../../common/components/BackLink'
 import { CardsContainer } from '../../../common/components/CardsContainer'
 import { CustomContainer } from '../../../common/components/CustomContainer'
+import { CustomToolbar } from '../../../common/components/CustomToolbar'
 import { AddPackModal } from '../../../common/components/Modals/AddPackModal/AddPackModal'
 import { PaginationBar } from '../../../common/components/Pagination/PaginationBar'
 import { MinimumDistanceSlider } from '../../../common/components/RangeSlider'
@@ -47,15 +50,16 @@ export const CardPacksPage = () => {
   const maxCardsCount = useAppSelector(selectMaxCardsCount)
 
   const packSearchName = useAppSelector(selectPackSearchName)
-  const debouncedTitle = useDebounce(packSearchName)
+  const debouncedPackSearchName = useDebounce(packSearchName)
 
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
   const [showSort, setShowSort] = useState(false)
 
   useEffect(() => {
     dispatch(DEPRECATED_fetchCardPacksTC())
-  }, [debouncedTitle, itemsPerPage, currentPage, isMyPacks, sortPackOrder])
+  }, [debouncedPackSearchName, itemsPerPage, currentPage, isMyPacks, sortPackOrder])
 
   const handleLoadPacksClick = (data: AddPackData) => {
     dispatch(addCardPackTC(data))
@@ -87,28 +91,33 @@ export const CardPacksPage = () => {
     <CustomContainer>
       {/*Toolbar with search, range slider, personal cards' toggle switch, filter reset etc*/}
       <BackLink title="test link to profile" to="/profile" />
-      <TextField value={packSearchName} onChange={handleSearchNameChange} />
-      {/*<FilledButton onClick={() => handleLoadPacksClick('New pack')}>add card pack</FilledButton>*/}
-      <AddPackModal handleLoadPacksClick={handleLoadPacksClick} />
-      <MinimumDistanceSlider
-        minValue={minCardsCount}
-        maxValue={maxCardsCount}
-        onRangeChange={handleSliderChange}
-      />
-      <div>
-        <SuperButton
-          style={isMyPacks ? { backgroundColor: 'blue' } : { backgroundColor: 'white' }}
-          onClick={() => dispatch(setPersonalPacksParam(true))}
-        >
-          my
-        </SuperButton>
-        <SuperButton
-          style={isMyPacks ? { backgroundColor: 'white' } : { backgroundColor: 'blue' }}
-          onClick={() => dispatch(setPersonalPacksParam(false))}
-        >
-          all
-        </SuperButton>
-      </div>
+      <CustomToolbar
+        title="Packs List"
+        actionButtonName="Add new Pack"
+        onActionButtonClick={() => {}}
+      >
+        <TextField value={packSearchName} onChange={handleSearchNameChange} />
+        <AddPackModal handleLoadPacksClick={handleLoadPacksClick} />
+        <MinimumDistanceSlider
+          minValue={minCardsCount}
+          maxValue={maxCardsCount}
+          onRangeChange={handleSliderChange}
+        />
+        <div>
+          <SuperButton
+            style={isMyPacks ? { backgroundColor: 'blue' } : { backgroundColor: 'white' }}
+            onClick={() => dispatch(setPersonalPacksParam(true))}
+          >
+            my
+          </SuperButton>
+          <SuperButton
+            style={isMyPacks ? { backgroundColor: 'white' } : { backgroundColor: 'blue' }}
+            onClick={() => dispatch(setPersonalPacksParam(false))}
+          >
+            all
+          </SuperButton>
+        </div>
+      </CustomToolbar>
       <div style={{ textAlign: 'center' }} onClick={() => setShowSort(!showSort)}>
         <h3>sort params</h3>
       </div>
@@ -124,16 +133,13 @@ export const CardPacksPage = () => {
             creator={p.user_name}
             isMyPack={profile._id === p.user_id}
             packId={p._id}
-            isPrivate={p.private}
-            openCardPack={() => {
-              alert('opened pack')
-            }}
-            /*  deleteCardPack={() => {
-                                        dispatch(deleteCardPackTC(p._id))
-                                      }}*/
-            /*editCardPack={() => {
-                                                  dispatch(updateCardPackTC(p._id, 'Updated pack'))
-                                                }}*/
+            openCardPack={() => navigate(`/${PATH.CARDS}/${p._id}`)}
+            // deleteCardPack={() => {
+            //   dispatch(deleteCardPackTC(p._id))
+            // }}
+            // editCardPack={() => {
+            //   dispatch(updateCardPackTC(p._id, 'Updated pack'))
+            // }}
           />
         ))}
       </CardsContainer>
