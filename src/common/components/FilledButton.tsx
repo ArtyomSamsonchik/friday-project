@@ -14,6 +14,9 @@ export const FilledButton: FC<ButtonProps> = ({ sx, ...props }) => (
       borderRadius: '30px',
       fontSize: 16,
       lineHeight: 1.25,
+      '&:hover': {
+        backgroundColor: '#3564DA',
+      },
       ...sx,
     }}
     {...props}
