@@ -12,15 +12,16 @@ type PropsType = {
 }
 
 export const DeletePackModal = (props: PropsType) => {
+  const { icon, packId, packName, deleteCardPack } = props
   const callback = () => {
-    props.deleteCardPack(props.packId)
+    deleteCardPack(packId)
   }
 
   return (
     <BasicModal
       buttonName={'Delete'}
       buttonColor={'error'}
-      icon={props.icon}
+      icon={icon}
       callback={callback}
       title={'Delete pack'}
     >
@@ -33,7 +34,7 @@ export const DeletePackModal = (props: PropsType) => {
             marginTop: '30px',
           }}
         >
-          Do you really want to remove <b>{props.packName}</b>?<div>All Cards will be deleted.</div>
+          Do you really want to remove <b>{packName}</b>?<div>All Cards will be deleted.</div>
         </span>
       </Typography>
     </BasicModal>

@@ -12,34 +12,35 @@ type PropsType = {
   packId: string
   editCardPack: (data: AddPackData) => void
   packName: string
+  isPrivate: boolean
 }
 
 export const EditPackModal = (props: PropsType) => {
-  const [packTitle, SetPackTitle] = useState(props.packName)
-  const [isPrivate, SetIsPrivate] = useState(false)
-
+  const { icon, packId, editCardPack, packName, isPrivate } = props
+  const [packTitle, setPackTitle] = useState(packName)
+  const [privatePack, setPrivatePack] = useState(isPrivate)
   const callback = () => {
     const data = {
-      _id: props.packId,
+      _id: packId,
       name: packTitle,
-      private: isPrivate,
+      private: privatePack,
     }
 
-    props.editCardPack(data)
-    SetPackTitle('')
+    editCardPack(data)
+    setPackTitle('')
   }
   const packTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    SetPackTitle(e.currentTarget.value)
+    setPackTitle(e.currentTarget.value)
   }
   const closeModal = () => {
-    SetPackTitle(props.packName)
-    SetIsPrivate(false)
+    setPackTitle(packName)
+    setPrivatePack(isPrivate)
   }
 
   return (
     <BasicModal
       buttonName={'Save'}
-      icon={props.icon}
+      icon={icon}
       closeModal={closeModal}
       callback={callback}
       title={'Edit pack'}
@@ -56,7 +57,7 @@ export const EditPackModal = (props: PropsType) => {
           onChange={packTitleChange}
         />
         <span style={{ marginBottom: '30px', marginTop: '30px' }}>
-          <Checkbox checked={isPrivate} onChange={() => SetIsPrivate(!isPrivate)} /> Private
+          <Checkbox checked={isPrivate} onChange={() => setPrivatePack(!privatePack)} /> Private
         </span>
       </Typography>
     </BasicModal>

@@ -25,6 +25,7 @@ type CardPackProps = {
   isMyPack: boolean
   imageSrc?: string
   packId: string
+  isPrivate: boolean
   openCardPack?: MouseEventHandler<HTMLButtonElement>
   editCardPack?: MouseEventHandler<HTMLButtonElement>
   deleteCardPack?: MouseEventHandler<HTMLButtonElement>
@@ -34,8 +35,17 @@ type CardPackProps = {
 const globalImageSrc = 'https://tomaztsql.files.wordpress.com/2021/01/cards.png'
 
 export const CardPack: FC<CardPackProps> = memo(props => {
-  const { packName, creator, lastUpdated, totalCards, isMyPack, imageSrc, openCardPack, packId } =
-    props
+  const {
+    packName,
+    creator,
+    lastUpdated,
+    totalCards,
+    isMyPack,
+    imageSrc,
+    openCardPack,
+    packId,
+    isPrivate,
+  } = props
   const dispatch = useAppDispatch()
   const editCardPack = (data: AddPackData) => {
     dispatch(updateCardPackTC(data))
@@ -51,25 +61,22 @@ export const CardPack: FC<CardPackProps> = memo(props => {
         <ActonIconButton disabled={totalCards === 0} onClick={openCardPack} title="open pack">
           <TeacherSVG />
         </ActonIconButton>
-        {isMyPack ? (
+        {isMyPack && (
           <EditPackModal
             editCardPack={editCardPack}
             packId={packId}
             packName={packName}
+            isPrivate={isPrivate}
             icon={<EditSVG />}
           />
-        ) : (
-          ''
-        )}{' '}
-        {isMyPack ? (
+        )}
+        {isMyPack && (
           <DeletePackModal
             deleteCardPack={deleteCardPack}
             packId={packId}
             packName={packName}
             icon={<DeleteSVG />}
           />
-        ) : (
-          ''
         )}
       </ActionButtonsContainer>
       <CardContent sx={{ wordWrap: 'break-word' }}>

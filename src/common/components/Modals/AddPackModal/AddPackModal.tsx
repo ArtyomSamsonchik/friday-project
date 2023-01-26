@@ -13,10 +13,11 @@ type PropsType = {
 }
 
 export const AddPackModal = (props: PropsType) => {
+  const { handleLoadPacksClick } = props
   const [packTitle, SetPackTitle] = useState('')
   const [isPrivate, SetIsPrivate] = useState(false)
   const callback = () => {
-    props.handleLoadPacksClick({ name: packTitle, private: isPrivate })
+    handleLoadPacksClick({ name: packTitle, private: isPrivate })
     SetPackTitle('')
   }
 
