@@ -32,6 +32,7 @@ export const SortPackButton = (props: PropsType) => {
     setAsc(!asc)
   }
 
+  console.log(asc)
   useEffect(() => {
     dispatch(setPacksSortOrder({ column: options[selectedIndex], order: asc ? 'asc' : 'desc' }))
   }, [asc])
