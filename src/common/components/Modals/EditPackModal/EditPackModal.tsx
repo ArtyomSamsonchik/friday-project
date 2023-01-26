@@ -4,13 +4,13 @@ import { Typography } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
 import TextField from '@mui/material/TextField'
 
-import { AddPackData } from '../../../../features/cardsPack/card-packs-api'
+import { UpdatePackData } from '../../../../features/cardsPack/card-packs-api'
 import { BasicModal } from '../BasicModal/BasicModal'
 
 type PropsType = {
   icon: JSX.Element
   packId: string
-  editCardPack: (data: AddPackData) => void
+  editCardPack: (data: UpdatePackData) => void
   packName: string
   isPrivate: boolean
 }
