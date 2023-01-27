@@ -38,7 +38,7 @@ export type GetCardPacksQueryParams = {
 
 export type SortPacksParams = {
   order: 'asc' | 'desc'
-  column: 'name' | 'cardsCount' | 'created' | 'updated' | string
+  column: 'name' | 'cardsCount' | 'created' | 'updated'
 }
 
 export type CardPackType = {

@@ -90,7 +90,7 @@ export const Header = () => {
 
       {/*Temporary construction. For development.*/}
       <Box
-        sx={{ position: 'fixed', bottom: 25, left: 20, zIndex: 1000, backgroundColor: '#a6a3a3cf' }}
+        sx={{ position: 'fixed', bottom: 50, left: 20, zIndex: 1000, backgroundColor: '#a6a3a3cf' }}
       >
         <ul className={s.links_list}>{links}</ul>
       </Box>

@@ -12,3 +12,7 @@ export const PATH = {
   TEST: 'test',
   CHECK_EMAIL: 'check-email',
 } as const
+
+export const URL_PARAMS = {
+  PACK_ID: 'packId',
+} as const

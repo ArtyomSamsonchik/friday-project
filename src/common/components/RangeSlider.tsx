@@ -10,6 +10,7 @@ import { useDebounce } from '../../utils/hooks'
 type MinimumDistanceSliderType = {
   minValue: number
   maxValue: number
+  disabled?: boolean
   onRangeChange: (minValue: number, maxValue: number) => void
 }
 
@@ -22,7 +23,7 @@ const getCorrectedInputMaxValue = (min: number, max: number) =>
   max - min < minThumbDistance ? min + minThumbDistance : max
 
 export const MinimumDistanceSlider = memo((props: MinimumDistanceSliderType) => {
-  const { minValue, maxValue, onRangeChange } = props
+  const { minValue, maxValue, disabled, onRangeChange } = props
 
   const [sliderMinMax, setSliderMinMax] = useState([minValue, maxValue])
   const [inputMinMax, setInputMinMax] = useState([minValue, maxValue])
@@ -83,9 +84,10 @@ export const MinimumDistanceSlider = memo((props: MinimumDistanceSliderType) => 
   }
 
   return (
-    <Box sx={{ width: 320, display: 'flex', flexDirection: 'row' }}>
+    <Box width={335} display="flex" gap="15px">
       <Input
         value={inputMinMax[0]}
+        disabled={disabled}
         size="small"
         onChange={handleMinInputChange}
         inputProps={{
@@ -97,6 +99,7 @@ export const MinimumDistanceSlider = memo((props: MinimumDistanceSliderType) => 
       />
       <Slider
         value={sliderMinMax}
+        disabled={disabled}
         max={maxValue}
         onChange={handleSliderChange}
         onChangeCommitted={handleSliderChangeCommit}
@@ -105,6 +108,7 @@ export const MinimumDistanceSlider = memo((props: MinimumDistanceSliderType) => 
       />
       <Input
         value={inputMinMax[1]}
+        disabled={disabled}
         size="small"
         onChange={handleMaxInputChange}
         inputProps={{

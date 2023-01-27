@@ -3,12 +3,14 @@ import React, { FC, ReactNode } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 
-import { FilledButton } from './FilledButton'
+import { AddPackData } from '../../features/cardsPack/card-packs-api'
+
+import { AddPackModal } from './Modals/AddPackModal/AddPackModal'
 
 type CustomToolbarProps = {
   title: string
   actionButtonName: string
-  onActionButtonClick: () => void
+  onActionButtonClick: (data: AddPackData) => void
   children?: ReactNode
 }
 
@@ -21,9 +23,7 @@ export const CustomToolbar: FC<CustomToolbarProps> = props => {
         <Typography component="h6" sx={{ fontSize: 22, lineHeight: 1.25, fontWeight: 600 }}>
           {title}
         </Typography>
-        <FilledButton sx={{ px: 4.5 }} onClick={onActionButtonClick}>
-          {actionButtonName}
-        </FilledButton>
+        <AddPackModal handleLoadPacksClick={onActionButtonClick} />
       </Box>
       <Box display="flex" alignItems="center" flexWrap="wrap" gap="20px">
         {children}
