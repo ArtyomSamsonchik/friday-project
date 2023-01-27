@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react'
 
 import TextField from '@mui/material/TextField'
+import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
 
 import { PATH } from '../../../app/path'
@@ -14,6 +15,8 @@ import { MinimumDistanceSlider } from '../../../common/components/RangeSlider'
 import { SuperButton } from '../../../common/components/shared/SuperButton/SuperButton'
 import { SortPacks } from '../../../common/components/SortPacks/SortPacks'
 import { SortPackButton } from '../../../common/components/SortPacks/SortPacksButton'
+import { CustomToolBarSam } from '../../../common/components/toolBar/ToolBar/CustomToolBar'
+import { ToolBarHeader } from '../../../common/components/toolBar/ToolBarHeader/ToolBarHeader'
 import { useAppDispatch, useAppSelector, useDebounce } from '../../../utils/hooks'
 import { selectProfile } from '../../profile/profile-slice'
 import { AddPackData } from '../card-packs-api'
@@ -92,7 +95,40 @@ export const CardPacksPage = () => {
     <CustomContainer>
       {/*Toolbar with search, range slider, personal cards' toggle switch, filter reset etc*/}
       <BackLink title="test link to profile" to="/profile" />
-      <CustomToolbar
+      <div className={'toolBar'}>
+        <ToolBarHeader>
+          <h3>Packs List</h3>
+          <AddPackModal handleLoadPacksClick={handleLoadPacksClick} />
+        </ToolBarHeader>
+
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <TextField value={packSearchName} onChange={handleSearchNameChange} />
+          <CustomToolBarSam>
+            <SortPackButton sortPackOrder={sortPackOrder} />
+
+            <MinimumDistanceSlider
+              minValue={minCardsCount}
+              maxValue={maxCardsCount}
+              onRangeChange={handleSliderChange}
+            />
+            <div>
+              <SuperButton
+                style={isMyPacks ? { backgroundColor: 'blue' } : { backgroundColor: 'white' }}
+                onClick={() => dispatch(setPersonalPacksParam(true))}
+              >
+                my
+              </SuperButton>
+              <SuperButton
+                style={isMyPacks ? { backgroundColor: 'white' } : { backgroundColor: 'blue' }}
+                onClick={() => dispatch(setPersonalPacksParam(false))}
+              >
+                all
+              </SuperButton>
+            </div>
+          </CustomToolBarSam>
+        </div>
+      </div>
+      {/*<CustomToolbar
         title="Packs List"
         actionButtonName="Add new Pack"
         onActionButtonClick={() => {}}
@@ -118,26 +154,29 @@ export const CardPacksPage = () => {
             all
           </SuperButton>
         </div>
-      </CustomToolbar>
+      </CustomToolbar>*/}
       <div style={{ textAlign: 'center' }} onClick={() => setShowSort(!showSort)}>
         <h3>sort params</h3>
       </div>
       {showSort && <SortPacks sortPackOrder={sortPackOrder} />}
-      <SortPackButton sortPackOrder={sortPackOrder} />
       <CardsContainer>
-        {packs.map(p => (
-          <CardPack
-            isPrivate={p.private}
-            key={p._id}
-            packName={p.name}
-            totalCards={p.cardsCount}
-            lastUpdated={p.updated}
-            creator={p.user_name}
-            isMyPack={profile._id === p.user_id}
-            packId={p._id}
-            openCardPack={() => navigate(`/${PATH.CARDS}/${p._id}`)}
-          />
-        ))}
+        {packs.map(p => {
+          const date = dayjs(p.updated).format('DD.MM.YYYY HH:mm')
+
+          return (
+            <CardPack
+              isPrivate={p.private}
+              key={p._id}
+              packName={p.name}
+              totalCards={p.cardsCount}
+              lastUpdated={date}
+              creator={p.user_name}
+              isMyPack={profile._id === p.user_id}
+              packId={p._id}
+              openCardPack={() => navigate(`/${PATH.CARDS}/${p._id}`)}
+            />
+          )
+        })}
       </CardsContainer>
       <PaginationBar
         pagesCount={Math.ceil(cardPacksTotalCount / itemsPerPage)}
