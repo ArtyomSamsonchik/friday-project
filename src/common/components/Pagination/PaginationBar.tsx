@@ -9,15 +9,17 @@ import { StyledSelect } from './StyledSelect'
 type PaginationBarPropsType = {
   pagesCount: number
   itemsPerPage: number
+  disabled?: boolean
   onPageChange: (event: React.ChangeEvent<unknown>, page: number) => void
   onItemsCountChange: NativeSelectInputProps['onChange']
 }
 export const PaginationBar = memo((props: PaginationBarPropsType) => {
-  const { pagesCount, itemsPerPage, onItemsCountChange, onPageChange } = props
+  const { pagesCount, disabled, itemsPerPage, onItemsCountChange, onPageChange } = props
 
   return (
     <div className={s.paginationBarContainer}>
       <StyledPagination
+        disabled={disabled}
         count={pagesCount}
         color="primary"
         shape="rounded"
@@ -26,6 +28,7 @@ export const PaginationBar = memo((props: PaginationBarPropsType) => {
       <div>
         <span>Show </span>
         <StyledSelect
+          disabled={disabled}
           value={itemsPerPage}
           onChange={onItemsCountChange}
           variant={'standard'}

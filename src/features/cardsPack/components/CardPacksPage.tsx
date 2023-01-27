@@ -1,19 +1,18 @@
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react'
+import React, { ChangeEvent, useCallback, useEffect } from 'react'
 
 import TextField from '@mui/material/TextField'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
 
+import { selectAppStatus } from '../../../app/app-slice'
 import { PATH } from '../../../app/path'
 import { BackLink } from '../../../common/components/BackLink'
 import { CardsContainer } from '../../../common/components/CardsContainer'
 import { CustomContainer } from '../../../common/components/CustomContainer'
 import { CustomToolbar } from '../../../common/components/CustomToolbar'
-import { AddPackModal } from '../../../common/components/Modals/AddPackModal/AddPackModal'
 import { PaginationBar } from '../../../common/components/Pagination/PaginationBar'
 import { MinimumDistanceSlider } from '../../../common/components/RangeSlider'
 import { SuperButton } from '../../../common/components/shared/SuperButton/SuperButton'
-import { SortPacks } from '../../../common/components/SortPacks/SortPacks'
 import { SortPackButton } from '../../../common/components/SortPacks/SortPacksButton'
 import { CustomToolBarSam } from '../../../common/components/toolBar/ToolBar/CustomToolBar'
 import { ToolBarHeader } from '../../../common/components/toolBar/ToolBarHeader/ToolBarHeader'
@@ -33,6 +32,7 @@ import {
 } from '../cards-pack-selectors'
 import {
   addCardPackTC,
+  cleanPacks,
   DEPRECATED_fetchCardPacksTC,
   setCurrentPackPage,
   setPackItemsPerPage,
@@ -52,6 +52,7 @@ export const CardPacksPage = () => {
   const isMyPacks = useAppSelector(selectIsMyPacks)
   const minCardsCount = useAppSelector(selectMinCardsCount)
   const maxCardsCount = useAppSelector(selectMaxCardsCount)
+  const appStatus = useAppSelector(selectAppStatus)
 
   const packSearchName = useAppSelector(selectPackSearchName)
   const debouncedPackSearchName = useDebounce(packSearchName)
@@ -59,10 +60,14 @@ export const CardPacksPage = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
-  const [showSort, setShowSort] = useState(false)
+  const controlsAreDisabled = appStatus === 'loading'
 
   useEffect(() => {
     dispatch(DEPRECATED_fetchCardPacksTC())
+
+    return () => {
+      dispatch(cleanPacks())
+    }
   }, [debouncedPackSearchName, itemsPerPage, currentPage, isMyPacks, sortPackOrder])
 
   const handleLoadPacksClick = (data: AddPackData) => {
@@ -93,7 +98,6 @@ export const CardPacksPage = () => {
 
   return (
     <CustomContainer>
-      {/*Toolbar with search, range slider, personal cards' toggle switch, filter reset etc*/}
       <BackLink title="test link to profile" to="/profile" />
       <div className={'toolBar'}>
         <ToolBarHeader>
@@ -131,23 +135,31 @@ export const CardPacksPage = () => {
       {/*<CustomToolbar
         title="Packs List"
         actionButtonName="Add new Pack"
-        onActionButtonClick={() => {}}
+        onActionButtonClick={handleLoadPacksClick}
       >
-        <TextField value={packSearchName} onChange={handleSearchNameChange} />
-        <AddPackModal handleLoadPacksClick={handleLoadPacksClick} />
+        <TextField
+          disabled={controlsAreDisabled}
+          label="search pack"
+          value={packSearchName}
+          onChange={handleSearchNameChange}
+        />
+        <SortPackButton disabled={controlsAreDisabled} sortPackOrder={sortPackOrder} />
         <MinimumDistanceSlider
+          disabled={controlsAreDisabled}
           minValue={minCardsCount}
           maxValue={maxCardsCount}
           onRangeChange={handleSliderChange}
         />
         <div>
           <SuperButton
+            disabled={controlsAreDisabled}
             style={isMyPacks ? { backgroundColor: 'blue' } : { backgroundColor: 'white' }}
             onClick={() => dispatch(setPersonalPacksParam(true))}
           >
             my
           </SuperButton>
           <SuperButton
+            disabled={controlsAreDisabled}
             style={isMyPacks ? { backgroundColor: 'white' } : { backgroundColor: 'blue' }}
             onClick={() => dispatch(setPersonalPacksParam(false))}
           >
@@ -155,10 +167,6 @@ export const CardPacksPage = () => {
           </SuperButton>
         </div>
       </CustomToolbar>*/}
-      <div style={{ textAlign: 'center' }} onClick={() => setShowSort(!showSort)}>
-        <h3>sort params</h3>
-      </div>
-      {showSort && <SortPacks sortPackOrder={sortPackOrder} />}
       <CardsContainer>
         {packs.map(p => {
           const date = dayjs(p.updated).format('DD.MM.YYYY HH:mm')
@@ -180,6 +188,7 @@ export const CardPacksPage = () => {
       </CardsContainer>
       <PaginationBar
         pagesCount={Math.ceil(cardPacksTotalCount / itemsPerPage)}
+        disabled={controlsAreDisabled}
         itemsPerPage={itemsPerPage}
         onPageChange={changePageHandler}
         onItemsCountChange={changeItemsPerPageHandler}

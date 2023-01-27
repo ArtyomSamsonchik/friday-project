@@ -54,6 +54,8 @@ export const cardsSlice = (state = initState, action: CardsSliceActions): typeof
       return { ...state, page: action.payload }
     case 'CARDS/ITEMS_PER_PAGE_CHANGED':
       return { ...state, pageCount: action.payload }
+    case 'CARDS/CARDS_CLEANED':
+      return { ...state, cards: [] }
     default:
       return state
   }
@@ -74,6 +76,9 @@ export const setCurrentCardsPage = (page: number) => {
 }
 export const setCardItemsPerPage = (count: number) => {
   return { type: 'CARDS/ITEMS_PER_PAGE_CHANGED', payload: count } as const
+}
+export const cleanCards = () => {
+  return { type: 'CARDS/CARDS_CLEANED' } as const
 }
 
 //thunks
@@ -141,6 +146,7 @@ type SetCardsSearchNameAT = ReturnType<typeof setCardsSearchName>
 type SetCardsSortOrderAT = ReturnType<typeof setCardsSortOrder>
 type SetCurrentCardsPageAT = ReturnType<typeof setCurrentCardsPage>
 type SetCardItemsPerPageAT = ReturnType<typeof setCardItemsPerPage>
+type CleanCardsAT = ReturnType<typeof cleanCards>
 
 export type CardsSliceActions =
   | SetCardsAT
@@ -148,5 +154,6 @@ export type CardsSliceActions =
   | SetCardsSortOrderAT
   | SetCurrentCardsPageAT
   | SetCardItemsPerPageAT
+  | CleanCardsAT
 
 // TODO: remove unnecessary properties in init state

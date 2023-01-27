@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
@@ -13,44 +13,40 @@ import MenuList from '@mui/material/MenuList'
 import Paper from '@mui/material/Paper'
 import Popper from '@mui/material/Popper'
 
+import { SortPacksParams } from '../../../features/cardsPack/card-packs-api'
 import { setPacksSortOrder } from '../../../features/cardsPack/cards-pack-slice'
 import { useAppDispatch } from '../../../utils/hooks'
 
-const options = ['name', 'cardsCount', 'created', 'updated']
+const options: SortPacksParams['column'][] = ['name', 'cardsCount', 'created', 'updated']
 
 type PropsType = {
+  disabled?: boolean
   sortPackOrder: string
 }
 
-export const SortPackButton = (props: PropsType) => {
-  const dispatch = useAppDispatch()
+export const SortPackButton = memo(({ sortPackOrder, disabled }: PropsType) => {
   const [open, setOpen] = React.useState(false)
+  const [asc, setAsc] = useState(sortPackOrder.includes('1'))
   const anchorRef = React.useRef<HTMLDivElement>(null)
-  const [selectedIndex, setSelectedIndex] = React.useState(3)
-  const [asc, setAsc] = useState(props.sortPackOrder.includes('1'))
-  const handleClick = () => {
-    setAsc(!asc)
-  }
+  const dispatch = useAppDispatch()
 
-  console.log(asc)
+  const column = sortPackOrder.slice(1) as SortPacksParams['column']
+  const selectedColumnIndex = options.indexOf(column)
+
   useEffect(() => {
-    dispatch(setPacksSortOrder({ column: options[selectedIndex], order: asc ? 'asc' : 'desc' }))
+    dispatch(setPacksSortOrder({ column, order: asc ? 'asc' : 'desc' }))
   }, [asc])
 
-  const handleMenuItemClick = (
-    event: React.MouseEvent<HTMLLIElement, MouseEvent>,
-    index: number,
-    option: string
-  ) => {
-    setSelectedIndex(index)
+  const handleAscToggleClick = () => setAsc(!asc)
+
+  const handleMenuItemClick = (index: number) => {
     setOpen(false)
+    const newColumn = options[index]
 
-    dispatch(setPacksSortOrder({ column: option, order: asc ? 'asc' : 'desc' }))
+    dispatch(setPacksSortOrder({ column: newColumn, order: asc ? 'asc' : 'desc' }))
   }
 
-  const handleToggle = () => {
-    setOpen(prevOpen => !prevOpen)
-  }
+  const handleToggle = () => setOpen(prevOpen => !prevOpen)
 
   const handleClose = (event: Event) => {
     if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
@@ -62,15 +58,20 @@ export const SortPackButton = (props: PropsType) => {
 
   return (
     <React.Fragment>
-      <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
-        <Button onClick={handleClick}>
-          {options[selectedIndex]} {asc ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />}
+      <ButtonGroup
+        variant="contained"
+        ref={anchorRef}
+        disabled={disabled}
+        aria-label="split button"
+      >
+        <Button onClick={handleAscToggleClick}>
+          {column} {asc ? <ArrowUpwardIcon /> : <ArrowDownwardIcon />}
         </Button>
         <Button
           size="small"
           aria-controls={open ? 'split-button-menu' : undefined}
           aria-expanded={open ? 'true' : undefined}
-          aria-label="select merge strategy"
+          aria-label="select merge field"
           aria-haspopup="menu"
           onClick={handleToggle}
         >
@@ -100,8 +101,8 @@ export const SortPackButton = (props: PropsType) => {
                   {options.map((option, index) => (
                     <MenuItem
                       key={option}
-                      selected={index === selectedIndex}
-                      onClick={event => handleMenuItemClick(event, index, option)}
+                      selected={index === selectedColumnIndex}
+                      onClick={() => handleMenuItemClick(index)}
                     >
                       {option}
                     </MenuItem>
@@ -114,4 +115,4 @@ export const SortPackButton = (props: PropsType) => {
       </Popper>
     </React.Fragment>
   )
-}
+})

@@ -3,7 +3,7 @@ import React, { ChangeEvent, useCallback, useEffect } from 'react'
 import TextField from '@mui/material/TextField'
 import { useParams } from 'react-router-dom'
 
-import { PATH } from '../../../app/path'
+import { PATH, URL_PARAMS } from '../../../app/path'
 import { BackLink } from '../../../common/components/BackLink'
 import { CardsContainer } from '../../../common/components/CardsContainer'
 import { CustomContainer } from '../../../common/components/CustomContainer'
@@ -20,6 +20,7 @@ import {
   selectCardsUserId,
 } from '../cards-selectors'
 import {
+  cleanCards,
   fetchCardsTC,
   setCardItemsPerPage,
   setCardsSearchName,
@@ -39,11 +40,15 @@ export const CardsPage = () => {
   const cardSearchName = useAppSelector(selectCardSearchName)
   const debouncedCardSearchName = useDebounce(cardSearchName)
 
-  const { packId } = useParams<'packId'>()
+  const { packId } = useParams<typeof URL_PARAMS.PACK_ID>()
   const dispatch = useAppDispatch()
 
   useEffect(() => {
     dispatch(fetchCardsTC(packId as string))
+
+    return () => {
+      dispatch(cleanCards())
+    }
   }, [debouncedCardSearchName, cardItemsPerPage, cardsCurrentPage])
 
   const handleSearchNameChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -78,7 +83,7 @@ export const CardsPage = () => {
             answer={c.answer}
             isMyCard={isMyPack}
             lastUpdated={c.updated}
-            rating={c.rating}
+            rating={c.grade}
           />
         ))}
       </CardsContainer>

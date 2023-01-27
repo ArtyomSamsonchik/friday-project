@@ -1,8 +1,16 @@
 .paginationBarContainer{
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+
     display: flex;
     align-items: center;
     justify-content: center;
 
-    height: auto;
-    margin-top: 10px;
+    width: 100%;
+    padding: 8px;
+
+    background-color: white;
+
+    translate: -50% 0;
 }

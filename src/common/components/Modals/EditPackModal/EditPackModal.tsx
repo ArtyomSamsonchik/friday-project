@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ChangeEventHandler, useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 
 import { Typography } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
@@ -41,6 +41,7 @@ export const EditPackModal = (props: PropsType) => {
     <BasicModal
       buttonName={'Save'}
       icon={icon}
+      handleOpen={() => setPackTitle(packName)}
       closeModal={closeModal}
       callback={callback}
       title={'Edit pack'}

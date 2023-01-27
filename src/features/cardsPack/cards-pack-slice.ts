@@ -46,7 +46,9 @@ export const cardsPackSlice = (
       return { ...state, itemsPerPage: action.payload }
     case 'CARD_PACKS/PERSONAL_PACKS_PARAM_CHANGED':
       return { ...state, loadPersonalPacks: action.payload }
-    case 'CARD_PACKS/FILTERS_CLEARED': {
+    case 'CARD_PACKS/PACKS_CLEANED':
+      return { ...state, cardPacks: [] }
+    case 'CARD_PACKS/FILTERS_CLEANED': {
       const initStateCopy: Partial<typeof initState> = { ...initState }
 
       delete initStateCopy.cardPacks
@@ -80,7 +82,10 @@ export const setPackItemsPerPage = (count: number) => {
 export const setPersonalPacksParam = (isPersonal: boolean) => {
   return { type: 'CARD_PACKS/PERSONAL_PACKS_PARAM_CHANGED', payload: isPersonal } as const
 }
-export const clearPacksFilters = () => ({ type: 'CARD_PACKS/FILTERS_CLEARED' } as const)
+export const cleanPacks = () => {
+  return { type: 'CARD_PACKS/PACKS_CLEANED' } as const
+}
+export const clearPacksFilters = () => ({ type: 'CARD_PACKS/FILTERS_CLEANED' } as const)
 
 //thunks
 export const DEPRECATED_fetchCardPacksTC =
@@ -155,21 +160,23 @@ export const updateCardPackTC =
 
 //types
 type SetCardsPacksAT = ReturnType<typeof setCardPacks>
-type setPackNameAT = ReturnType<typeof setPackSearchName>
-type setPacksSortOrderAT = ReturnType<typeof setPacksSortOrder>
-type setCurrentPageAT = ReturnType<typeof setCurrentPackPage>
-type setItemsPerPageAT = ReturnType<typeof setPackItemsPerPage>
-type setPersonalPacksParamAT = ReturnType<typeof setPersonalPacksParam>
-type clearPacksFiltersAT = ReturnType<typeof clearPacksFilters>
+type SetPackNameAT = ReturnType<typeof setPackSearchName>
+type SetPacksSortOrderAT = ReturnType<typeof setPacksSortOrder>
+type SetCurrentPageAT = ReturnType<typeof setCurrentPackPage>
+type SetItemsPerPageAT = ReturnType<typeof setPackItemsPerPage>
+type SetPersonalPacksParamAT = ReturnType<typeof setPersonalPacksParam>
+type ClearPacksFiltersAT = ReturnType<typeof clearPacksFilters>
+type CleanPacksAT = ReturnType<typeof cleanPacks>
 
 export type CardsPackSliceActionsType =
   | SetCardsPacksAT
-  | setPackNameAT
-  | setPacksSortOrderAT
-  | setCurrentPageAT
-  | setItemsPerPageAT
-  | setPersonalPacksParamAT
-  | clearPacksFiltersAT
+  | SetPackNameAT
+  | SetPacksSortOrderAT
+  | SetCurrentPageAT
+  | SetItemsPerPageAT
+  | SetPersonalPacksParamAT
+  | ClearPacksFiltersAT
+  | CleanPacksAT
 
 // TODO: add app status processing via dispatching in every thunk
 // TODO: think about useless types from API response

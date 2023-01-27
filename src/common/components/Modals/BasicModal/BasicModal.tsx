@@ -8,6 +8,7 @@ import Modal from '@mui/material/Modal'
 import Typography from '@mui/material/Typography'
 
 import { ActonIconButton } from '../../../../features/cardsPack/components/cardPack/ActonIconButton'
+import { FilledButton } from '../../FilledButton'
 
 type PropsType = {
   children: ReactNode
@@ -43,9 +44,9 @@ export const BasicModal = (props: PropsType) => {
           {props.icon}
         </ActonIconButton>
       ) : (
-        <Button variant={'contained'} onClick={handleOpen}>
+        <FilledButton sx={{ px: 4.5 }} onClick={handleOpen}>
           {props.title}
-        </Button>
+        </FilledButton>
       )}
       <Modal
         sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
