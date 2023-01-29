@@ -1,5 +1,5 @@
-import { RootStateType } from '../app/store'
-import { GetCardPacksQueryParams } from '../features/cardsPack/card-packs-api'
+import { RootStateType } from '../../app/store'
+import { GetCardPacksQueryParams } from '../../features/cardsPack/card-packs-api'
 
 export const mapStateToPacksRequestParams = (state: RootStateType) => {
   const {

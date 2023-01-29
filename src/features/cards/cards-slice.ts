@@ -1,8 +1,8 @@
 import { setAppStatus } from '../../app/app-slice'
 import { AppThunk } from '../../app/store'
-import { handleError } from '../../utils/handleError'
-import { mapStateToCardsRequestParams } from '../../utils/mapStateToCardsRequestParams'
-import { stringifySortQueryParams } from '../../utils/stringifySortQueryParams'
+import { handleError } from '../../utils/helpers/handleError'
+import { mapStateToCardsRequestParams } from '../../utils/helpers/mapStateToCardsRequestParams'
+import { stringifySortQueryParams } from '../../utils/helpers/stringifySortQueryParams'
 
 import {
   AddCardRequestData,

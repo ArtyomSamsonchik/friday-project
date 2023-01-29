@@ -2,7 +2,7 @@ import { AxiosError, HttpStatusCode } from 'axios'
 
 import { setAppStatus } from '../../app/app-slice'
 import { AppThunk } from '../../app/store'
-import { handleError } from '../../utils/handleError'
+import { handleError } from '../../utils/helpers/handleError'
 import { setProfile } from '../profile/profile-slice'
 
 import {

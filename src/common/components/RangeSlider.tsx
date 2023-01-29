@@ -5,7 +5,7 @@ import Input from '@mui/material/Input'
 import Slider from '@mui/material/Slider'
 import { shallowEqual } from 'react-redux'
 
-import { useDebounce } from '../../utils/hooks'
+import { useDebounce } from '../../utils/hooks/useDebounce'
 
 type MinimumDistanceSliderType = {
   minValue: number

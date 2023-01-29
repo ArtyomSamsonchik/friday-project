@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 import LinearProgress, { LinearProgressProps } from '@mui/material/LinearProgress'
 
 import { selectAppStatus } from '../../app/app-slice'
-import { useAppSelector } from '../../utils/hooks'
+import { useAppSelector } from '../../utils/hooks/useAppSelector'
 
 export const ProgressBar: FC<LinearProgressProps> = props => {
   const appStatus = useAppSelector(selectAppStatus)

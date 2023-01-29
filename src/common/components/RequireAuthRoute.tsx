@@ -4,7 +4,8 @@ import { Navigate, Outlet } from 'react-router-dom'
 
 import { PATH } from '../../app/path'
 import { selectIsLoggedIn } from '../../features/auth/login-selectors'
-import { useAppSelector, useRedirectLocation } from '../../utils/hooks'
+import { useAppSelector } from '../../utils/hooks/useAppSelector'
+import { useRedirectLocation } from '../../utils/hooks/useRedirectLocation'
 
 export const RequireAuthRoute: FC = () => {
   const isLoggedIn = useAppSelector(selectIsLoggedIn)

@@ -17,7 +17,9 @@ import { SuperButton } from '../../../common/components/shared/SuperButton/Super
 import { SortPackButton } from '../../../common/components/SortPacks/SortPacksButton'
 import { CustomToolBarSam } from '../../../common/components/toolBar/ToolBar/CustomToolBar'
 import { ToolBarHeader } from '../../../common/components/toolBar/ToolBarHeader/ToolBarHeader'
-import { useAppDispatch, useAppSelector, useDebounce } from '../../../utils/hooks'
+import { useAppDispatch } from '../../../utils/hooks/useAppDispatch'
+import { useAppSelector } from '../../../utils/hooks/useAppSelector'
+import { useDebounce } from '../../../utils/hooks/useDebounce'
 import { selectProfile } from '../../profile/profile-slice'
 import { AddPackData } from '../card-packs-api'
 import {

@@ -15,7 +15,7 @@ import Popper from '@mui/material/Popper'
 
 import { SortPacksParams } from '../../../features/cardsPack/card-packs-api'
 import { setPacksSortOrder } from '../../../features/cardsPack/cards-pack-slice'
-import { useAppDispatch } from '../../../utils/hooks'
+import { useAppDispatch } from '../../../utils/hooks/useAppDispatch'
 
 const options: SortPacksParams['column'][] = ['name', 'cardsCount', 'created', 'updated']
 

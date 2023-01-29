@@ -9,7 +9,9 @@ import { CardsContainer } from '../../../common/components/CardsContainer'
 import { CustomContainer } from '../../../common/components/CustomContainer'
 import { CustomToolbar } from '../../../common/components/CustomToolbar'
 import { PaginationBar } from '../../../common/components/Pagination/PaginationBar'
-import { useAppDispatch, useAppSelector, useDebounce } from '../../../utils/hooks'
+import { useAppDispatch } from '../../../utils/hooks/useAppDispatch'
+import { useAppSelector } from '../../../utils/hooks/useAppSelector'
+import { useDebounce } from '../../../utils/hooks/useDebounce'
 import { selectProfile } from '../../profile/profile-slice'
 import {
   selectAllCards,

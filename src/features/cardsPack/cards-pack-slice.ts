@@ -1,8 +1,8 @@
 import { setAppStatus } from '../../app/app-slice'
 import { AppThunk } from '../../app/store'
-import { handleError } from '../../utils/handleError'
-import { mapStateToPacksRequestParams } from '../../utils/mapStateToPacksRequestParams'
-import { stringifySortQueryParams } from '../../utils/stringifySortQueryParams'
+import { handleError } from '../../utils/helpers/handleError'
+import { mapStateToPacksRequestParams } from '../../utils/helpers/mapStateToPacksRequestParams'
+import { stringifySortQueryParams } from '../../utils/helpers/stringifySortQueryParams'
 
 import {
   AddPackData,

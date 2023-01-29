@@ -1,7 +1,7 @@
 import { AxiosError, isAxiosError } from 'axios'
 
-import { setAppError, setAppStatus } from '../app/app-slice'
-import { AppDispatch } from '../app/store'
+import { setAppError, setAppStatus } from '../../app/app-slice'
+import { AppDispatch } from '../../app/store'
 
 export const handleError = (e: Error | AxiosError<{ error: string }>, dispatch: AppDispatch) => {
   let message = e.message

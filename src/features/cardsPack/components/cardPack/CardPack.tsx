@@ -10,7 +10,7 @@ import { ReactComponent as TeacherSVG } from '../../../../common/assets/icons/te
 import { CustomCard } from '../../../../common/components/CustomCard'
 import { DeletePackModal } from '../../../../common/components/Modals/DeletePackModal/DeletePackModal'
 import { EditPackModal } from '../../../../common/components/Modals/EditPackModal/EditPackModal'
-import { useAppDispatch } from '../../../../utils/hooks'
+import { useAppDispatch } from '../../../../utils/hooks/useAppDispatch'
 import { UpdatePackData } from '../../card-packs-api'
 import { deleteCardPackTC, updateCardPackTC } from '../../cards-pack-slice'
 

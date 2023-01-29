@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { setPacksSortOrder } from '../../../features/cardsPack/cards-pack-slice'
-import { useAppDispatch } from '../../../utils/hooks'
+import { useAppDispatch } from '../../../utils/hooks/useAppDispatch'
 import { SuperButton } from '../shared/SuperButton/SuperButton'
 
 type PropsType = {
