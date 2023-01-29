@@ -130,10 +130,10 @@ export const authTC = (): AppThunk => async dispatch => {
     dispatch(setAppStatus('success'))
   } catch (e) {
     //skip auth error handling at init app loading
-    let isUnauthorized = (e as AxiosError)?.response?.status === HttpStatusCode.Unauthorized
+    const isUnauthorizedOnAuth = (e as AxiosError)?.response?.status === HttpStatusCode.Unauthorized
 
-    if (!isUnauthorized) handleError(e as Error, dispatch)
-    else dispatch(setAppStatus('failure'))
+    if (isUnauthorizedOnAuth) dispatch(setAppStatus('failure'))
+    else handleError(e as Error, dispatch)
   }
 }
 
