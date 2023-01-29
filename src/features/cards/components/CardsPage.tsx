@@ -18,6 +18,7 @@ import {
   selectCardSearchName,
   selectCardsTotalCount,
   selectCardsUserId,
+  selectPackName,
 } from '../cards-selectors'
 import {
   cleanCards,
@@ -36,6 +37,7 @@ export const CardsPage = () => {
   const cardsTotalCount = useAppSelector(selectCardsTotalCount)
   const cardItemsPerPage = useAppSelector(selectCardItemsPerPage)
   const cardsCurrentPage = useAppSelector(selectCardsCurrentPage)
+  const packName = useAppSelector(selectPackName)
 
   const cardSearchName = useAppSelector(selectCardSearchName)
   const debouncedCardSearchName = useDebounce(cardSearchName)
@@ -69,7 +71,7 @@ export const CardsPage = () => {
     <CustomContainer>
       <BackLink title="Back to Packs List" to={`/${PATH.PACKS}`} />
       <CustomToolbar
-        title={isMyPack ? 'My Pack' : "Friend's Pack"}
+        title={packName}
         actionButtonName={isMyPack ? 'Add new card' : 'Learn to pack'}
         onActionButtonClick={() => {}}
       >

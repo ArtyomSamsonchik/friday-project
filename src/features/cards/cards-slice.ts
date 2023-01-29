@@ -55,7 +55,7 @@ export const cardsSlice = (state = initState, action: CardsSliceActions): typeof
     case 'CARDS/ITEMS_PER_PAGE_CHANGED':
       return { ...state, pageCount: action.payload }
     case 'CARDS/CARDS_CLEANED':
-      return { ...state, cards: [] }
+      return { ...state, cards: [], packName: '' }
     default:
       return state
   }

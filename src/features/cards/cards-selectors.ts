@@ -2,7 +2,7 @@ import { RootStateType } from '../../app/store'
 
 import { Card } from './cards-api'
 
-const selectCardsSlice = (state: RootStateType) => state.cards
+const selectCardsSlice = (state: RootStateType): RootStateType['cards'] => state.cards
 
 export const selectAllCards = (state: RootStateType) => selectCardsSlice(state).cards
 export const selectCard = (state: RootStateType, id: string) => {
