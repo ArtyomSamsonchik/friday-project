@@ -1,7 +1,7 @@
 import { RootStateType } from '../app/store'
 import { GetCardsQueryParams } from '../features/cards/cards-api'
 
-export const getFetchCardsQueryParams = (state: RootStateType, packId: string) => {
+export const mapStateToCardsRequestParams = (state: RootStateType, packId: string) => {
   const { cardSearchName, cardsSortOrder, page, pageCount } = state.cards
 
   return {
