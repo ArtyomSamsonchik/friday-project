@@ -49,7 +49,6 @@ export const SignUp = () => {
       dispatch(isRegisterTC({ email: values.email, password: values.password }))
     },
     validate: values => {
-      console.log(values)
       const errors: Partial<ValueType> = {}
 
       if (!values.email) {
@@ -161,3 +160,5 @@ export const SignUp = () => {
     </CustomPaperContainer>
   )
 }
+
+// TODO: remove redundant isRegistered from store

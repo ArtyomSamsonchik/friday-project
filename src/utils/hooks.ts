@@ -1,6 +1,7 @@
 import { DependencyList, EffectCallback, useEffect, useRef, useState } from 'react'
 
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
+import { useLocation, Location } from 'react-router-dom'
 
 import { AppDispatch, RootStateType } from '../app/store'
 
@@ -34,3 +35,9 @@ export const useControlledUpdateEffect = (effect: EffectCallback, deps?: Depende
 
   return skipEffectRef
 }
+
+interface RedirectLocation extends Location {
+  state: { path?: string }
+}
+
+export const useRedirectLocation: () => RedirectLocation = useLocation

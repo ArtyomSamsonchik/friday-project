@@ -2,7 +2,6 @@ import React, { useCallback } from 'react'
 
 import { LogoutOutlined } from '@mui/icons-material'
 import { Avatar, Box, Typography } from '@mui/material'
-import { Navigate } from 'react-router-dom'
 
 import { PATH } from '../../app/path'
 import { BackLink } from '../../common/components/BackLink'
@@ -12,7 +11,6 @@ import { OutlinedButton } from '../../common/components/OutlinedButton'
 import { getUserNameInitials } from '../../utils/getUserNameInitials'
 import { useAppDispatch, useAppSelector } from '../../utils/hooks'
 import { profileIsNotLoaded } from '../../utils/profileIsNotLoaded'
-import { selectIsLoggedIn } from '../auth/login-selectors'
 
 import { EditableSpan } from './EditableSpan/EditableSpan'
 import { PhotoIconButton } from './PhotoIconButton'
@@ -20,7 +18,6 @@ import { closeSession, fetchUpdatedProfile, selectProfile } from './profile-slic
 
 export const Profile = () => {
   let profile = useAppSelector(selectProfile)
-  const isLoggedIn = useAppSelector(selectIsLoggedIn)
   const dispatch = useAppDispatch()
 
   const profileControlsDisabled = profileIsNotLoaded(profile)
@@ -31,10 +28,6 @@ export const Profile = () => {
 
   const handleLogoutClick = () => {
     dispatch(closeSession())
-  }
-
-  if (!isLoggedIn) {
-    return <Navigate to={`/${PATH.LOGIN}`} />
   }
 
   return (

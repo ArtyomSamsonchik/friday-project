@@ -19,7 +19,7 @@ import { Navigate } from 'react-router-dom'
 import { PATH } from '../../../app/path'
 import { loginTC } from '../../../features/auth/auth-slice'
 import { selectIsLoggedIn } from '../../../features/auth/login-selectors'
-import { useAppDispatch, useAppSelector } from '../../../utils/hooks'
+import { useAppDispatch, useAppSelector, useRedirectLocation } from '../../../utils/hooks'
 import { loginFormValidationSchema } from '../../formValidation/basicFormValidationSchema'
 import common from '../../styles/common.module.css'
 import { CustomPaperContainer } from '../CustomPaperContainer/CustomPaperContainer'
@@ -28,6 +28,7 @@ import s from './Login.module.css'
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
+  const { state: locationState } = useRedirectLocation()
 
   const handleClickShowPassword = () => setShowPassword(show => !show)
 
@@ -49,7 +50,7 @@ export const Login = () => {
   })
 
   if (isLoggedIn) {
-    return <Navigate to={`/${PATH.PROFILE}`} />
+    return <Navigate to={locationState?.path || `/${PATH.PACKS}`} replace />
   }
 
   return (
