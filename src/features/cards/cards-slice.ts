@@ -1,7 +1,7 @@
 import { setAppStatus } from '../../app/app-slice'
 import { AppThunk } from '../../app/store'
-import { getFetchCardsQueryParams } from '../../utils/getFetchCardsQueryParams'
 import { handleError } from '../../utils/handleError'
+import { mapStateToCardsRequestParams } from '../../utils/mapStateToCardsRequestParams'
 import { stringifySortQueryParams } from '../../utils/stringifySortQueryParams'
 
 import {
@@ -85,7 +85,7 @@ export const cleanCards = () => {
 export const fetchCardsTC =
   (packId: string): AppThunk =>
   async (dispatch, getState) => {
-    const requestData = getFetchCardsQueryParams(getState(), packId)
+    const requestData = mapStateToCardsRequestParams(getState(), packId)
 
     try {
       dispatch(setAppStatus('loading'))

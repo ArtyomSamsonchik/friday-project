@@ -1,7 +1,7 @@
 import { setAppStatus } from '../../app/app-slice'
 import { AppThunk } from '../../app/store'
-import { getFetchCardPacksQueryParams } from '../../utils/getFetchCardPacksQueryParams'
 import { handleError } from '../../utils/handleError'
+import { mapStateToPacksRequestParams } from '../../utils/mapStateToPacksRequestParams'
 import { stringifySortQueryParams } from '../../utils/stringifySortQueryParams'
 
 import {
@@ -19,7 +19,7 @@ const initState = {
   packSearchName: '',
   currentPage: 1,
   itemsPerPage: 12,
-  sortPacksOrder: stringifySortQueryParams({ order: 'desc', column: 'updated' }),
+  packsSortOrder: stringifySortQueryParams({ order: 'desc', column: 'updated' }),
   loadPersonalPacks: false,
   minCardsCount: 0,
   maxCardsCount: 110,
@@ -39,7 +39,7 @@ export const cardsPackSlice = (
     case 'CARD_PACKS/SEARCH_NAME_CHANGED':
       return { ...state, packSearchName: action.payload }
     case 'CARD_PACKS/SORT_ORDER_CHANGED':
-      return { ...state, sortPacksOrder: stringifySortQueryParams(action.payload) }
+      return { ...state, packsSortOrder: stringifySortQueryParams(action.payload) }
     case 'CARD_PACKS/PAGE_CHANGED':
       return { ...state, currentPage: action.payload }
     case 'CARD_PACKS/ITEMS_COUNT_PER_PAGE_CHANGED':
@@ -91,7 +91,7 @@ export const clearPacksFilters = () => ({ type: 'CARD_PACKS/FILTERS_CLEANED' } a
 export const DEPRECATED_fetchCardPacksTC =
   (params?: GetCardPacksQueryParams): AppThunk =>
   async (dispatch, getState) => {
-    const requestData = getFetchCardPacksQueryParams(getState())
+    const requestData = mapStateToPacksRequestParams(getState())
     const sortData = { ...requestData, ...params }
 
     try {
@@ -106,7 +106,7 @@ export const DEPRECATED_fetchCardPacksTC =
   }
 
 export const fetchCardPacksTC = (): AppThunk => async (dispatch, getState) => {
-  const requestData = getFetchCardPacksQueryParams(getState())
+  const requestData = mapStateToPacksRequestParams(getState())
 
   try {
     dispatch(setAppStatus('loading'))

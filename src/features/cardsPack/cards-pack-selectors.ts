@@ -11,7 +11,7 @@ export const selectCardPack = (state: RootStateType, id: string) => {
 export const selectPackSearchName = (state: RootStateType) => selectPacksSlice(state).packSearchName
 export const selectCurrentPage = (state: RootStateType) => selectPacksSlice(state).currentPage
 export const selectItemsPerPage = (state: RootStateType) => selectPacksSlice(state).itemsPerPage
-export const selectPacksSortOrder = (state: RootStateType) => selectPacksSlice(state).sortPacksOrder
+export const selectPacksSortOrder = (state: RootStateType) => selectPacksSlice(state).packsSortOrder
 export const selectIsMyPacks = (state: RootStateType) => selectPacksSlice(state).loadPersonalPacks
 export const selectMinCardsCount = (state: RootStateType) => selectPacksSlice(state).minCardsCount
 export const selectMaxCardsCount = (state: RootStateType) => selectPacksSlice(state).maxCardsCount
