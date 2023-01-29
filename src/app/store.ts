@@ -34,4 +34,4 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 >
 
 //@ts-ignore
-window.store = store
+if (process.env.NODE_ENV === 'development') window.store = store
