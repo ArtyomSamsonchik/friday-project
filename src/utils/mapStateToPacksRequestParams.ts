@@ -1,7 +1,7 @@
 import { RootStateType } from '../app/store'
 import { GetCardPacksQueryParams } from '../features/cardsPack/card-packs-api'
 
-export const getFetchCardPacksQueryParams = (state: RootStateType) => {
+export const mapStateToPacksRequestParams = (state: RootStateType) => {
   const {
     profile: {
       userData: { _id },
@@ -13,7 +13,7 @@ export const getFetchCardPacksQueryParams = (state: RootStateType) => {
       itemsPerPage,
       packSearchName,
       loadPersonalPacks,
-      sortPacksOrder,
+      packsSortOrder,
     },
   } = state
 
@@ -21,7 +21,7 @@ export const getFetchCardPacksQueryParams = (state: RootStateType) => {
     packName: packSearchName || undefined,
     min: minCardsCount,
     max: maxCardsCount,
-    sortPacks: sortPacksOrder,
+    sortPacks: packsSortOrder,
     page: currentPage,
     pageCount: itemsPerPage,
     user_id: loadPersonalPacks ? _id : undefined,
