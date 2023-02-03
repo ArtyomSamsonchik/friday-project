@@ -3,7 +3,7 @@ import React from 'react'
 import { Button, ButtonProps, styled } from '@mui/material'
 
 export const OutlinedButton = styled(Button)<ButtonProps>(({ theme }) => ({
-  padding: '8px 20px',
+  padding: '8px 28px',
   borderRadius: 30,
   backgroundColor: '#FCFCFC',
   color: 'inherit',
