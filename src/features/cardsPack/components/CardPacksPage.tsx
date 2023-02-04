@@ -1,15 +1,10 @@
 import React, { ChangeEvent, useCallback, useEffect } from 'react'
 
 import TextField from '@mui/material/TextField'
-import dayjs from 'dayjs'
-import { useNavigate } from 'react-router-dom'
 
 import { selectAppStatus } from '../../../app/app-slice'
-import { PATH } from '../../../app/path'
 import { BackLink } from '../../../common/components/BackLink'
-import { CardsContainer } from '../../../common/components/CardsContainer'
 import { CustomContainer } from '../../../common/components/CustomContainer'
-import { CustomToolbar } from '../../../common/components/CustomToolbar'
 import { AddPackModal } from '../../../common/components/Modals/AddPackModal/AddPackModal'
 import { PaginationBar } from '../../../common/components/Pagination/PaginationBar'
 import { MinimumDistanceSlider } from '../../../common/components/RangeSlider'
@@ -20,10 +15,8 @@ import { ToolBarHeader } from '../../../common/components/toolBar/ToolBarHeader/
 import { useAppDispatch } from '../../../utils/hooks/useAppDispatch'
 import { useAppSelector } from '../../../utils/hooks/useAppSelector'
 import { useDebounce } from '../../../utils/hooks/useDebounce'
-import { selectProfile } from '../../profile/profile-slice'
 import { AddPackData } from '../card-packs-api'
 import {
-  selectAllPacks,
   selectCurrentPage,
   selectIsMyPacks,
   selectItemsPerPage,
@@ -43,14 +36,14 @@ import {
   setPersonalPacksParam,
 } from '../cards-pack-slice'
 
-import { CardPack } from './cardPack/CardPack'
+import { CardPacksList } from './CardPacksList'
 
 export const CardPacksPage = () => {
-  const packs = useAppSelector(selectAllPacks)
+  // const packs = useAppSelector(selectAllPacks)
+  // const profile = useAppSelector(selectProfile)
   const cardPacksTotalCount = useAppSelector(selectPacksTotalCount)
   const itemsPerPage = useAppSelector(selectItemsPerPage)
   const currentPage = useAppSelector(selectCurrentPage)
-  const profile = useAppSelector(selectProfile)
   const sortPackOrder = useAppSelector(selectPacksSortOrder)
   const isMyPacks = useAppSelector(selectIsMyPacks)
   const minCardsCount = useAppSelector(selectMinCardsCount)
@@ -60,7 +53,7 @@ export const CardPacksPage = () => {
   const packSearchName = useAppSelector(selectPackSearchName)
   const debouncedPackSearchName = useDebounce(packSearchName)
 
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
   const controlsAreDisabled = appStatus === 'loading'
@@ -170,7 +163,7 @@ export const CardPacksPage = () => {
           </SuperButton>
         </div>
       </CustomToolbar>*/}
-      <CardsContainer>
+      {/*<CardsContainer>
         {packs.map(p => {
           const date = dayjs(p.updated).format('DD.MM.YYYY HH:mm')
 
@@ -184,11 +177,12 @@ export const CardPacksPage = () => {
               creator={p.user_name}
               isMyPack={profile._id === p.user_id}
               packId={p._id}
-              openCardPack={() => navigate(`/${PATH.CARDS}/${p._id}`)}
+              onOpenCardPack={() => navigate(`/${PATH.CARDS}/${p._id}`)}
             />
           )
         })}
-      </CardsContainer>
+      </CardsContainer>*/}
+      <CardPacksList />
       <PaginationBar
         pagesCount={Math.ceil(cardPacksTotalCount / itemsPerPage)}
         disabled={controlsAreDisabled}

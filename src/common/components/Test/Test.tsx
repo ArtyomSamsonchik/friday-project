@@ -90,13 +90,13 @@ export const Test = memo(() => {
             lastUpdated={'14.01.2023'}
             creator={'Artyom'}
             isMyPack={true}
-            openCardPack={() => {
+            onOpenCardPack={() => {
               alert('opened pack')
             }}
-            deleteCardPack={() => {
+            onDeleteCardPack={() => {
               alert('deleted pack')
             }}
-            editCardPack={() => {
+            onEditCardPack={() => {
               alert('edited pack')
             }}
           />
@@ -119,13 +119,13 @@ export const Test = memo(() => {
               lastUpdated={c.updated}
               creator={c.user_name}
               isMyPack={profile._id === c.user_id}
-              openCardPack={() => {
+              onOpenCardPack={() => {
                 alert('opened pack')
               }}
-              deleteCardPack={() => {
+              onDeleteCardPack={() => {
                 alert('deleted pack')
               }}
-              editCardPack={() => {
+              onEditCardPack={() => {
                 alert('edited pack')
               }}
             />

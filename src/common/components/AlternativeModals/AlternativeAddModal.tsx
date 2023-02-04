@@ -4,7 +4,7 @@ import { FilledButton } from '../FilledButton'
 
 import { AlternativeModal, AlternativeModalProps } from './AlternativeModal/AlternativeModal'
 
-type AlternativeAddModalProps = Omit<AlternativeModalProps, 'actionButton'> & {
+export type AlternativeAddModalProps = Omit<AlternativeModalProps, 'actionButton'> & {
   onSave: () => void
 }
 
@@ -22,12 +22,6 @@ export const AlternativeAddModal: FC<AlternativeAddModalProps> = props => {
       {...restProps}
     >
       {children}
-      {/*<Box display="flex" justifyContent="space-between" alignItems="center" mt="30px">*/}
-      {/*  <OutlinedButton onClick={e => props.onClose?.(e, 'closeButtonClick')}>*/}
-      {/*    Cancel*/}
-      {/*  </OutlinedButton>*/}
-      {/*  <FilledButton onClick={handleSave}>Save</FilledButton>*/}
-      {/*</Box>*/}
     </AlternativeModal>
   )
 }

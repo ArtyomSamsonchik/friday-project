@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent } from 'react'
+import React, { FC, MouseEvent, ReactNode } from 'react'
 
 import CloseIcon from '@mui/icons-material/Close'
 import Divider from '@mui/material/Divider'
@@ -19,9 +19,10 @@ const modalBoxShadow =
   'rgba(0, 0, 0, 0.14) 0px 0px 38px 3px, ' +
   'rgba(0, 0, 0, 0.12) 0px 0px 46px 8px'
 
-export type AlternativeModalProps = ModalProps & {
+export type AlternativeModalProps = Omit<ModalProps, 'children'> & {
   title: string
   actionButton: JSX.Element
+  children?: ReactNode
   onClose?: (event: {}, reason: 'closeButtonClick') => void
 }
 
