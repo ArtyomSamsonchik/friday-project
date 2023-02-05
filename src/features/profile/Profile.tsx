@@ -21,7 +21,6 @@ import { closeSession, fetchUpdatedProfile, selectProfile } from './profile-slic
 export const Profile = () => {
   let profile = useAppSelector(selectProfile)
   const dispatch = useAppDispatch()
-  /*const avatar = useAppSelector(state => state.profile.userData.avatar)*/
   const profileControlsDisabled = profileIsNotLoaded(profile)
   const changeProfileName = useCallback((name: string) => {
     dispatch(fetchUpdatedProfile({ name }))
