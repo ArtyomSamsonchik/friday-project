@@ -56,6 +56,7 @@ export const CardPacksList = () => {
               creator={p.user_name}
               isMyPack={profile._id === p.user_id}
               packId={p._id}
+              deckCover={p.deckCover}
               onOpenCardPack={() => handleOpenCardPack(p._id)}
               onEditCardPack={() => openEditModal(p._id)}
               onDeleteCardPack={() => openDeleteModal(p._id)}

@@ -16,6 +16,7 @@ type PropsType = {
 }
 
 export const EditPackModal = (props: PropsType) => {
+  console.log('re')
   const { icon, packId, editCardPack, packName, isPrivate } = props
   const [packTitle, setPackTitle] = useState(packName)
   const [privatePack, setPrivatePack] = useState(isPrivate)

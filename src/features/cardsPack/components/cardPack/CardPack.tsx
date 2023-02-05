@@ -8,11 +8,6 @@ import { ReactComponent as DeleteSVG } from '../../../../common/assets/icons/del
 import { ReactComponent as EditSVG } from '../../../../common/assets/icons/edit.svg'
 import { ReactComponent as TeacherSVG } from '../../../../common/assets/icons/teacher.svg'
 import { CustomCard } from '../../../../common/components/CustomCard'
-import { DeletePackModal } from '../../../../common/components/Modals/DeletePackModal/DeletePackModal'
-import { EditPackModal } from '../../../../common/components/Modals/EditPackModal/EditPackModal'
-import { useAppDispatch } from '../../../../utils/hooks/useAppDispatch'
-import { UpdatePackData } from '../../card-packs-api'
-import { deleteCardPackTC, updateCardPackTC } from '../../cards-pack-slice'
 
 import { ActionButtonsContainer } from './ActionButtonsContainer'
 import { ActonIconButton } from './ActonIconButton'
@@ -22,6 +17,7 @@ type CardPackProps = {
   totalCards: number
   lastUpdated: string
   creator: string
+  deckCover?: string
   isMyPack: boolean
   imageSrc?: string
   packId: string
@@ -38,6 +34,7 @@ export const CardPack: FC<CardPackProps> = memo(props => {
   const {
     packName,
     creator,
+    deckCover,
     lastUpdated,
     totalCards,
     isMyPack,
@@ -59,7 +56,10 @@ export const CardPack: FC<CardPackProps> = memo(props => {
 
   return (
     <CustomCard sx={{ minHeight: '200px' }}>
-      <CardMedia sx={{ height: 150, backgroundSize: 'cover' }} image={imageSrc || globalImageSrc} />
+      <CardMedia
+        sx={{ height: 150, backgroundSize: 'cover' }}
+        image={deckCover || globalImageSrc}
+      />
       <ActionButtonsContainer sx={{ position: 'absolute', top: '12px', right: '12px' }}>
         <ActonIconButton disabled={totalCards === 0} onClick={onOpenCardPack} title="open pack">
           <TeacherSVG />

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { ChangeEvent, useCallback } from 'react'
 
 import { LogoutOutlined } from '@mui/icons-material'
 import { Avatar, Box, Typography } from '@mui/material'
@@ -8,6 +8,7 @@ import { BackLink } from '../../common/components/BackLink'
 import { CustomContainer } from '../../common/components/CustomContainer'
 import { CustomPaper } from '../../common/components/CustomPaper'
 import { OutlinedButton } from '../../common/components/OutlinedButton'
+import { convertFileToBase64 } from '../../utils/helpers/convertFileToBase64'
 import { getUserNameInitials } from '../../utils/helpers/getUserNameInitials'
 import { profileIsNotLoaded } from '../../utils/helpers/profileIsNotLoaded'
 import { useAppDispatch } from '../../utils/hooks/useAppDispatch'
@@ -20,15 +21,30 @@ import { closeSession, fetchUpdatedProfile, selectProfile } from './profile-slic
 export const Profile = () => {
   let profile = useAppSelector(selectProfile)
   const dispatch = useAppDispatch()
-
+  /*const avatar = useAppSelector(state => state.profile.userData.avatar)*/
   const profileControlsDisabled = profileIsNotLoaded(profile)
-
   const changeProfileName = useCallback((name: string) => {
     dispatch(fetchUpdatedProfile({ name }))
   }, [])
 
   const handleLogoutClick = () => {
     dispatch(closeSession())
+  }
+
+  console.log(profile.avatar)
+
+  const uploadHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length) {
+      const file = e.target.files[0]
+
+      if (file.size < 4000000) {
+        convertFileToBase64(file, (file64: string) => {
+          dispatch(fetchUpdatedProfile({ avatar: file64 }))
+        })
+      } else {
+        console.error('Error: ', 'Файл слишком большого размера')
+      }
+    }
   }
 
   return (
@@ -48,13 +64,23 @@ export const Profile = () => {
           >
             Personal Information
           </Typography>
-          <Avatar
-            alt="user"
-            sx={{ mb: 1, width: 96, height: 96, fontSize: '2.1rem', overflow: 'visible' }}
-          >
-            {getUserNameInitials(profile.name)}
-            <PhotoIconButton disabled={profileControlsDisabled} />
-          </Avatar>
+          <Box position={'relative'}>
+            <Avatar
+              alt="user"
+              variant={'circular'}
+              src={profile.avatar}
+              sx={{
+                mb: 1,
+                width: 110,
+                height: 110,
+                fontSize: '2.1rem',
+              }}
+            >
+              {getUserNameInitials(profile.name)}
+            </Avatar>
+            <PhotoIconButton onFileUpload={uploadHandler} disabled={profileControlsDisabled} />
+          </Box>
+
           <EditableSpan disabled={profileControlsDisabled} changeTitle={changeProfileName}>
             {profile.name}
           </EditableSpan>
