@@ -6,7 +6,7 @@ import { Provider } from 'react-redux'
 import { createHashRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom'
 
 import { App } from './app/App'
-import { PATH } from './app/path'
+import { PATH, URL_PARAMS } from './app/path'
 import { store } from './app/store'
 import { ErrorPage } from './common/components/ErrorPage/ErrorPage'
 import { LearnCardsPage } from './common/components/LarnCardsPage/LearnCardsPage'
@@ -29,6 +29,10 @@ const router = createHashRouter(
         <Route path={PATH.PACKS} element={<CardPacksPage />} />
         <Route path={PATH.PROFILE} element={<Profile />} />
         <Route path={`${PATH.CARDS}?/:packId`} element={<CardsPage />} />
+        <Route
+          path={`${PATH.LEARN}/:${URL_PARAMS.PACK_ID}/:${URL_PARAMS.PACK_NAME}`}
+          element={<LearnCardsPage />}
+        />
       </Route>
       <Route path={PATH.LOGIN} element={<Login />} />
       <Route path={PATH.SIGN_UP} element={<SignUp />} />
@@ -37,7 +41,6 @@ const router = createHashRouter(
       <Route path={PATH.CHECK_EMAIL} element={<CheckEmail />} />
       <Route path={PATH.TEST} element={<Test />} />
       <Route path={PATH.ERROR} element={<ErrorPage />} />
-      <Route path={`${PATH.LEARN_CARDS_PAGE}?/:packName`} element={<LearnCardsPage />} />
     </Route>
   )
 )

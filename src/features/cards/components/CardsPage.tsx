@@ -50,9 +50,9 @@ export const CardsPage = () => {
   useEffect(() => {
     dispatch(fetchCardsTC(packId as string))
 
-    return () => {
-      dispatch(cleanCards())
-    }
+    /*  return () => {
+                dispatch(cleanCards())
+              }*/
   }, [debouncedCardSearchName, cardItemsPerPage, cardsCurrentPage])
 
   const handleSearchNameChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -71,7 +71,11 @@ export const CardsPage = () => {
 
   return (
     <CustomContainer>
-      <BackLink title="Back to Packs List" to={`/${PATH.PACKS}`} />
+      <BackLink
+        onClick={() => dispatch(cleanCards())}
+        title="Back to Packs List"
+        to={`/${PATH.PACKS}`}
+      />
       <CustomToolbar
         title={packName}
         actionButtonName={isMyPack ? 'Add new card' : 'Learn to pack'}

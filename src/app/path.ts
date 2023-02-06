@@ -12,6 +12,7 @@ export const PATH = {
   TEST: 'test',
   CHECK_EMAIL: 'check-email',
   LEARN_CARDS_PAGE: '/:packId/:packName',
+  LEARN: 'learn',
 } as const
 
 export const URL_PARAMS = {

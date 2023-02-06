@@ -2,21 +2,22 @@ import React, { useState } from 'react'
 
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { useLocation } from 'react-router-dom'
 
-import { Card } from '../../../features/cards/cards-api'
+import { selectAllCards, selectPackName } from '../../../features/cards/cards-selectors'
+import { useAppSelector } from '../../../utils/hooks/useAppSelector'
 
 export const LearnCardsPage = () => {
-  console.log(useLocation())
-  const { state } = useLocation()
-  const cards: Card[] = state.cards
+  const cards = useAppSelector(selectAllCards)
   const [showAnswer, setShowAnswer] = useState(false)
   const [simpleCounter, setSimpleCounter] = useState(0)
-
-  console.log(simpleCounter)
+  const packName = useAppSelector(selectPackName)
   const increaseSimpleCounter = () => {
     setSimpleCounter(simpleCounter + 1)
+    setShowAnswer(false)
   }
+
+  console.log(cards)
+  console.log(packName)
 
   return (
     <Box
@@ -29,10 +30,10 @@ export const LearnCardsPage = () => {
         justifyContent: 'center',
       }}
     >
-      <Typography>{state.packName}</Typography>
+      <Typography>{packName}</Typography>
       <Box sx={{ margin: '10px', width: '400px', height: 'max-content', border: '2px solid red' }}>
         <Typography>{cards[simpleCounter].question}</Typography>
-        <Typography>kоличестов попыток ответа на вопрос: {cards[simpleCounter].shots}</Typography>
+        <Typography>количестов попыток ответа на вопрос: {cards[simpleCounter].shots}</Typography>
         {showAnswer && cards[simpleCounter].answer}
         {showAnswer || <button onClick={() => setShowAnswer(!showAnswer)}>show answer</button>}
         {!showAnswer || <button onClick={increaseSimpleCounter}>next question</button>}
