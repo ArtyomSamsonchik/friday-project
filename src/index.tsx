@@ -9,6 +9,7 @@ import { App } from './app/App'
 import { PATH } from './app/path'
 import { store } from './app/store'
 import { ErrorPage } from './common/components/ErrorPage/ErrorPage'
+import { LearnCardsPage } from './common/components/LarnCardsPage/LearnCardsPage'
 import { Login } from './common/components/Login/Login'
 import { NewPassword } from './common/components/NewPassword/NewPassword'
 import { RequireAuthRoute } from './common/components/RequireAuthRoute'
@@ -36,6 +37,7 @@ const router = createHashRouter(
       <Route path={PATH.CHECK_EMAIL} element={<CheckEmail />} />
       <Route path={PATH.TEST} element={<Test />} />
       <Route path={PATH.ERROR} element={<ErrorPage />} />
+      <Route path={`${PATH.LEARN_CARDS_PAGE}?/:packName`} element={<LearnCardsPage />} />
     </Route>
   )
 )

@@ -19,7 +19,7 @@ import s from './Header.module.css'
 export const Header = () => {
   const profile = useAppSelector(selectProfile)
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
-
+  const avatar = useAppSelector(state => state.profile.userData.avatar)
   const navigate = useNavigate()
   const handleSignIn = () => {
     navigate(`/${PATH.LOGIN}`)
@@ -58,11 +58,13 @@ export const Header = () => {
               <Typography color={'black'}>{profile.name}</Typography>
               <Avatar
                 alt="user"
+                src={avatar}
+                variant={'circular'}
                 sx={{
                   width: 36,
                   height: 36,
                   fontSize: '1.1rem',
-                  overflow: 'visible',
+
                   marginLeft: 1,
                 }}
               >

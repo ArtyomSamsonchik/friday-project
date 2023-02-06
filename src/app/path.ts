@@ -11,8 +11,10 @@ export const PATH = {
   RESTORE_PASSWORD: 'restore-password',
   TEST: 'test',
   CHECK_EMAIL: 'check-email',
+  LEARN_CARDS_PAGE: '/:packId/:packName',
 } as const
 
 export const URL_PARAMS = {
   PACK_ID: 'packId',
+  PACK_NAME: 'packName',
 } as const
