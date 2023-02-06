@@ -22,8 +22,9 @@ export const CustomToolbar: FC<CustomToolbarProps> = props => {
   const navigate = useNavigate()
   const { packId } = useParams<typeof URL_PARAMS.PACK_ID>()
   const packName = useAppSelector(state => state.cards.packName)
+  const cards = useAppSelector(state => state.cards)
   const startLearn = () => {
-    navigate(`/${PATH.CARDS}/${packId}/${packName}`)
+    navigate(`/${PATH.CARDS}/${packId}/${packName}`, { state: cards })
   }
 
   return (
