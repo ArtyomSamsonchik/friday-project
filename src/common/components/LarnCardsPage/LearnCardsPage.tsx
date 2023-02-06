@@ -16,9 +16,6 @@ export const LearnCardsPage = () => {
     setShowAnswer(false)
   }
 
-  console.log(cards)
-  console.log(packName)
-
   return (
     <Box
       sx={{
