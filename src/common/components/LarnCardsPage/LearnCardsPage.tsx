@@ -11,6 +11,7 @@ import { updateCardGradeTC } from '../../../features/cards/cards-slice'
 import { useAppDispatch } from '../../../utils/hooks/useAppDispatch'
 import { useAppSelector } from '../../../utils/hooks/useAppSelector'
 import { BackLink } from '../BackLink'
+import { CustomContainer } from '../CustomContainer'
 import { CustomPaper } from '../CustomPaper'
 import { FilledButton } from '../FilledButton'
 import { RateYourSelf } from '../RateYourSelf/RateYourSelf'
@@ -51,7 +52,7 @@ export const LearnCardsPage = () => {
   }
 
   return (
-    <Box>
+    <CustomContainer>
       <BackLink
         title="Back to Cards List"
         to={`/${PATH.CARDS}/${cards[simpleCounter].cardsPack_id}`}
@@ -114,6 +115,6 @@ export const LearnCardsPage = () => {
           )}
         </Box>
       </CustomPaper>
-    </Box>
+    </CustomContainer>
   )
 }
