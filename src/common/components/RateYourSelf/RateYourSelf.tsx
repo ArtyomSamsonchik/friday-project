@@ -25,7 +25,7 @@ export const RateYourSelf = (props: PropsType) => {
 
   const onNextButtonClick = () => {
     increaseSimpleCounter(simpleCounter + 1)
-    setGrade(0)
+
     const data: CardsNewGradeRequestData = {
       card_id: cardId,
       grade: grade,

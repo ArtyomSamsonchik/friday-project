@@ -2,9 +2,8 @@ import React, { useState } from 'react'
 
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { useParams } from 'react-router-dom'
 
-import { PATH, URL_PARAMS } from '../../../app/path'
+import { PATH } from '../../../app/path'
 import { CardsNewGradeRequestData } from '../../../features/cards/cards-api'
 import { selectAllCards, selectPackName } from '../../../features/cards/cards-selectors'
 import { updateCardGradeTC } from '../../../features/cards/cards-slice'
@@ -39,7 +38,6 @@ export const LearnCardsPage = () => {
   const [showAnswer, setShowAnswer] = useState(false)
   const [simpleCounter, setSimpleCounter] = useState(0)
   const packName = useAppSelector(selectPackName)
-  const { packId } = useParams<typeof URL_PARAMS.PACK_ID>()
 
   const dispatch = useAppDispatch()
   const increaseSimpleCounter = () => {
@@ -107,6 +105,7 @@ export const LearnCardsPage = () => {
           )}
           {showAnswer && (
             <RateYourSelf
+              key={cards[simpleCounter]._id}
               cardId={cards[simpleCounter]._id}
               simpleCounter={simpleCounter}
               increaseSimpleCounter={increaseSimpleCounter}
