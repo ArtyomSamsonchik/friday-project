@@ -70,7 +70,7 @@ export const CardsPage = () => {
   const isMyPack = profile._id === cardsUserId
 
   return (
-    <CustomContainer>
+    <CustomContainer sx={{ mb: 8 }}>
       <BackLink title="Back to Packs List" to={`/${PATH.PACKS}`} />
       <CustomToolbar
         title={packName}

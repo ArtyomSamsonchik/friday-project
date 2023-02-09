@@ -39,8 +39,6 @@ import {
 import { CardPacksList } from './CardPacksList'
 
 export const CardPacksPage = () => {
-  // const packs = useAppSelector(selectAllPacks)
-  // const profile = useAppSelector(selectProfile)
   const cardPacksTotalCount = useAppSelector(selectPacksTotalCount)
   const itemsPerPage = useAppSelector(selectItemsPerPage)
   const currentPage = useAppSelector(selectCurrentPage)
@@ -53,7 +51,6 @@ export const CardPacksPage = () => {
   const packSearchName = useAppSelector(selectPackSearchName)
   const debouncedPackSearchName = useDebounce(packSearchName)
 
-  // const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
   const controlsAreDisabled = appStatus === 'loading'
@@ -93,7 +90,7 @@ export const CardPacksPage = () => {
   }, [])
 
   return (
-    <CustomContainer>
+    <CustomContainer sx={{ mb: 8 }}>
       <BackLink title="test link to profile" to="/profile" />
       <div className={'toolBar'}>
         <ToolBarHeader>
@@ -128,60 +125,6 @@ export const CardPacksPage = () => {
           </CustomToolBarSam>
         </div>
       </div>
-      {/*<CustomToolbar
-        title="Packs List"
-        actionButtonName="Add new Pack"
-        onActionButtonClick={handleLoadPacksClick}
-      >
-        <TextField
-          disabled={controlsAreDisabled}
-          label="search pack"
-          value={packSearchName}
-          onChange={handleSearchNameChange}
-        />
-        <SortPackButton disabled={controlsAreDisabled} sortPackOrder={sortPackOrder} />
-        <MinimumDistanceSlider
-          disabled={controlsAreDisabled}
-          minValue={minCardsCount}
-          maxValue={maxCardsCount}
-          onRangeChange={handleSliderChange}
-        />
-        <div>
-          <SuperButton
-            disabled={controlsAreDisabled}
-            style={isMyPacks ? { backgroundColor: 'blue' } : { backgroundColor: 'white' }}
-            onClick={() => dispatch(setPersonalPacksParam(true))}
-          >
-            my
-          </SuperButton>
-          <SuperButton
-            disabled={controlsAreDisabled}
-            style={isMyPacks ? { backgroundColor: 'white' } : { backgroundColor: 'blue' }}
-            onClick={() => dispatch(setPersonalPacksParam(false))}
-          >
-            all
-          </SuperButton>
-        </div>
-      </CustomToolbar>*/}
-      {/*<CardsContainer>
-        {packs.map(p => {
-          const date = dayjs(p.updated).format('DD.MM.YYYY HH:mm')
-
-          return (
-            <CardPack
-              isPrivate={p.private}
-              key={p._id}
-              packName={p.name}
-              totalCards={p.cardsCount}
-              lastUpdated={date}
-              creator={p.user_name}
-              isMyPack={profile._id === p.user_id}
-              packId={p._id}
-              onOpenCardPack={() => navigate(`/${PATH.CARDS}/${p._id}`)}
-            />
-          )
-        })}
-      </CardsContainer>*/}
       <CardPacksList />
       <PaginationBar
         pagesCount={Math.ceil(cardPacksTotalCount / itemsPerPage)}
@@ -193,3 +136,6 @@ export const CardPacksPage = () => {
     </CustomContainer>
   )
 }
+
+//TODO: Separate PacksList and Toolbar to different components
+//  to prevent unnecessary renders
