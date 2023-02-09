@@ -56,7 +56,10 @@ export const AlternativeEditorAddPackModal: FC<AlternativeEditorAddPackModalProp
   }
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter') handleEditorAddPack()
+    if (e.key === 'Enter') {
+      handleEditorAddPack()
+      e.preventDefault()
+    }
   }
 
   const handleEditModalClose = () => {

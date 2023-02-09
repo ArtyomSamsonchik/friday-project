@@ -8,7 +8,7 @@ import { CardsContainer } from '../../../common/components/CardsContainer'
 import { useAppSelector } from '../../../utils/hooks/useAppSelector'
 import { selectAllPacksIds } from '../cards-pack-selectors'
 
-import { AlternativeDeletePackModal } from './AlternativeDeletePackModal'
+import { AlternativeDeletePackModal } from './alternativeDeletePackModal/AlternativeDeletePackModal'
 import { AlternativeEditorAddPackModal } from './alternativeEditorAddPackModal/AlternativeEditorAddPackModal'
 import { CardPack } from './cardPack/CardPack'
 

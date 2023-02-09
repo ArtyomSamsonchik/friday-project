@@ -36,8 +36,6 @@ export const CardPack: FC<CardPackProps> = memo(props => {
   const isMyPack = profile._id === pack.user_id
   const lastUpdated = dayjs(pack.updated).format('DD.MM.YYYY HH:mm')
 
-  console.log('pack')
-
   return (
     <CustomCard sx={{ minHeight: '200px' }}>
       <CardMedia
