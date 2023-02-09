@@ -3,96 +3,75 @@ import React, { FC, memo } from 'react'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
+import dayjs from 'dayjs'
 
 import { ReactComponent as DeleteSVG } from '../../../../common/assets/icons/delete.svg'
 import { ReactComponent as EditSVG } from '../../../../common/assets/icons/edit.svg'
 import { ReactComponent as TeacherSVG } from '../../../../common/assets/icons/teacher.svg'
 import { CustomCard } from '../../../../common/components/CustomCard'
-import { DeletePackModal } from '../../../../common/components/Modals/DeletePackModal/DeletePackModal'
-import { EditPackModal } from '../../../../common/components/Modals/EditPackModal/EditPackModal'
-import { useAppDispatch } from '../../../../utils/hooks/useAppDispatch'
-import { UpdatePackData } from '../../card-packs-api'
-import { deleteCardPackTC, updateCardPackTC } from '../../cards-pack-slice'
+import { useAppSelector } from '../../../../utils/hooks/useAppSelector'
+import { selectProfile } from '../../../profile/profile-slice'
+import { CardPackType } from '../../card-packs-api'
+import { selectCardPack } from '../../cards-pack-selectors'
 
 import { ActionButtonsContainer } from './ActionButtonsContainer'
 import { ActonIconButton } from './ActonIconButton'
 
 type CardPackProps = {
-  packName: string
-  totalCards: number
-  lastUpdated: string
-  creator: string
-  isMyPack: boolean
-  imageSrc?: string
   packId: string
-  isPrivate: boolean
-  onOpenCardPack: () => void
-  onEditCardPack: () => void
-  onDeleteCardPack: () => void
+  onOpenCardPack: (packId: string) => void
+  onEditCardPack: (packId: string) => void
+  onDeleteCardPack: (packId: string) => void
 }
 
 //image src placeholder
 const globalImageSrc = 'https://tomaztsql.files.wordpress.com/2021/01/cards.png'
 
 export const CardPack: FC<CardPackProps> = memo(props => {
-  const {
-    packName,
-    creator,
-    lastUpdated,
-    totalCards,
-    isMyPack,
-    imageSrc,
-    onOpenCardPack,
-    onEditCardPack,
-    onDeleteCardPack,
-    // packId,
-  } = props
+  const { packId, onOpenCardPack, onEditCardPack, onDeleteCardPack } = props
 
-  // const dispatch = useAppDispatch()
+  const pack = useAppSelector(state => selectCardPack(state, packId)) as CardPackType
+  const profile = useAppSelector(selectProfile)
 
-  // const editCardPack = (data: UpdatePackData) => {
-  //   dispatch(updateCardPackTC(data))
-  // }
-  // const deleteCardPack = (packId: string) => {
-  //   dispatch(deleteCardPackTC(packId))
-  // }
+  const isMyPack = profile._id === pack.user_id
+  const lastUpdated = dayjs(pack.updated).format('DD.MM.YYYY HH:mm')
+
+  console.log('pack')
 
   return (
     <CustomCard sx={{ minHeight: '200px' }}>
-      <CardMedia sx={{ height: 150, backgroundSize: 'cover' }} image={imageSrc || globalImageSrc} />
+      <CardMedia
+        sx={{ height: 150, backgroundSize: 'cover' }}
+        image={pack.deckCover || globalImageSrc}
+      />
       <ActionButtonsContainer sx={{ position: 'absolute', top: '12px', right: '12px' }}>
-        <ActonIconButton disabled={totalCards === 0} onClick={onOpenCardPack} title="open pack">
+        <ActonIconButton
+          disabled={pack.cardsCount === 0}
+          onClick={() => onOpenCardPack(packId)}
+          title="open pack"
+        >
           <TeacherSVG />
         </ActonIconButton>
-        <ActonIconButton isHidden={!isMyPack} onClick={onEditCardPack} title="edit pack">
+        <ActonIconButton
+          isHidden={!isMyPack}
+          onClick={() => onEditCardPack(packId)}
+          title="edit pack"
+        >
           <EditSVG />
         </ActonIconButton>
-        <ActonIconButton isHidden={!isMyPack} onClick={onDeleteCardPack} title="delete pack">
+        <ActonIconButton
+          isHidden={!isMyPack}
+          onClick={() => onDeleteCardPack(packId)}
+          title="delete pack"
+        >
           <DeleteSVG />
         </ActonIconButton>
-        {/*isMyPack && (
-          <EditPackModal
-            editCardPack={editCardPack}
-            packId={packId}
-            packName={packName}
-            isPrivate={isPrivate}
-            icon={<EditSVG />}
-          />
-        )}
-        {isMyPack && (
-          <DeletePackModal
-            deleteCardPack={deleteCardPack}
-            packId={packId}
-            packName={packName}
-            icon={<DeleteSVG />}
-          />
-        )*/}
       </ActionButtonsContainer>
       <CardContent sx={{ wordWrap: 'break-word' }}>
-        <Typography variant="h5">{packName}</Typography>
+        <Typography variant="h5">{pack.name}</Typography>
         <Typography>Last updated: {lastUpdated}</Typography>
-        <Typography>Total cards: {totalCards}</Typography>
-        <Typography>Creator: {creator}</Typography>
+        <Typography>Total cards: {pack.cardsCount}</Typography>
+        <Typography>Creator: {pack.user_name}</Typography>
       </CardContent>
     </CustomCard>
   )
