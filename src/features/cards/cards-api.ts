@@ -14,6 +14,9 @@ export const cardsApi = {
   updateCard(data: UpdateCardRequestData) {
     return instance.put<UpdateCardResponse>('cards/card', { card: data })
   },
+  updateCardsGrade(data: CardsNewGradeRequestData) {
+    return instance.put<CardsNewGradeResponseData>('/cards/grade', data)
+  },
 }
 
 export type GetCardsQueryParams = {
@@ -43,6 +46,9 @@ export type UpdateCardRequestData = {
   _id: string
   packId: string
 } & Partial<Pick<Card, 'question' | 'answer' | 'grade'>>
+
+export type CardsNewGradeRequestData = { card_id: string } & Pick<Card, 'grade'>
+export type CardsNewGradeResponseData = Pick<Card, 'grade' | 'shots' | 'cardsPack_id' | 'user_id'>
 
 export type Card = {
   _id: string

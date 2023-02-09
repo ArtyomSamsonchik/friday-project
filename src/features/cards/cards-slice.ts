@@ -8,6 +8,7 @@ import {
   AddCardRequestData,
   Card,
   cardsApi,
+  CardsNewGradeRequestData,
   GetCardsResponse,
   SortCardsParams,
   UpdateCardRequestData,
@@ -97,7 +98,15 @@ export const fetchCardsTC =
       handleError(e as Error, dispatch)
     }
   }
-
+export const updateCardGradeTC =
+  (data: CardsNewGradeRequestData): AppThunk =>
+  async (dispatch, getState, extraArgument) => {
+    try {
+      await cardsApi.updateCardsGrade(data)
+    } catch (e) {
+      handleError(e as Error, dispatch)
+    }
+  }
 export const addCardTC =
   (cardData: AddCardRequestData): AppThunk =>
   async dispatch => {
