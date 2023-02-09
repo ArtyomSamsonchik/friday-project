@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import { useParams } from 'react-router-dom'
 
-import { PATH } from '../../../app/path'
+import { PATH, URL_PARAMS } from '../../../app/path'
 import { CardsNewGradeRequestData } from '../../../features/cards/cards-api'
 import { selectAllCards, selectPackName } from '../../../features/cards/cards-selectors'
 import { updateCardGradeTC } from '../../../features/cards/cards-slice'
@@ -14,12 +15,31 @@ import { CustomPaper } from '../CustomPaper'
 import { FilledButton } from '../FilledButton'
 import { RateYourSelf } from '../RateYourSelf/RateYourSelf'
 
+/*const getCard = (cards: Card[]) => {
+  const sum = cards.reduce((acc, card) => acc + (6 - card.grade) * (6 - card.grade), 0)
+  const rand = Math.random() * sum
+  const res = cards.reduce(
+    (acc: { sum: number; id: number }, card, i) => {
+      const newSum = acc.sum + (6 - card.grade) * (6 - card.grade)
+
+      return { sum: newSum, id: newSum < rand ? i : acc.id }
+    },
+    { sum: 0, id: -1 }
+  )
+
+  console.log('test: ', sum, rand, res)
+
+  return cards[res.id + 1]
+}*/
+
 export const LearnCardsPage = () => {
   const cards = useAppSelector(selectAllCards)
-  const [grade, setGrade] = useState(0)
+
   const [showAnswer, setShowAnswer] = useState(false)
   const [simpleCounter, setSimpleCounter] = useState(0)
   const packName = useAppSelector(selectPackName)
+  const { packId } = useParams<typeof URL_PARAMS.PACK_ID>()
+
   const dispatch = useAppDispatch()
   const increaseSimpleCounter = () => {
     setSimpleCounter(simpleCounter + 1)
@@ -28,7 +48,6 @@ export const LearnCardsPage = () => {
 
   const getCardNewRating = (data: CardsNewGradeRequestData) => {
     dispatch(updateCardGradeTC(data))
-    setGrade(0)
   }
 
   return (
@@ -91,8 +110,6 @@ export const LearnCardsPage = () => {
               simpleCounter={simpleCounter}
               increaseSimpleCounter={increaseSimpleCounter}
               getCardNewRating={getCardNewRating}
-              setGrade={setGrade}
-              grade={grade}
             />
           )}
         </Box>

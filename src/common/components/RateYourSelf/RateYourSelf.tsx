@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useState } from 'react'
 
 import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
@@ -14,18 +15,17 @@ type PropsType = {
   simpleCounter: number
   getCardNewRating: (data: CardsNewGradeRequestData) => void
   increaseSimpleCounter: (simpleCounter: number) => void
-  setGrade: (grade: number) => void
-  grade: number
 }
 export const RateYourSelf = (props: PropsType) => {
-  const { increaseSimpleCounter, getCardNewRating, simpleCounter, cardId, setGrade, grade } = props
+  const [grade, setGrade] = useState(0)
+  const { increaseSimpleCounter, getCardNewRating, simpleCounter, cardId } = props
   const changeGrade = (value: number) => {
     setGrade(value)
   }
 
   const onNextButtonClick = () => {
     increaseSimpleCounter(simpleCounter + 1)
-
+    setGrade(0)
     const data: CardsNewGradeRequestData = {
       card_id: cardId,
       grade: grade,
@@ -84,3 +84,4 @@ export const RateYourSelf = (props: PropsType) => {
     </FormControl>
   )
 }
+//Todo : промапиться, keys

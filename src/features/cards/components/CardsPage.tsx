@@ -48,11 +48,13 @@ export const CardsPage = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(fetchCardsTC(packId as string))
+    if (packId) {
+      dispatch(fetchCardsTC({ cardsPack_id: packId, pageCount: 12 }))
+    }
 
     /*  return () => {
-                dispatch(cleanCards())
-              }*/
+                            dispatch(cleanCards())
+                          }*/
   }, [debouncedCardSearchName, cardItemsPerPage, cardsCurrentPage])
 
   const handleSearchNameChange = (e: ChangeEvent<HTMLInputElement>) => {
