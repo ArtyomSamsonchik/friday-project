@@ -1,11 +1,11 @@
-import React, { ChangeEvent, useCallback, useEffect } from 'react'
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react'
 
 import TextField from '@mui/material/TextField'
 
 import { selectAppStatus } from '../../../app/app-slice'
 import { BackLink } from '../../../common/components/BackLink'
 import { CustomContainer } from '../../../common/components/CustomContainer'
-import { AddPackModal } from '../../../common/components/Modals/AddPackModal/AddPackModal'
+import { FilledButton } from '../../../common/components/FilledButton'
 import { PaginationBar } from '../../../common/components/Pagination/PaginationBar'
 import { MinimumDistanceSlider } from '../../../common/components/RangeSlider'
 import { SuperButton } from '../../../common/components/shared/SuperButton/SuperButton'
@@ -15,7 +15,6 @@ import { ToolBarHeader } from '../../../common/components/toolBar/ToolBarHeader/
 import { useAppDispatch } from '../../../utils/hooks/useAppDispatch'
 import { useAppSelector } from '../../../utils/hooks/useAppSelector'
 import { useDebounce } from '../../../utils/hooks/useDebounce'
-import { AddPackData } from '../card-packs-api'
 import {
   selectCurrentPage,
   selectIsMyPacks,
@@ -27,7 +26,6 @@ import {
   selectPacksTotalCount,
 } from '../cards-pack-selectors'
 import {
-  addCardPackTC,
   cleanPacks,
   DEPRECATED_fetchCardPacksTC,
   setCurrentPackPage,
@@ -36,6 +34,7 @@ import {
   setPersonalPacksParam,
 } from '../cards-pack-slice'
 
+import { AlternativeEditorAddPackModal } from './alternativeEditorAddPackModal/AlternativeEditorAddPackModal'
 import { CardPacksList } from './CardPacksList'
 
 export const CardPacksPage = () => {
@@ -51,6 +50,8 @@ export const CardPacksPage = () => {
   const packSearchName = useAppSelector(selectPackSearchName)
   const debouncedPackSearchName = useDebounce(packSearchName)
 
+  const [modalIsOpen, setModalIsOpen] = useState(false)
+
   const dispatch = useAppDispatch()
 
   const controlsAreDisabled = appStatus === 'loading'
@@ -62,10 +63,6 @@ export const CardPacksPage = () => {
       dispatch(cleanPacks())
     }
   }, [debouncedPackSearchName, itemsPerPage, currentPage, isMyPacks, sortPackOrder])
-
-  const handleLoadPacksClick = (data: AddPackData) => {
-    dispatch(addCardPackTC(data))
-  }
 
   const handleSearchNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(setPackSearchName(e.currentTarget.value))
@@ -89,13 +86,17 @@ export const CardPacksPage = () => {
     dispatch(DEPRECATED_fetchCardPacksTC({ min, max }))
   }, [])
 
+  const handleModalClose = useCallback(() => {
+    setModalIsOpen(false)
+  }, [])
+
   return (
     <CustomContainer sx={{ mb: 8 }}>
       <BackLink title="test link to profile" to="/profile" />
       <div className={'toolBar'}>
         <ToolBarHeader>
           <h3>Packs List</h3>
-          <AddPackModal handleLoadPacksClick={handleLoadPacksClick} />
+          <FilledButton onClick={() => setModalIsOpen(true)}>Add new pack</FilledButton>
         </ToolBarHeader>
 
         <div style={{ display: 'flex', gap: '20px' }}>
@@ -132,6 +133,12 @@ export const CardPacksPage = () => {
         itemsPerPage={itemsPerPage}
         onPageChange={changePageHandler}
         onItemsCountChange={changeItemsPerPageHandler}
+      />
+      <AlternativeEditorAddPackModal
+        isOpen={modalIsOpen}
+        title="Add new pack"
+        onClose={handleModalClose}
+        packId=""
       />
     </CustomContainer>
   )
