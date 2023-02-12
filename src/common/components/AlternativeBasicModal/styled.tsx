@@ -41,5 +41,12 @@ export const ModalHeader = styled('div', { name: 'ModalHeader' })(({ theme }) =>
   },
 }))
 
+export const ModalLabel = styled('span')(({ theme }) => ({
+  display: 'block',
+  margin: theme.spacing(0, 0, 1.5, 0),
+  fontFamily: 'Montserrat, sans-serif',
+  color: theme.palette.text.secondary,
+}))
+
 //TODO: think about 'styled' file with components instead of separate files just
 //  to store styled divs.
