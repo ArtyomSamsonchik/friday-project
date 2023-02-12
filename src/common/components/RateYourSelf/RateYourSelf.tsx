@@ -33,50 +33,26 @@ export const RateYourSelf = (props: PropsType) => {
 
     getCardNewRating(data)
   }
+  const yourAnswer = ['Did not know', 'Forgot', 'A lot of thought', 'Confused', 'Knew the answer']
 
   return (
     <FormControl>
       <FormLabel id="demo-radio-buttons-group-label">Rate yourself</FormLabel>
       <RadioGroup
         aria-labelledby="demo-radio-buttons-group-label"
-        defaultValue="A lot of thought"
+        defaultValue=""
         name="radio-buttons-group"
       >
-        <FormControlLabel
-          onClick={() => changeGrade(1)}
-          value={1}
-          checked={grade === 1}
-          control={<Radio />}
-          label="Did not know"
-        />
-        <FormControlLabel
-          onClick={() => changeGrade(2)}
-          checked={grade === 2}
-          value={2}
-          control={<Radio />}
-          label="Forgot"
-        />
-        <FormControlLabel
-          onClick={() => changeGrade(3)}
-          value={3}
-          checked={grade === 3}
-          control={<Radio />}
-          label="A lot of thought"
-        />
-        <FormControlLabel
-          onClick={() => changeGrade(4)}
-          checked={grade === 4}
-          value={4}
-          control={<Radio />}
-          label="Confused"
-        />
-        <FormControlLabel
-          onClick={() => changeGrade(5)}
-          checked={grade === 5}
-          value={5}
-          control={<Radio />}
-          label="Knew the answer"
-        />
+        {yourAnswer.map((answer, index) => (
+          <FormControlLabel
+            key={index}
+            value={index + 1}
+            onClick={() => changeGrade(index + 1)}
+            checked={grade === index + 1}
+            control={<Radio />}
+            label={answer}
+          />
+        ))}
       </RadioGroup>
       <FilledButton disabled={!grade} onClick={onNextButtonClick}>
         Next Question
@@ -84,4 +60,3 @@ export const RateYourSelf = (props: PropsType) => {
     </FormControl>
   )
 }
-//Todo : промапиться, keys
