@@ -29,10 +29,7 @@ const router = createHashRouter(
         <Route path={PATH.PACKS} element={<CardPacksPage />} />
         <Route path={PATH.PROFILE} element={<Profile />} />
         <Route path={`${PATH.CARDS}?/:packId`} element={<CardsPage />} />
-        <Route
-          path={`${PATH.LEARN}/:${URL_PARAMS.PACK_ID}/:${URL_PARAMS.PACK_NAME}`}
-          element={<LearnCardsPage />}
-        />
+        <Route path={`${PATH.LEARN}/:${URL_PARAMS.PACK_ID}`} element={<LearnCardsPage />} />
       </Route>
       <Route path={PATH.LOGIN} element={<Login />} />
       <Route path={PATH.SIGN_UP} element={<SignUp />} />

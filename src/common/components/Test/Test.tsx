@@ -1,12 +1,18 @@
-import React, { memo, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 
+import { EditorAddCardModal } from '../../../features/cards/components/EditorAddCardModal/EditorAddCardModal'
 import { QuestionCard } from '../../../features/cards/components/QuestionCard'
+import { CardPackType, GetCardPackResponse } from '../../../features/cardsPack/card-packs-api'
 import {
   selectAllPacks,
   selectMaxCardsCount,
   selectMinCardsCount,
 } from '../../../features/cardsPack/cards-pack-selectors'
-import { DEPRECATED_fetchCardPacksTC } from '../../../features/cardsPack/cards-pack-slice'
+import {
+  cleanPacks,
+  DEPRECATED_fetchCardPacksTC,
+  setCardPacks,
+} from '../../../features/cardsPack/cards-pack-slice'
 import { CardPack } from '../../../features/cardsPack/components/cardPack/CardPack'
 import { selectProfile } from '../../../features/profile/profile-slice'
 import { useAppDispatch } from '../../../utils/hooks/useAppDispatch'
@@ -28,7 +34,7 @@ import s from './Test.module.css'
 export const Test = memo(() => {
   const options = ['x', 'y', 'z']
   const [selected, setSelected] = useState(options[1])
-  const cards = useAppSelector(selectAllPacks)
+  const packs = useAppSelector(selectAllPacks)
   const profile = useAppSelector(selectProfile)
   const minCardsCount = useAppSelector(selectMinCardsCount)
   const maxCardsCount = useAppSelector(selectMaxCardsCount)
@@ -37,7 +43,36 @@ export const Test = memo(() => {
   const [showNew, setShowNew] = useState(true)
   const [values, setValues] = useState([0, 110])
 
+  //set test pack in store
+  useEffect(() => {
+    const pack = {
+      _id: '1',
+      private: false,
+      user_id: '1',
+      type: 'pack',
+      user_name: 'test user',
+      cardsCount: 1,
+      updated: '',
+      name: 'test name',
+    } as CardPackType
+
+    const packsResponse = {
+      cardPacks: [pack],
+      page: 1,
+      pageCount: 12,
+      minCardsCount: 1,
+      maxCardsCount: 50,
+    } as GetCardPackResponse
+
+    dispatch(setCardPacks(packsResponse))
+
+    return () => {
+      dispatch(cleanPacks())
+    }
+  }, [])
+
   const handleFetchPacksClick = () => {
+    dispatch(cleanPacks())
     dispatch(
       DEPRECATED_fetchCardPacksTC({
         min: values[0],
@@ -50,6 +85,13 @@ export const Test = memo(() => {
 
   return (
     <div className={commonS.demo}>
+      <EditorAddCardModal
+        isOpen={true}
+        title={'Add New Card'}
+        onClose={() => {}}
+        cardId="ff"
+        packId="dd"
+      />
       <h1>Super components demo</h1>
       <h3>Super button</h3>
       <div className={s.container}>
@@ -82,24 +124,22 @@ export const Test = memo(() => {
       <h3>Cards</h3>
       <CustomContainer>
         <CardsContainer>
-          <CardPack
-            isPrivate={false}
-            packId={'as'} ///  что бы не ругался тест
-            packName={'Test card pack'}
-            totalCards={20}
-            lastUpdated={'14.01.2023'}
-            creator={'Artyom'}
-            isMyPack={true}
-            onOpenCardPack={() => {
-              alert('opened pack')
-            }}
-            onDeleteCardPack={() => {
-              alert('deleted pack')
-            }}
-            onEditCardPack={() => {
-              alert('edited pack')
-            }}
-          />
+          {packs.length &&
+            packs.map(p => (
+              <CardPack
+                key={p._id}
+                packId={p._id}
+                onOpenCardPack={() => {
+                  alert('opened pack')
+                }}
+                onDeleteCardPack={() => {
+                  alert('deleted pack')
+                }}
+                onEditCardPack={() => {
+                  alert('edited pack')
+                }}
+              />
+            ))}
           <QuestionCard
             question={'Lorem ipsum dolor sit amet'}
             answer={'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'}
@@ -109,27 +149,6 @@ export const Test = memo(() => {
             editCard={() => alert('card edited')}
             deleteCard={() => alert('card deleted')}
           />
-          {cards.map(c => (
-            <CardPack
-              isPrivate={false}
-              key={c._id}
-              packId={c._id}
-              packName={c.name}
-              totalCards={c.cardsCount}
-              lastUpdated={c.updated}
-              creator={c.user_name}
-              isMyPack={profile._id === c.user_id}
-              onOpenCardPack={() => {
-                alert('opened pack')
-              }}
-              onDeleteCardPack={() => {
-                alert('deleted pack')
-              }}
-              onEditCardPack={() => {
-                alert('edited pack')
-              }}
-            />
-          ))}
         </CardsContainer>
       </CustomContainer>
       <h3>Super checkbox</h3>

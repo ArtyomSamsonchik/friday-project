@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { PATH, URL_PARAMS } from '../../app/path'
+import { selectCardsTotalCount } from '../../features/cards/cards-selectors'
 import { fetchCardsTC } from '../../features/cards/cards-slice'
 import { AddPackData } from '../../features/cardsPack/card-packs-api'
 import { useAppDispatch } from '../../utils/hooks/useAppDispatch'
@@ -20,20 +21,19 @@ type CustomToolbarProps = {
 }
 
 export const CustomToolbar: FC<CustomToolbarProps> = props => {
-  const { title, actionButtonName, onActionButtonClick, children } = props
+  const { title, onActionButtonClick, children } = props
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { packId } = useParams<typeof URL_PARAMS.PACK_ID>()
-  const packName = useAppSelector(state => state.cards.packName)
-  const cards = useAppSelector(state => state.cards)
+  const cardsTotalCount = useAppSelector(selectCardsTotalCount)
 
   console.log(packId)
   /*dispatch(getAllCardTC({ cardsPack_id: packId }))*/
   const startLearn = () => {
     if (packId) {
       if (packId) {
-        dispatch(fetchCardsTC({ cardsPack_id: packId, pageCount: 110 }))
-        navigate(`/${PATH.LEARN}/${packId}/${packName}`)
+        dispatch(fetchCardsTC({ cardsPack_id: packId, pageCount: cardsTotalCount }))
+        navigate(`/${PATH.LEARN}/${packId}`)
       }
     }
   }

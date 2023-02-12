@@ -72,7 +72,7 @@ export const CardsPage = () => {
   const isMyPack = profile._id === cardsUserId
 
   return (
-    <CustomContainer>
+    <CustomContainer sx={{ mb: 9 }}>
       <BackLink
         onClick={() => dispatch(cleanCards())}
         title="Back to Packs List"
