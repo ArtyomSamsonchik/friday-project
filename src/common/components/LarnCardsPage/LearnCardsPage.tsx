@@ -28,6 +28,12 @@ export const LearnCardsPage = () => {
     setShowAnswer(false)
   }
 
+  console.log(cards)
+  /*useEffect(() => {
+      debugger
+      dispatch(fetchCardsTC({ cardsPack_id: cards[0].cardsPack_id }))
+    }, [])*/
+
   const getCardNewRating = (data: CardsNewGradeRequestData) => {
     dispatch(updateCardGradeTC(data))
   }

@@ -33,8 +33,8 @@ export const CustomToolbar: FC<CustomToolbarProps> = props => {
     if (packId) {
       if (packId) {
         dispatch(fetchCardsTC({ cardsPack_id: packId, pageCount: 110 }))
+        navigate(`/${PATH.LEARN}/${packId}/${packName}`)
       }
-      navigate(`/${PATH.LEARN}/${packId}/${packName}`)
     }
   }
 

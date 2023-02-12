@@ -39,13 +39,8 @@ export const cardsSlice = (state = initState, action: CardsSliceActions): typeof
 
       return {
         ...state,
-        cards,
-        packName,
-        packIsPrivate: packPrivate,
-        page,
-        pageCount,
-        cardsTotalCount,
-        packUserId,
+
+        ...action.payload,
       } as typeof initState
     }
     case 'CARDS/SEARCH_NAME_CHANGED':
@@ -100,22 +95,11 @@ export const fetchCardsTC =
 
     try {
       dispatch(setAppStatus('loading'))
-      const { data } = await cardsApi.getCards(requestData)
+      const { data } = await cardsApi.getCards(params)
 
+      console.log(requestData)
+      console.log(data)
       dispatch(setCards(data))
-      dispatch(setAppStatus('success'))
-    } catch (e) {
-      handleError(e as Error, dispatch)
-    }
-  }
-export const getAllCardTC =
-  (data: GetCardsQueryParams): AppThunk =>
-  async dispatch => {
-    try {
-      dispatch(setAppStatus('loading'))
-      const res = await cardsApi.getCards(data)
-
-      dispatch(getAllCards(res.data, 110))
       dispatch(setAppStatus('success'))
     } catch (e) {
       handleError(e as Error, dispatch)
