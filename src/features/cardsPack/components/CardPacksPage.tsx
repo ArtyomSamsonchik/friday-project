@@ -91,7 +91,7 @@ export const CardPacksPage = () => {
   }, [])
 
   return (
-    <CustomContainer sx={{ mb: 8 }}>
+    <CustomContainer sx={{ mb: 9 }}>
       <BackLink title="test link to profile" to="/profile" />
       <div className={'toolBar'}>
         <ToolBarHeader>
