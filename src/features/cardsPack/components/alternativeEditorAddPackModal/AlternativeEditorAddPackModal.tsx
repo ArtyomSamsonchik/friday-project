@@ -20,7 +20,7 @@ type AlternativeEditorAddPackModalProps = Pick<
   'isOpen' | 'title' | 'onClose'
 > & { packId: string }
 
-const validationSchema = string().required('pack name should not be empty!')
+const validationSchema = string().trim().required('pack name should not be empty!')
 
 export const AlternativeEditorAddPackModal: FC<AlternativeEditorAddPackModalProps> = memo(props => {
   const { packId, onClose, ...restProps } = props
@@ -42,13 +42,14 @@ export const AlternativeEditorAddPackModal: FC<AlternativeEditorAddPackModalProp
 
   const handleEditorAddPack = () => {
     try {
-      validationSchema.validateSync(packName)
+      const newPackName = validationSchema.validateSync(packName)
 
       if (pack) {
-        dispatch(updateCardPackTC({ _id: packId, name: packName, private: isPrivate }))
+        dispatch(updateCardPackTC({ _id: packId, name: newPackName, private: isPrivate }))
       } else {
-        dispatch(addCardPackTC({ name: packName, private: isPrivate }))
+        dispatch(addCardPackTC({ name: newPackName, private: isPrivate }))
       }
+      setPackName(newPackName)
       onClose()
     } catch (e) {
       if (ValidationError.isError(e)) setError(e.errors[0])
