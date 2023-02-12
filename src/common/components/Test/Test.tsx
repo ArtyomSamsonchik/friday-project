@@ -1,5 +1,6 @@
 import React, { memo, useEffect, useState } from 'react'
 
+import { EditorAddCardModal } from '../../../features/cards/components/EditorAddCardModal/EditorAddCardModal'
 import { QuestionCard } from '../../../features/cards/components/QuestionCard'
 import { CardPackType, GetCardPackResponse } from '../../../features/cardsPack/card-packs-api'
 import {
@@ -84,6 +85,13 @@ export const Test = memo(() => {
 
   return (
     <div className={commonS.demo}>
+      <EditorAddCardModal
+        isOpen={true}
+        title={'Add New Card'}
+        onClose={() => {}}
+        cardId="ff"
+        packId="dd"
+      />
       <h1>Super components demo</h1>
       <h3>Super button</h3>
       <div className={s.container}>
