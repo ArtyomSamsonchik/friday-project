@@ -37,7 +37,17 @@ export const CustomToolBarSam = ({ children }: CustomToolBarPropsType) => {
           horizontal: 'left',
         }}
       >
-        <Box sx={{ padding: '10px' }}>{children}</Box>
+        <Box
+          sx={{
+            padding: '20px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '20px',
+            minHeight: '200px',
+          }}
+        >
+          {children}
+        </Box>
       </Popover>
     </div>
   )
