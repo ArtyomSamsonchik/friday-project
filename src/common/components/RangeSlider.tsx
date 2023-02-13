@@ -96,6 +96,11 @@ export const MinimumDistanceSlider = memo((props: MinimumDistanceSliderType) => 
           max: sliderMinMax[1] - 1,
           type: 'number',
         }}
+        sx={{
+          '& input': {
+            width: 'auto',
+          },
+        }}
       />
       <Slider
         value={sliderMinMax}
@@ -116,6 +121,11 @@ export const MinimumDistanceSlider = memo((props: MinimumDistanceSliderType) => 
           min: sliderMinMax[0] + 1,
           max: maxValue,
           type: 'number',
+        }}
+        sx={{
+          '& input': {
+            width: 'auto',
+          },
         }}
       />
     </Box>
