@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 
-import { Button, ButtonProps, InputAdornment } from '@mui/material'
+import Button, { ButtonProps } from '@mui/material/Button'
+import InputAdornment from '@mui/material/InputAdornment'
 
 export const EditableSpanSaveButton: FC<ButtonProps> = props => {
   return (

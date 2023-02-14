@@ -41,10 +41,13 @@ export const EditableSpan: FC<EditableSpanProps> = memo(props => {
     if (e.key === 'Enter') {
       disableEditMode()
     }
+    if (e.key === 'Escape') {
+      setEditMode(false)
+    }
   }
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" width={1} mb={2}>
+    <Box display="flex" justifyContent="center" alignItems="center" width={1} mb={1}>
       {editMode ? (
         <TextField
           autoFocus
@@ -54,6 +57,7 @@ export const EditableSpan: FC<EditableSpanProps> = memo(props => {
           helperText={error ? error : ''}
           sx={{
             flexGrow: '1',
+            mb: 1,
             '& .MuiInputBase-root': { paddingRight: '12px', paddingBottom: '3px' },
           }}
           value={title}
@@ -83,5 +87,3 @@ export const EditableSpan: FC<EditableSpanProps> = memo(props => {
     </Box>
   )
 })
-
-// TODO: add memo for this component
