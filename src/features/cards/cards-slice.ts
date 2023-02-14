@@ -8,7 +8,7 @@ import {
   AddCardRequestData,
   Card,
   cardsApi,
-  CardsNewGradeRequestData,
+  UpdateCardGradeRequestData,
   GetCardsQueryParams,
   GetCardsResponse,
   SortCardsParams,
@@ -39,9 +39,14 @@ export const cardsSlice = (state = initState, action: CardsSliceActions): typeof
 
       return {
         ...state,
-
-        ...action.payload,
-      } as typeof initState
+        cards,
+        packName,
+        packIsPrivate: packPrivate,
+        page,
+        pageCount,
+        cardsTotalCount,
+        packUserId,
+      }
     }
     case 'CARDS/SEARCH_NAME_CHANGED':
       return { ...state, cardSearchName: action.payload }
@@ -53,21 +58,12 @@ export const cardsSlice = (state = initState, action: CardsSliceActions): typeof
       return { ...state, pageCount: action.payload }
     case 'CARDS/CARDS_CLEANED':
       return { ...state, cards: [], packName: '' }
-    case 'CARDS/ALL_LOADED':
-      return {
-        ...state,
-        cards: action.payload.cardsData.cards,
-        pageCount: action.payload.cardsCount,
-      }
     default:
       return state
   }
 }
 
 //actions
-export const getAllCards = (cardsData: GetCardsResponse, cardsCount: number) => {
-  return { type: 'CARDS/ALL_LOADED', payload: { cardsData, cardsCount } } as const
-}
 export const setCards = (cardsData: GetCardsResponse) => {
   return { type: 'CARDS/LOADED', payload: cardsData } as const
 }
@@ -91,31 +87,31 @@ export const cleanCards = () => {
 export const fetchCardsTC =
   (params: GetCardsQueryParams): AppThunk =>
   async (dispatch, getState) => {
-    const requestData = mapStateToCardsRequestParams(getState(), params.cardsPack_id)
+    const requestData = mapStateToCardsRequestParams(getState(), params)
 
     try {
       dispatch(setAppStatus('loading'))
-      const { data } = await cardsApi.getCards(params)
+      const { data } = await cardsApi.getCards(requestData)
 
-      console.log(requestData)
-      console.log(data)
       dispatch(setCards(data))
       dispatch(setAppStatus('success'))
     } catch (e) {
       handleError(e as Error, dispatch)
     }
   }
+
 export const updateCardGradeTC =
-  (data: CardsNewGradeRequestData): AppThunk =>
-  async (dispatch, getState, extraArgument) => {
+  (data: UpdateCardGradeRequestData): AppThunk =>
+  async dispatch => {
     try {
       dispatch(setAppStatus('loading'))
-      await cardsApi.updateCardsGrade(data)
+      await cardsApi.updateCardGrade(data)
       dispatch(setAppStatus('success'))
     } catch (e) {
       handleError(e as Error, dispatch)
     }
   }
+
 export const addCardTC =
   (cardData: AddCardRequestData): AppThunk =>
   async dispatch => {
@@ -123,7 +119,7 @@ export const addCardTC =
       dispatch(setAppStatus('loading'))
       await cardsApi.addCard(cardData)
 
-      dispatch(fetchCardsTC(cardData))
+      dispatch(fetchCardsTC({ cardsPack_id: cardData.cardsPack_id }))
       dispatch(setAppStatus('success'))
     } catch (e) {
       handleError(e as Error, dispatch)
@@ -165,7 +161,6 @@ type SetCardsSortOrderAT = ReturnType<typeof setCardsSortOrder>
 type SetCurrentCardsPageAT = ReturnType<typeof setCurrentCardsPage>
 type SetCardItemsPerPageAT = ReturnType<typeof setCardItemsPerPage>
 type CleanCardsAT = ReturnType<typeof cleanCards>
-type getAllCardsAT = ReturnType<typeof getAllCards>
 
 export type CardsSliceActions =
   | SetCardsAT
@@ -174,6 +169,6 @@ export type CardsSliceActions =
   | SetCurrentCardsPageAT
   | SetCardItemsPerPageAT
   | CleanCardsAT
-  | getAllCardsAT
 
-// TODO: remove unnecessary properties in init state
+//TODO: remove unnecessary properties in init state
+//TODO: add mapper-helper to CARDS_LOADED reducer case
