@@ -12,6 +12,7 @@ import MenuItem from '@mui/material/MenuItem'
 import MenuList from '@mui/material/MenuList'
 import Paper from '@mui/material/Paper'
 import Popper from '@mui/material/Popper'
+import { right } from '@popperjs/core'
 
 import { SortPacksParams } from '../../../features/cardsPack/card-packs-api'
 import { setPacksSortOrder } from '../../../features/cardsPack/cards-pack-slice'
@@ -63,6 +64,7 @@ export const SortPackButton = memo(({ sortPackOrder, disabled }: PropsType) => {
         ref={anchorRef}
         disabled={disabled}
         aria-label="split button"
+        style={{ display: 'flex', width: 'fit-content' }}
       >
         <Button onClick={handleAscToggleClick}>
           {column} {asc ? <ArrowUpwardIcon /> : <ArrowDownwardIcon />}
@@ -87,6 +89,7 @@ export const SortPackButton = memo(({ sortPackOrder, disabled }: PropsType) => {
         role={undefined}
         transition
         disablePortal
+        popperOptions={{ placement: 'right-start' }}
       >
         {({ TransitionProps, placement }) => (
           <Grow
