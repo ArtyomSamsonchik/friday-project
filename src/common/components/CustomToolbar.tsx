@@ -5,9 +5,9 @@ import Typography from '@mui/material/Typography'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { PATH, URL_PARAMS } from '../../app/path'
-import { selectCardsTotalCount } from '../../features/cards/cards-selectors'
+import { selectCardsTotalCount, selectCardsUserId } from '../../features/cards/cards-selectors'
 import { AddPackData } from '../../features/cardsPack/card-packs-api'
-import { useAppDispatch } from '../../utils/hooks/useAppDispatch'
+import { selectProfile } from '../../features/profile/profile-slice'
 import { useAppSelector } from '../../utils/hooks/useAppSelector'
 
 import { AddPackModal } from './Modals/AddPackModal/AddPackModal'
@@ -22,30 +22,29 @@ type CustomToolbarProps = {
 export const CustomToolbar: FC<CustomToolbarProps> = props => {
   const { title, onActionButtonClick, children } = props
   const navigate = useNavigate()
-  const dispatch = useAppDispatch()
   const { packId } = useParams<typeof URL_PARAMS.PACK_ID>()
-  const cardsTotalCount = useAppSelector(selectCardsTotalCount)
+  const cardsCount = useAppSelector(selectCardsTotalCount)
+  const cardsUserId = useAppSelector(selectCardsUserId)
 
+  const profile = useAppSelector(selectProfile)
   const startLearn = () => {
     if (packId) {
-      /*
-                  dispatch(fetchCardsTC({ cardsPack_id: packId, pageCount: cardsTotalCount }))
-            */
       navigate(`/${PATH.CARDS}/${packId}/${PATH.LEARN}`)
     }
   }
+  const isMyPack = profile._id === cardsUserId
 
   return (
     <Box mb={3}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={4.5}>
         <Typography component="h6" sx={{ fontSize: 22, lineHeight: 1.25, fontWeight: 600 }}>
-          {title}
+          {cardsCount ? title : title + ' is empty'}
         </Typography>
-        <button onClick={startLearn}>learn</button>
-        <AddPackModal handleLoadPacksClick={onActionButtonClick} />
+        {cardsCount ? <button onClick={startLearn}>learn</button> : ''}
+        {isMyPack && <AddPackModal handleLoadPacksClick={onActionButtonClick} />}
       </Box>
       <Box display="flex" alignItems="center" flexWrap="wrap" gap="20px">
-        {children}
+        {!cardsCount || children}
       </Box>
     </Box>
   )

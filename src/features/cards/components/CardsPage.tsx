@@ -40,7 +40,6 @@ export const CardsPage = () => {
   const cardItemsPerPage = useAppSelector(selectCardItemsPerPage)
   const cardsCurrentPage = useAppSelector(selectCardsCurrentPage)
   const packName = useAppSelector(selectPackName)
-
   const cardSearchName = useAppSelector(selectCardSearchName)
   const debouncedCardSearchName = useDebounce(cardSearchName)
 
@@ -82,16 +81,20 @@ export const CardsPage = () => {
         <TextField value={cardSearchName} onChange={handleSearchNameChange} />
       </CustomToolbar>
       <CardsContainer>
-        {cards.map(c => (
-          <QuestionCard
-            key={c._id}
-            question={c.question}
-            answer={c.answer}
-            isMyCard={isMyPack}
-            lastUpdated={c.updated}
-            rating={c.grade}
-          />
-        ))}
+        {cards.length ? (
+          cards.map(c => (
+            <QuestionCard
+              key={c._id}
+              question={c.question}
+              answer={c.answer}
+              isMyCard={isMyPack}
+              lastUpdated={c.updated}
+              rating={c.grade}
+            />
+          ))
+        ) : (
+          <div>˚‧º·(˚ ˃̣̣̥᷄⌓˂̣̣̥᷅ )‧º·˚</div>
+        )}
       </CardsContainer>
       <PaginationBar
         pagesCount={Math.ceil(cardsTotalCount / cardItemsPerPage)}
