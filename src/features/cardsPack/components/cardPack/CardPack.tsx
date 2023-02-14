@@ -4,7 +4,9 @@ import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 import dayjs from 'dayjs'
+import { useNavigate } from 'react-router-dom'
 
+import { PATH } from '../../../../app/path'
 import { ReactComponent as DeleteSVG } from '../../../../common/assets/icons/delete.svg'
 import { ReactComponent as EditSVG } from '../../../../common/assets/icons/edit.svg'
 import { ReactComponent as TeacherSVG } from '../../../../common/assets/icons/teacher.svg'
@@ -29,24 +31,32 @@ const globalImageSrc = 'https://tomaztsql.files.wordpress.com/2021/01/cards.png'
 
 export const CardPack: FC<CardPackProps> = memo(props => {
   const { packId, onOpenCardPack, onEditCardPack, onDeleteCardPack } = props
-
+  const navigate = useNavigate()
   const pack = useAppSelector(state => selectCardPack(state, packId)) as CardPackType
   const profile = useAppSelector(selectProfile)
 
   const isMyPack = profile._id === pack.user_id
   const lastUpdated = dayjs(pack.updated).format('DD.MM.YYYY HH:mm')
 
+  const startLearn = () => {
+    if (packId) {
+      navigate(`/${PATH.CARDS}/${packId}/${PATH.LEARN}`)
+    }
+  }
+
   return (
     <CustomCard sx={{ minHeight: '200px' }}>
       <CardMedia
-        sx={{ height: 150, backgroundSize: 'cover' }}
+        onClick={() => onOpenCardPack(packId)}
+        sx={{ height: 150, backgroundSize: 'cover', cursor: 'pointer' }}
         image={pack.deckCover || globalImageSrc}
+        title={'open pack'}
       />
       <ActionButtonsContainer sx={{ position: 'absolute', top: '12px', right: '12px' }}>
         <ActonIconButton
           disabled={pack.cardsCount === 0}
-          onClick={() => onOpenCardPack(packId)}
-          title="open pack"
+          onClick={startLearn}
+          title="start learning"
         >
           <TeacherSVG />
         </ActonIconButton>
