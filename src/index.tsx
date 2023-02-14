@@ -19,7 +19,7 @@ import { SignUp } from './common/components/SignUp/SignUp'
 import { Test } from './common/components/Test/Test'
 import { CardsPage } from './features/cards/components/CardsPage'
 import { CardPacksPage } from './features/cardsPack/components/CardPacksPage'
-import { Profile } from './features/profile/Profile'
+import { Profile } from './features/profile/components/Profile/Profile'
 
 const router = createHashRouter(
   createRoutesFromElements(
