@@ -14,8 +14,8 @@ export const cardsApi = {
   updateCard(data: UpdateCardRequestData) {
     return instance.put<UpdateCardResponse>('cards/card', { card: data })
   },
-  updateCardsGrade(data: CardsNewGradeRequestData) {
-    return instance.put<CardsNewGradeResponseData>('/cards/grade', data)
+  updateCardGrade(data: UpdateCardGradeRequestData) {
+    return instance.put<UpdateCardGradeResponse>('/cards/grade', data)
   },
 }
 
@@ -47,8 +47,16 @@ export type UpdateCardRequestData = {
   packId: string
 } & Partial<Pick<Card, 'question' | 'answer' | 'grade'>>
 
-export type CardsNewGradeRequestData = { card_id: string } & Pick<Card, 'grade'>
-export type CardsNewGradeResponseData = Pick<Card, 'grade' | 'shots' | 'cardsPack_id' | 'user_id'>
+export type UpdateCardGradeRequestData = { card_id: string; grade: number }
+
+export type UpdateCardGradeResponse = {
+  _id: string
+  cardsPack_id: string
+  card_id: string
+  user_id: string
+  grade: number
+  shots: number
+}
 
 export type Card = {
   _id: string
@@ -91,3 +99,4 @@ type DeleteCardResponse = { deletedCard: Card } & ResponseTokenData
 type UpdateCardResponse = { updatedCard: Card } & ResponseTokenData
 
 // TODO: add sortCards helper to create according query param
+// TODO: reduce AddCardRequestData type in future. grade and shots are unnecessary
