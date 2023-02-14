@@ -1,49 +1,59 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import { useParams } from 'react-router-dom'
 
-import { PATH } from '../../../app/path'
-import { CardsNewGradeRequestData } from '../../../features/cards/cards-api'
-import { selectAllCards, selectPackName } from '../../../features/cards/cards-selectors'
-import { updateCardGradeTC } from '../../../features/cards/cards-slice'
-import { useAppDispatch } from '../../../utils/hooks/useAppDispatch'
-import { useAppSelector } from '../../../utils/hooks/useAppSelector'
-import { BackLink } from '../BackLink'
-import { CustomContainer } from '../CustomContainer'
-import { CustomPaper } from '../CustomPaper'
-import { FilledButton } from '../FilledButton'
+import { URL_PARAMS } from '../../../../app/path'
+import { BackLink } from '../../../../common/components/BackLink'
+import { CustomContainer } from '../../../../common/components/CustomContainer'
+import { CustomPaper } from '../../../../common/components/CustomPaper'
+import { FilledButton } from '../../../../common/components/FilledButton'
+import { useAppDispatch } from '../../../../utils/hooks/useAppDispatch'
+import { useAppSelector } from '../../../../utils/hooks/useAppSelector'
+import {
+  selectAllCards,
+  selectCardsTotalCount,
+  selectPackName,
+} from '../../../cards/cards-selectors'
+import { cleanCards, fetchCardsTC } from '../../../cards/cards-slice'
 import { RateYourSelf } from '../RateYourSelf/RateYourSelf'
 
 export const LearnCardsPage = () => {
-  const cards = useAppSelector(selectAllCards)
-
   const [showAnswer, setShowAnswer] = useState(false)
   const [simpleCounter, setSimpleCounter] = useState(0)
+
+  const cards = useAppSelector(selectAllCards)
   const packName = useAppSelector(selectPackName)
+  const cardsTotalCount = useAppSelector(selectCardsTotalCount)
+  const { packId } = useParams<typeof URL_PARAMS.PACK_ID>()
 
   const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (packId) {
+      dispatch(fetchCardsTC({ cardsPack_id: packId, pageCount: cardsTotalCount }))
+    }
+
+    return () => {
+      cleanCards()
+    }
+  }, [])
+
   const increaseSimpleCounter = () => {
-    setSimpleCounter(simpleCounter + 1)
+    setSimpleCounter(count => {
+      if (count === cards.length - 1) return 0
+      else return count + 1
+    })
     setShowAnswer(false)
   }
 
-  console.log(cards)
-  /*useEffect(() => {
-      debugger
-      dispatch(fetchCardsTC({ cardsPack_id: cards[0].cardsPack_id }))
-    }, [])*/
-
-  const getCardNewRating = (data: CardsNewGradeRequestData) => {
-    dispatch(updateCardGradeTC(data))
-  }
+  //placeholder
+  if (!cards.length) return null
 
   return (
     <CustomContainer>
-      <BackLink
-        title="Back to Cards List"
-        to={`/${PATH.CARDS}/${cards[simpleCounter].cardsPack_id}`}
-      />
+      <BackLink title="Back to Cards List" to=".." relative="path" />
       <Typography
         align={'center'}
         sx={{
@@ -53,7 +63,9 @@ export const LearnCardsPage = () => {
           mb: '30px',
         }}
       >
-        <b>Learn: {packName}</b>
+        <b>
+          Learn: {packName} {`(${simpleCounter + 1}/${cards.length})`}
+        </b>
       </Typography>
       <CustomPaper
         sx={{
@@ -89,20 +101,23 @@ export const LearnCardsPage = () => {
             alignItems: 'center',
           }}
         >
-          {showAnswer || (
-            <FilledButton onClick={() => setShowAnswer(!showAnswer)}>show answer</FilledButton>
-          )}
           {showAnswer && (
             <RateYourSelf
               key={cards[simpleCounter]._id}
               cardId={cards[simpleCounter]._id}
-              simpleCounter={simpleCounter}
               increaseSimpleCounter={increaseSimpleCounter}
-              getCardNewRating={getCardNewRating}
             />
+          )}
+          {!showAnswer && (
+            <FilledButton onClick={() => setShowAnswer(!showAnswer)}>show answer</FilledButton>
           )}
         </Box>
       </CustomPaper>
     </CustomContainer>
   )
 }
+
+//TODO: add redirect back in history to cards page if learning process
+//  was not launched from cards page
+// TODO: replace return placeholder with loading logic (like spinner)
+// TODO: write logic to update cards in store after dispatching UpdateGrade thunk
