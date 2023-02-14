@@ -1,10 +1,19 @@
-export const convertFileToBase64 = (file: File, callBack: (value: string) => void) => {
-  const reader = new FileReader()
+export const convertFileToBase64 = (file: File) => {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader()
 
-  reader.onloadend = () => {
-    const file64 = reader.result as string
+    reader.onload = () => {
+      const file64 = reader.result as string
 
-    callBack(file64)
-  }
-  reader.readAsDataURL(file)
+      resolve(file64)
+    }
+    reader.onerror = e => {
+      const error =
+        e.target?.error || new Error(`An error occurred while reading the file ${file.name}`)
+
+      console.log(e)
+      reject(error)
+    }
+    reader.readAsDataURL(file)
+  })
 }
