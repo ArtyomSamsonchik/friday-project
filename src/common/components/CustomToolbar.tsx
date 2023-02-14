@@ -6,7 +6,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { PATH, URL_PARAMS } from '../../app/path'
 import { selectCardsTotalCount } from '../../features/cards/cards-selectors'
-import { fetchCardsTC } from '../../features/cards/cards-slice'
 import { AddPackData } from '../../features/cardsPack/card-packs-api'
 import { useAppDispatch } from '../../utils/hooks/useAppDispatch'
 import { useAppSelector } from '../../utils/hooks/useAppSelector'
@@ -29,7 +28,9 @@ export const CustomToolbar: FC<CustomToolbarProps> = props => {
 
   const startLearn = () => {
     if (packId) {
-      dispatch(fetchCardsTC({ cardsPack_id: packId, pageCount: cardsTotalCount }))
+      /*
+                  dispatch(fetchCardsTC({ cardsPack_id: packId, pageCount: cardsTotalCount }))
+            */
       navigate(`/${PATH.CARDS}/${packId}/${PATH.LEARN}`)
     }
   }
