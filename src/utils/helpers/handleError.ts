@@ -11,5 +11,5 @@ export const handleError = (e: Error | AxiosError<{ error: string }>, dispatch: 
   }
   dispatch(setAppError(message))
   dispatch(setAppStatus('failure'))
-  console.log(message)
+  console.log(e)
 }
