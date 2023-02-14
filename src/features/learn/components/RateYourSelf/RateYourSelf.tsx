@@ -7,33 +7,42 @@ import FormLabel from '@mui/material/FormLabel'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 
-import { CardsNewGradeRequestData } from '../../../features/cards/cards-api'
-import { FilledButton } from '../FilledButton'
+import { FilledButton } from '../../../../common/components/FilledButton'
+import { useAppDispatch } from '../../../../utils/hooks/useAppDispatch'
+import { UpdateCardGradeRequestData } from '../../../cards/cards-api'
+import { updateCardGradeTC } from '../../../cards/cards-slice'
 
-type PropsType = {
+const yourAnswer = [
+  'Did not know',
+  'Forgot',
+  'A lot of thought',
+  'Confused',
+  'Knew the answer',
+] as const
+
+type RateYourSelfProps = {
   cardId: string
-  simpleCounter: number
-  getCardNewRating: (data: CardsNewGradeRequestData) => void
-  increaseSimpleCounter: (simpleCounter: number) => void
+  increaseSimpleCounter: () => void
 }
-export const RateYourSelf = (props: PropsType) => {
+export const RateYourSelf = (props: RateYourSelfProps) => {
+  const { increaseSimpleCounter, cardId } = props
+
   const [grade, setGrade] = useState(0)
-  const { increaseSimpleCounter, getCardNewRating, simpleCounter, cardId } = props
+  const dispatch = useAppDispatch()
   const changeGrade = (value: number) => {
     setGrade(value)
   }
 
   const onNextButtonClick = () => {
-    increaseSimpleCounter(simpleCounter + 1)
+    increaseSimpleCounter()
 
-    const data: CardsNewGradeRequestData = {
+    const data: UpdateCardGradeRequestData = {
       card_id: cardId,
       grade: grade,
     }
 
-    getCardNewRating(data)
+    dispatch(updateCardGradeTC(data))
   }
-  const yourAnswer = ['Did not know', 'Forgot', 'A lot of thought', 'Confused', 'Knew the answer']
 
   return (
     <FormControl>
