@@ -45,7 +45,7 @@ export const Header = () => {
   })
 
   return (
-    <Box sx={{ marginBottom: '84px' }}>
+    <Box>
       <AppBar color={'inherit'}>
         <ProgressBar />
         <Toolbar sx={{ justifyContent: 'space-between', width: '1280px', margin: '0 auto' }}>

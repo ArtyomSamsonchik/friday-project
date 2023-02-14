@@ -20,11 +20,12 @@ export const BackLink = styled(component, { name: 'BackLink' })(({ theme }) => (
   display: 'flex',
   alignItems: 'center',
   gap: theme.spacing(1),
-  paddingTop: theme.spacing(2),
   marginBottom: theme.spacing(2.5),
   [theme.breakpoints.up('sm')]: {
-    paddingTop: theme.spacing(3),
     marginBottom: theme.spacing(3.5),
+  },
+  '&:hover': {
+    textDecoration: 'underline',
   },
 }))
 
