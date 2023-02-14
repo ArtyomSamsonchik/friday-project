@@ -27,14 +27,10 @@ export const CustomToolbar: FC<CustomToolbarProps> = props => {
   const { packId } = useParams<typeof URL_PARAMS.PACK_ID>()
   const cardsTotalCount = useAppSelector(selectCardsTotalCount)
 
-  console.log(packId)
-  /*dispatch(getAllCardTC({ cardsPack_id: packId }))*/
   const startLearn = () => {
     if (packId) {
-      if (packId) {
-        dispatch(fetchCardsTC({ cardsPack_id: packId, pageCount: cardsTotalCount }))
-        navigate(`/${PATH.LEARN}/${packId}`)
-      }
+      dispatch(fetchCardsTC({ cardsPack_id: packId, pageCount: cardsTotalCount }))
+      navigate(`/${PATH.CARDS}/${packId}/${PATH.LEARN}`)
     }
   }
 
