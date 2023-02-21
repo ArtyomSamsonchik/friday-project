@@ -24,7 +24,6 @@ export const EmptyPackPage = () => {
 
   console.log(cardsTotalCount)
   useEffect(() => {
-    console.log('empty')
     if (cardsTotalCount) {
       navigate(`/${PATH.CARDS}/${packId}`)
     }
