@@ -14,7 +14,6 @@ export const ModalContainer = styled('div', { name: 'ModalContainer' })(({ theme
 export const ModalInner = styled('div', { name: 'ModalInner' })(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  height: 'calc(100% - 60px)',
   padding: theme.spacing(4, 0, 5),
 }))
 
@@ -28,6 +27,27 @@ export const ModalControls = styled(ModalContent, { name: 'ModalControls' })({
   alignItems: 'center',
   '& .MuiButtonBase-root': {
     minWidth: 112,
+  },
+})
+
+export const ModalButtonGroup = styled(ButtonGroup, {
+  name: 'ModalButtonGroup',
+})({
+  border: '1px solid #1976d2',
+  borderRadius: 2,
+  width: 'fit-content',
+  '& .MuiButton-root': {
+    border: 'none',
+    textTransform: 'none',
+    fontFamily: 'Montserrat',
+  },
+  '& > .MuiCollapse-root': {
+    marginLeft: -1,
+    '& .MuiButton-root': {
+      borderTopLeftRadius: 0,
+      borderBottomLeftRadius: 0,
+      borderLeft: '1px solid #1976d2',
+    },
   },
 })
 
@@ -55,5 +75,5 @@ export const ModalLabel = styled('span')(({ theme }) => ({
   color: theme.palette.text.secondary,
 }))
 
-//TODO: think about 'styled' file with components instead of separate files just
+// TODO: think about 'styled' file with components instead of separate files just
 //  to store styled divs.
