@@ -46,6 +46,7 @@ const router = createHashRouter(
       <Route path={PATH.CHECK_EMAIL} element={<CheckEmail />} />
       <Route path={PATH.TEST} element={<Test />} />
       <Route path={PATH.ERROR} element={<ErrorPage />} />
+      <Route path={PATH.EMPTY} element={<EmptyPackPage />} />
     </Route>
   )
 )

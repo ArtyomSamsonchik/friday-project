@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useCallback, useEffect } from 'react'
 
 import TextField from '@mui/material/TextField'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { PATH, URL_PARAMS } from '../../../app/path'
 import { BackLink } from '../../../common/components/BackLink'
@@ -42,19 +42,29 @@ export const CardsPage = () => {
   const packName = useAppSelector(selectPackName)
   const cardSearchName = useAppSelector(selectCardSearchName)
   const debouncedCardSearchName = useDebounce(cardSearchName)
-
+  const pageCount = useAppSelector(selectCardItemsPerPage)
   const { packId } = useParams<typeof URL_PARAMS.PACK_ID>()
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+
+  console.log(pageCount, cardsTotalCount)
+  console.log(useParams())
+  useEffect(() => {
+    if (cardsTotalCount === 0) {
+      navigate(`/${PATH.CARDS}/${packId}/${PATH.EMPTY}`)
+    }
+  }, [cardsTotalCount])
 
   useEffect(() => {
+    console.log('cardspage')
     if (packId) {
-      dispatch(fetchCardsTC({ cardsPack_id: packId }))
+      dispatch(fetchCardsTC({ cardsPack_id: packId, pageCount }))
     }
 
     return () => {
       dispatch(cleanCards())
     }
-  }, [debouncedCardSearchName, cardItemsPerPage, cardsCurrentPage])
+  }, [debouncedCardSearchName, cardsCurrentPage, cardItemsPerPage])
 
   const handleSearchNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(setCardsSearchName(e.currentTarget.value))
