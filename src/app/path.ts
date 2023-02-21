@@ -7,6 +7,7 @@ export const PATH = {
   PACKS: 'packs',
   CARDS: 'cards',
   ERROR: '404',
+  EMPTY: 'empty',
   NEW_PASSWORD: 'new-password/:token',
   RESTORE_PASSWORD: 'restore-password',
   TEST: 'test',
