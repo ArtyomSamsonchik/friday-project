@@ -2,7 +2,7 @@ import React, { ChangeEvent, FC, memo, useState, KeyboardEvent } from 'react'
 
 import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import FormGroup from '@mui/material/FormGroup'
+import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import { string, ValidationError } from 'yup'
 
@@ -77,7 +77,7 @@ export const AlternativeEditorAddPackModal: FC<AlternativeEditorAddPackModalProp
       onClose={handleEditModalClose}
       {...restProps}
     >
-      <FormGroup>
+      <Stack maxHeight="45vh">
         <TextField
           autoFocus
           label="Pack Name"
@@ -92,7 +92,7 @@ export const AlternativeEditorAddPackModal: FC<AlternativeEditorAddPackModalProp
           control={<Checkbox checked={isPrivate} onChange={handleIsPrivateChange} />}
           label="Private"
         />
-      </FormGroup>
+      </Stack>
     </AlternativeBasicModal>
   )
 })

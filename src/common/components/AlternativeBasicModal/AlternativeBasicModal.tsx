@@ -12,6 +12,7 @@ import { FilledButton } from '../FilledButton'
 import { OutlinedButton } from '../OutlinedButton'
 
 import { ModalContainer, ModalContent, ModalControls, ModalHeader, ModalInner } from './styled'
+
 const modalBoxShadow =
   'rgba(0, 0, 0, 0.2) 0px 0px 15px -7px, ' +
   'rgba(0, 0, 0, 0.14) 0px 0px 38px 3px, ' +
@@ -43,7 +44,7 @@ export const AlternativeBasicModal: FC<AlternativeBasicModalProps> = props => {
     <Modal open={isOpen} onClose={onClose}>
       <ModalContainer>
         <CustomPaper sx={{ boxShadow: modalBoxShadow }}>
-          <Box height="100vh" maxHeight="90vh">
+          <Box>
             <ModalHeader>
               <Typography>{title}</Typography>
               <IconButton onClick={onClose}>
