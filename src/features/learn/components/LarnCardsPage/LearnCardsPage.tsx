@@ -34,9 +34,9 @@ export const LearnCardsPage = () => {
   }, [])
 
   async function getLearnCards(params: GetCardsQueryParams) {
-    await cardsApi.getCards(params).then(res => {
-      setCards(res.data.cards)
-    })
+    const data = await cardsApi.getCards(params)
+
+    setCards(data.data.cards)
   }
 
   const increaseSimpleCounter = () => {
