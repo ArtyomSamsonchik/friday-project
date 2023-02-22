@@ -8,7 +8,6 @@ import { createHashRouter, createRoutesFromElements, Route, RouterProvider } fro
 import { App } from './app/App'
 import { PATH, URL_PARAMS } from './app/path'
 import { store } from './app/store'
-import { EmptyPackPage } from './common/components/EmptyPackPage/EmptyPackPage'
 import { ErrorPage } from './common/components/ErrorPage/ErrorPage'
 import { Login } from './common/components/Login/Login'
 import { NewPassword } from './common/components/NewPassword/NewPassword'
@@ -34,10 +33,6 @@ const router = createHashRouter(
           path={`${PATH.CARDS}/:${URL_PARAMS.PACK_ID}/${PATH.LEARN}`}
           element={<LearnCardsPage />}
         />{' '}
-        <Route
-          path={`${PATH.CARDS}/:${URL_PARAMS.PACK_ID}/${PATH.EMPTY}`}
-          element={<EmptyPackPage />}
-        />
       </Route>
       <Route path={PATH.LOGIN} element={<Login />} />
       <Route path={PATH.SIGN_UP} element={<SignUp />} />
@@ -46,7 +41,6 @@ const router = createHashRouter(
       <Route path={PATH.CHECK_EMAIL} element={<CheckEmail />} />
       <Route path={PATH.TEST} element={<Test />} />
       <Route path={PATH.ERROR} element={<ErrorPage />} />
-      <Route path={PATH.EMPTY} element={<EmptyPackPage />} />
     </Route>
   )
 )

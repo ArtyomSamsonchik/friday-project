@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useCallback, useEffect } from 'react'
 
 import TextField from '@mui/material/TextField'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import { PATH, URL_PARAMS } from '../../../app/path'
 import { BackLink } from '../../../common/components/BackLink'
@@ -45,15 +45,6 @@ export const CardsPage = () => {
   const pageCount = useAppSelector(selectCardItemsPerPage)
   const { packId } = useParams<typeof URL_PARAMS.PACK_ID>()
   const dispatch = useAppDispatch()
-  const navigate = useNavigate()
-
-  console.log(pageCount, cardsTotalCount)
-  console.log(useParams())
-  useEffect(() => {
-    if (cardsTotalCount === 0) {
-      navigate(`/${PATH.CARDS}/${packId}/${PATH.EMPTY}`)
-    }
-  }, [cardsTotalCount])
 
   useEffect(() => {
     console.log('cardspage')
@@ -88,23 +79,23 @@ export const CardsPage = () => {
         actionButtonName={isMyPack ? 'Add new card' : 'Learn to pack'}
         onActionButtonClick={() => {}}
       >
-        <TextField value={cardSearchName} onChange={handleSearchNameChange} />
+        {!!cardsTotalCount && (
+          <TextField value={cardSearchName} onChange={handleSearchNameChange} />
+        )}
       </CustomToolbar>
       <CardsContainer>
-        {cards.length ? (
-          cards.map(c => (
-            <QuestionCard
-              key={c._id}
-              question={c.question}
-              answer={c.answer}
-              isMyCard={isMyPack}
-              lastUpdated={c.updated}
-              rating={c.grade}
-            />
-          ))
-        ) : (
-          <div>˚‧º·(˚ ˃̣̣̥᷄⌓˂̣̣̥᷅ )‧º·˚</div>
-        )}
+        {cards.length
+          ? cards.map(c => (
+              <QuestionCard
+                key={c._id}
+                question={c.question}
+                answer={c.answer}
+                isMyCard={isMyPack}
+                lastUpdated={c.updated}
+                rating={c.grade}
+              />
+            ))
+          : ''}
       </CardsContainer>
       <PaginationBar
         pagesCount={Math.ceil(cardsTotalCount / cardItemsPerPage)}

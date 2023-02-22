@@ -8,10 +8,10 @@ import {
   AddCardRequestData,
   Card,
   cardsApi,
-  UpdateCardGradeRequestData,
   GetCardsQueryParams,
   GetCardsResponse,
   SortCardsParams,
+  UpdateCardGradeRequestData,
   UpdateCardRequestData,
 } from './cards-api'
 
@@ -57,7 +57,7 @@ export const cardsSlice = (state = initState, action: CardsSliceActions): typeof
     case 'CARDS/ITEMS_PER_PAGE_CHANGED':
       return { ...state, pageCount: action.payload }
     case 'CARDS/CARDS_CLEANED':
-      return { ...state, cards: [], packName: '' }
+      return { ...state, cards: [], packName: '', pageCount: 12 }
     default:
       return state
   }
@@ -91,6 +91,7 @@ export const fetchCardsTC =
 
     try {
       dispatch(setAppStatus('loading'))
+      console.log(requestData)
       const { data } = await cardsApi.getCards(requestData)
 
       dispatch(setCards(data))

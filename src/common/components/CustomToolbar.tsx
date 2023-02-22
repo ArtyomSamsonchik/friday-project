@@ -44,7 +44,7 @@ export const CustomToolbar: FC<CustomToolbarProps> = props => {
         {isMyPack && <AddPackModal handleLoadPacksClick={onActionButtonClick} />}
       </Box>
       <Box display="flex" alignItems="center" flexWrap="wrap" gap="20px">
-        {!cardsCount && children}
+        {children}
       </Box>
     </Box>
   )
