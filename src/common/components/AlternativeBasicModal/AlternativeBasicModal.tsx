@@ -1,6 +1,7 @@
 import React, { FC, MouseEventHandler, PropsWithChildren } from 'react'
 
 import CloseIcon from '@mui/icons-material/Close'
+import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
 import Modal from '@mui/material/Modal'
@@ -10,7 +11,7 @@ import { CustomPaper } from '../CustomPaper'
 import { FilledButton } from '../FilledButton'
 import { OutlinedButton } from '../OutlinedButton'
 
-import { ModalContainer, ModalContent, ModalControls, ModalHeader } from './styled'
+import { ModalContainer, ModalContent, ModalControls, ModalHeader, ModalInner } from './styled'
 const modalBoxShadow =
   'rgba(0, 0, 0, 0.2) 0px 0px 15px -7px, ' +
   'rgba(0, 0, 0, 0.14) 0px 0px 38px 3px, ' +
@@ -42,26 +43,31 @@ export const AlternativeBasicModal: FC<AlternativeBasicModalProps> = props => {
     <Modal open={isOpen} onClose={onClose}>
       <ModalContainer>
         <CustomPaper sx={{ boxShadow: modalBoxShadow }}>
-          <ModalHeader>
-            <Typography>{title}</Typography>
-            <IconButton onClick={onClose}>
-              <CloseIcon />
-            </IconButton>
-          </ModalHeader>
-          <Divider />
-          <ModalContent>
-            {children}
-            <ModalControls>
-              <OutlinedButton onClick={onClose}>Cancel</OutlinedButton>
-              <FilledButton
-                red={primaryButtonHighSeverity}
-                disabled={primaryButtonIsDisabled}
-                onClick={onPrimaryButtonClick}
-              >
-                {primaryButtonName}
-              </FilledButton>
-            </ModalControls>
-          </ModalContent>
+          <Box height="100vh" maxHeight="90vh">
+            <ModalHeader>
+              <Typography>{title}</Typography>
+              <IconButton onClick={onClose}>
+                <CloseIcon />
+              </IconButton>
+            </ModalHeader>
+            <Divider />
+
+            <ModalInner>
+              <ModalContent sx={{ mb: '30px', overflow: 'auto', scrollbarWidth: 'thin' }}>
+                {children}
+              </ModalContent>
+              <ModalControls>
+                <OutlinedButton onClick={onClose}>Cancel</OutlinedButton>
+                <FilledButton
+                  red={primaryButtonHighSeverity}
+                  disabled={primaryButtonIsDisabled}
+                  onClick={onPrimaryButtonClick}
+                >
+                  {primaryButtonName}
+                </FilledButton>
+              </ModalControls>
+            </ModalInner>
+          </Box>
         </CustomPaper>
       </ModalContainer>
     </Modal>

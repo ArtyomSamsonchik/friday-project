@@ -1,4 +1,5 @@
 import { styled } from '@mui/material'
+import ButtonGroup from '@mui/material/ButtonGroup'
 
 export const ModalContainer = styled('div', { name: 'ModalContainer' })(({ theme }) => ({
   position: 'absolute',
@@ -10,15 +11,21 @@ export const ModalContainer = styled('div', { name: 'ModalContainer' })(({ theme
   translate: '-50% -50%',
 }))
 
-export const ModalContent = styled('div', { name: 'ModalContent' })(({ theme: { spacing } }) => ({
-  padding: `${spacing(4)} ${spacing(3)} ${spacing(6)}`,
+export const ModalInner = styled('div', { name: 'ModalInner' })(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  height: 'calc(100% - 60px)',
+  padding: theme.spacing(4, 0, 5),
 }))
 
-export const ModalControls = styled('div', { name: 'ModalControls' })({
+export const ModalContent = styled('div', { name: 'ModalContent' })(({ theme }) => ({
+  padding: theme.spacing(0, 3),
+}))
+
+export const ModalControls = styled(ModalContent, { name: 'ModalControls' })({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  marginTop: '30px',
   '& .MuiButtonBase-root': {
     minWidth: 112,
   },

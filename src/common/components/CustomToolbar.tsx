@@ -6,11 +6,13 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { PATH, URL_PARAMS } from '../../app/path'
 import { selectCardsTotalCount, selectCardsUserId } from '../../features/cards/cards-selectors'
+import { addCardTC } from '../../features/cards/cards-slice'
 import { AddPackData } from '../../features/cardsPack/card-packs-api'
 import { selectProfile } from '../../features/profile/profile-slice'
+import { useAppDispatch } from '../../utils/hooks/useAppDispatch'
 import { useAppSelector } from '../../utils/hooks/useAppSelector'
 
-import { AddPackModal } from './Modals/AddPackModal/AddPackModal'
+import { FilledButton } from './FilledButton'
 
 type CustomToolbarProps = {
   title: string
@@ -25,14 +27,26 @@ export const CustomToolbar: FC<CustomToolbarProps> = props => {
   const { packId } = useParams<typeof URL_PARAMS.PACK_ID>()
   const cardsCount = useAppSelector(selectCardsTotalCount)
   const cardsUserId = useAppSelector(selectCardsUserId)
-
+  const dispatch = useAppDispatch()
   const profile = useAppSelector(selectProfile)
   const startLearn = () => {
     if (packId) {
-      navigate(`/${PATH.CARDS}/${packId}/${PATH.LEARN}`)
+      navigate(`/${PATH.CARDS}/${packId}/${PATH.LEARN}`, { state: cardsCount })
     }
   }
+
   const isMyPack = profile._id === cardsUserId
+  const addCard = () => {
+    if (packId) {
+      dispatch(
+        addCardTC({
+          cardsPack_id: packId,
+          question: 'string',
+          answer: 'string',
+        })
+      )
+    }
+  }
 
   return (
     <Box mb={3}>
@@ -41,10 +55,10 @@ export const CustomToolbar: FC<CustomToolbarProps> = props => {
           {cardsCount ? title : title + ' is empty'}
         </Typography>
         {cardsCount ? <button onClick={startLearn}>learn</button> : ''}
-        {isMyPack && <AddPackModal handleLoadPacksClick={onActionButtonClick} />}
+        {isMyPack && <FilledButton onClick={addCard}>asd</FilledButton>}
       </Box>
       <Box display="flex" alignItems="center" flexWrap="wrap" gap="20px">
-        {!cardsCount && children}
+        {children}
       </Box>
     </Box>
   )
