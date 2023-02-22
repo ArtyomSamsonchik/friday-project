@@ -40,7 +40,7 @@ export const CardPack: FC<CardPackProps> = memo(props => {
 
   const startLearn = () => {
     if (packId) {
-      navigate(`/${PATH.CARDS}/${packId}/${PATH.LEARN}`)
+      navigate(`/${PATH.CARDS}/${packId}/${PATH.LEARN}`, { state: pack.cardsCount })
     }
   }
 

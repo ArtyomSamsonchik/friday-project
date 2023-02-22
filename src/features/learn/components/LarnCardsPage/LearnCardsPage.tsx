@@ -2,43 +2,42 @@ import React, { useEffect, useState } from 'react'
 
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 
 import { URL_PARAMS } from '../../../../app/path'
 import { BackLink } from '../../../../common/components/BackLink'
 import { CustomContainer } from '../../../../common/components/CustomContainer'
 import { CustomPaper } from '../../../../common/components/CustomPaper'
 import { FilledButton } from '../../../../common/components/FilledButton'
-import { useAppDispatch } from '../../../../utils/hooks/useAppDispatch'
 import { useAppSelector } from '../../../../utils/hooks/useAppSelector'
-import {
-  selectAllCards,
-  selectCardsTotalCount,
-  selectPackName,
-} from '../../../cards/cards-selectors'
-import { cleanCards, fetchCardsTC } from '../../../cards/cards-slice'
+import { Card, cardsApi, GetCardsQueryParams } from '../../../cards/cards-api'
+import { selectPackName } from '../../../cards/cards-selectors'
+import { cleanCards } from '../../../cards/cards-slice'
 import { RateYourSelf } from '../RateYourSelf/RateYourSelf'
 
 export const LearnCardsPage = () => {
   const [showAnswer, setShowAnswer] = useState(false)
   const [simpleCounter, setSimpleCounter] = useState(0)
-
-  const cards = useAppSelector(selectAllCards)
+  const [cards, setCards] = useState<Card[]>([])
   const packName = useAppSelector(selectPackName)
-  const cardsTotalCount = useAppSelector(selectCardsTotalCount)
   const { packId } = useParams<typeof URL_PARAMS.PACK_ID>()
-
-  const dispatch = useAppDispatch()
+  const { state } = useLocation()
 
   useEffect(() => {
     if (packId) {
-      dispatch(fetchCardsTC({ cardsPack_id: packId, pageCount: cardsTotalCount }))
+      getLearnCards({ cardsPack_id: packId, pageCount: state })
     }
 
     return () => {
       cleanCards()
     }
   }, [])
+
+  async function getLearnCards(params: GetCardsQueryParams) {
+    await cardsApi.getCards(params).then(res => {
+      setCards(res.data.cards)
+    })
+  }
 
   const increaseSimpleCounter = () => {
     setSimpleCounter(count => {

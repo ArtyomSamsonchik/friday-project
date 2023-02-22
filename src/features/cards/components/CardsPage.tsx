@@ -78,7 +78,9 @@ export const CardsPage = () => {
         actionButtonName={isMyPack ? 'Add new card' : 'Learn to pack'}
         onActionButtonClick={() => {}}
       >
-        <TextField value={cardSearchName} onChange={handleSearchNameChange} />
+        {!!cardsTotalCount && (
+          <TextField value={cardSearchName} onChange={handleSearchNameChange} />
+        )}
       </CustomToolbar>
       <CardsContainer>
         {cards.length ? (
