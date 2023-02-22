@@ -35,7 +35,6 @@ export const CustomToolbar: FC<CustomToolbarProps> = props => {
     }
   }
 
-  console.log(cardsCount)
   const isMyPack = profile._id === cardsUserId
   const addCard = () => {
     if (packId) {
