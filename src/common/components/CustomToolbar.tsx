@@ -31,7 +31,7 @@ export const CustomToolbar: FC<CustomToolbarProps> = props => {
   const profile = useAppSelector(selectProfile)
   const startLearn = () => {
     if (packId) {
-      navigate(`/${PATH.CARDS}/${packId}/${PATH.LEARN}`)
+      navigate(`/${PATH.CARDS}/${packId}/${PATH.LEARN}`, { state: cardsCount })
     }
   }
 
