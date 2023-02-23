@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react'
 
+import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
-import { useSearchParams } from 'react-router-dom'
 
 import { selectAppStatus } from '../../../app/app-slice'
 import { BackLink } from '../../../common/components/BackLink'
@@ -32,6 +32,7 @@ import {
   setCurrentPackPage,
   setPackItemsPerPage,
   setPackSearchName,
+  setPacksSortOrder,
   setPersonalPacksParam,
 } from '../cards-pack-slice'
 
@@ -86,6 +87,13 @@ export const CardPacksPage = () => {
   const handleModalClose = useCallback(() => {
     setModalIsOpen(false)
   }, [])
+  const resetAllFiltersHandler = () => {
+    dispatch(setPackItemsPerPage(12))
+    dispatch(setPacksSortOrder({ order: 'desc', column: 'updated' }))
+    dispatch(setCurrentPackPage(1))
+    dispatch(setPersonalPacksParam(false))
+    dispatch(setPackSearchName(''))
+  }
 
   return (
     <CustomContainer sx={{ mb: 9 }}>
@@ -120,6 +128,17 @@ export const CardPacksPage = () => {
                 all
               </SuperButton>
             </div>
+            <Button
+              variant="text"
+              size={'small'}
+              sx={{
+                width: 'fit-content',
+              }}
+              fullWidth={false}
+              onClick={resetAllFiltersHandler}
+            >
+              Reset
+            </Button>
           </CustomToolBarFilters>
         </div>
       </div>
