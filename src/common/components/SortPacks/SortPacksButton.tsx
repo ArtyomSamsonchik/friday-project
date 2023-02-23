@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { memo, useEffect, useState } from 'react'
+import { memo, useEffect, useState, KeyboardEvent } from 'react'
 
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
@@ -56,6 +56,12 @@ export const SortPackButton = memo(({ sortPackOrder, disabled }: PropsType) => {
 
     setOpen(false)
   }
+  const escKeyPress = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Escape') {
+      setOpen(false)
+      e.stopPropagation()
+    }
+  }
 
   return (
     <React.Fragment>
@@ -89,6 +95,7 @@ export const SortPackButton = memo(({ sortPackOrder, disabled }: PropsType) => {
         role={undefined}
         transition
         disablePortal
+        onKeyDown={escKeyPress}
         popperOptions={{ placement: 'right-start' }}
       >
         {({ TransitionProps, placement }) => (
