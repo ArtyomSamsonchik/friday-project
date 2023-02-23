@@ -8,7 +8,7 @@ import Button from '@mui/material/Button'
 type CustomToolBarPropsType = {
   children: ReactNode
 }
-export const CustomToolBarSam = ({ children }: CustomToolBarPropsType) => {
+export const CustomToolBarFilters = ({ children }: CustomToolBarPropsType) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {

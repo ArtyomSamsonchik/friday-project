@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react'
 
 import TextField from '@mui/material/TextField'
+import { useSearchParams } from 'react-router-dom'
 
 import { selectAppStatus } from '../../../app/app-slice'
 import { BackLink } from '../../../common/components/BackLink'
@@ -10,7 +11,7 @@ import { PaginationBar } from '../../../common/components/Pagination/PaginationB
 import { MinimumDistanceSlider } from '../../../common/components/RangeSlider'
 import { SuperButton } from '../../../common/components/shared/SuperButton/SuperButton'
 import { SortPackButton } from '../../../common/components/SortPacks/SortPacksButton'
-import { CustomToolBarSam } from '../../../common/components/toolBar/ToolBar/CustomToolBar'
+import { CustomToolBarFilters } from '../../../common/components/toolBar/ToolBar/CustomToolBarFilters'
 import { ToolBarHeader } from '../../../common/components/toolBar/ToolBarHeader/ToolBarHeader'
 import { useAppDispatch } from '../../../utils/hooks/useAppDispatch'
 import { useAppSelector } from '../../../utils/hooks/useAppSelector'
@@ -46,7 +47,6 @@ export const CardPacksPage = () => {
   const minCardsCount = useAppSelector(selectMinCardsCount)
   const maxCardsCount = useAppSelector(selectMaxCardsCount)
   const appStatus = useAppSelector(selectAppStatus)
-
   const packSearchName = useAppSelector(selectPackSearchName)
   const debouncedPackSearchName = useDebounce(packSearchName)
 
@@ -64,13 +64,9 @@ export const CardPacksPage = () => {
     }
   }, [debouncedPackSearchName, itemsPerPage, currentPage, isMyPacks, sortPackOrder])
 
-  const handleSearchNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(setPackSearchName(e.currentTarget.value))
-  }
-
   const changePageHandler = useCallback(
-    (event: ChangeEvent<unknown>, page: number) => {
-      dispatch(setCurrentPackPage(page))
+    (event: ChangeEvent<unknown>, currentPage: number) => {
+      dispatch(setCurrentPackPage(currentPage))
     },
     [dispatch]
   )
@@ -81,11 +77,12 @@ export const CardPacksPage = () => {
     },
     [dispatch]
   )
-
   const handleSliderChange = useCallback((min: number, max: number) => {
     dispatch(DEPRECATED_fetchCardPacksTC({ min, max }))
   }, [])
-
+  const handleSearchNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    dispatch(setPackSearchName(e.currentTarget.value))
+  }
   const handleModalClose = useCallback(() => {
     setModalIsOpen(false)
   }, [])
@@ -101,7 +98,7 @@ export const CardPacksPage = () => {
 
         <div style={{ display: 'flex', gap: '20px' }}>
           <TextField value={packSearchName} onChange={handleSearchNameChange} />
-          <CustomToolBarSam>
+          <CustomToolBarFilters>
             <SortPackButton sortPackOrder={sortPackOrder} />
 
             <MinimumDistanceSlider
@@ -123,7 +120,7 @@ export const CardPacksPage = () => {
                 all
               </SuperButton>
             </div>
-          </CustomToolBarSam>
+          </CustomToolBarFilters>
         </div>
       </div>
       <CardPacksList />
