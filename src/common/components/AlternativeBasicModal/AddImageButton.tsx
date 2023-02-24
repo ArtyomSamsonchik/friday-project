@@ -2,8 +2,9 @@ import React, { FC, useState } from 'react'
 
 import CloseIcon from '@mui/icons-material/Close'
 import PanoramaOutlinedIcon from '@mui/icons-material/PanoramaOutlined'
-import { Collapse, SxProps, Theme } from '@mui/material'
+import { SxProps, Theme } from '@mui/material'
 import Button from '@mui/material/Button'
+import Collapse from '@mui/material/Collapse'
 
 import { UploadImageInput } from '../UploadImageInput/UploadImageInput'
 
@@ -11,16 +12,17 @@ import { ModalButtonGroup } from './styled'
 
 type ModalAddImageButtonProps = {
   title: string
-  sx?: SxProps<Theme>
+  initIsCollapsed: boolean
   disabled?: boolean
   onImageUpload: (file64: string) => void
   onImageRemove: () => void
+  sx?: SxProps<Theme>
 }
 
-export const ModalAddImageButton: FC<ModalAddImageButtonProps> = props => {
-  const { title, onImageUpload, onImageRemove, ...restProps } = props
+export const AddImageButton: FC<ModalAddImageButtonProps> = props => {
+  const { title, initIsCollapsed, onImageUpload, onImageRemove, ...restProps } = props
 
-  const [isCollapsed, setIsCollapsed] = useState(true)
+  const [isCollapsed, setIsCollapsed] = useState(initIsCollapsed)
 
   const handleCloseButtonClick = () => {
     onImageRemove()
