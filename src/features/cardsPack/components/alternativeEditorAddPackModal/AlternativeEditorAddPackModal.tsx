@@ -1,5 +1,6 @@
-import React, { ChangeEvent, FC, memo, useState, KeyboardEvent } from 'react'
+import React, { ChangeEvent, FC, KeyboardEvent, memo, useCallback, useState } from 'react'
 
+import { SxProps } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Stack from '@mui/material/Stack'
@@ -10,26 +11,31 @@ import {
   AlternativeBasicModal,
   AlternativeBasicModalProps,
 } from '../../../../common/components/AlternativeBasicModal/AlternativeBasicModal'
+import { MediaLoader } from '../../../../common/components/AlternativeBasicModal/MediaLoader'
 import { useAppDispatch } from '../../../../utils/hooks/useAppDispatch'
 import { useAppSelector } from '../../../../utils/hooks/useAppSelector'
+import { AddPackData } from '../../card-packs-api'
 import { selectCardPack } from '../../cards-pack-selectors'
 import { addCardPackTC, updateCardPackTC } from '../../cards-pack-slice'
+
+const validationSchema = string().trim().required('pack name should not be empty!')
+const modalMediaSxProps: SxProps = { mb: 3 }
 
 type AlternativeEditorAddPackModalProps = Pick<
   AlternativeBasicModalProps,
   'isOpen' | 'title' | 'onClose'
 > & { packId: string }
 
-const validationSchema = string().trim().required('pack name should not be empty!')
-
 export const AlternativeEditorAddPackModal: FC<AlternativeEditorAddPackModalProps> = memo(props => {
   const { packId, onClose, ...restProps } = props
 
   const pack = useAppSelector(state => selectCardPack(state, packId))
   const initPackName = pack?.name || ''
+  const initImageSrc = pack?.deckCover || ''
 
   const [packName, setPackName] = useState(initPackName)
   const [isPrivate, setIsPrivate] = useState(false)
+  const [imageSrc, setImageSrc] = useState(initImageSrc)
   const [error, setError] = useState<string | null>(null)
   const dispatch = useAppDispatch()
 
@@ -43,11 +49,16 @@ export const AlternativeEditorAddPackModal: FC<AlternativeEditorAddPackModalProp
   const handleEditorAddPack = () => {
     try {
       const newPackName = validationSchema.validateSync(packName)
+      const packData: AddPackData = {
+        name: newPackName,
+        private: isPrivate,
+        deckCover: imageSrc,
+      }
 
       if (pack) {
-        dispatch(updateCardPackTC({ _id: packId, name: newPackName, private: isPrivate }))
+        dispatch(updateCardPackTC({ ...packData, _id: packId }))
       } else {
-        dispatch(addCardPackTC({ name: newPackName, private: isPrivate }))
+        dispatch(addCardPackTC(packData))
       }
       setPackName(newPackName)
       onClose()
@@ -66,8 +77,13 @@ export const AlternativeEditorAddPackModal: FC<AlternativeEditorAddPackModalProp
   const handleEditModalClose = () => {
     onClose()
     setPackName(initPackName)
+    setImageSrc(initImageSrc)
     setError(null)
   }
+
+  const handleImageUpload = useCallback((file64: string) => setImageSrc(file64), [])
+
+  const handleImageRemove = useCallback(() => setImageSrc(''), [])
 
   return (
     <AlternativeBasicModal
@@ -77,7 +93,7 @@ export const AlternativeEditorAddPackModal: FC<AlternativeEditorAddPackModalProp
       onClose={handleEditModalClose}
       {...restProps}
     >
-      <Stack maxHeight="45vh">
+      <Stack>
         <TextField
           autoFocus
           label="Pack Name"
@@ -87,10 +103,19 @@ export const AlternativeEditorAddPackModal: FC<AlternativeEditorAddPackModalProp
           helperText={error || ' '}
           onChange={handlePackTitleChange}
           onKeyDown={handleKeyDown}
+          sx={{ mb: '10px' }}
+        />
+        <MediaLoader
+          buttonName="Add cover"
+          imageSrc={imageSrc}
+          onUploadImage={handleImageUpload}
+          onRemoveImage={handleImageRemove}
+          sx={modalMediaSxProps}
         />
         <FormControlLabel
           control={<Checkbox checked={isPrivate} onChange={handleIsPrivateChange} />}
           label="Private"
+          sx={{ width: 'fit-content' }}
         />
       </Stack>
     </AlternativeBasicModal>
