@@ -21,7 +21,23 @@ export const ModalContent = styled('div', { name: 'ModalContent' })(({ theme }) 
   padding: theme.spacing(0, 3),
 }))
 
-export const ModalControls = styled(ModalContent, { name: 'ModalControls' })({
+export const ScrollableModalContent = styled(ModalContent)({
+  overflow: 'auto',
+  scrollbarWidth: 'thin',
+  maxHeight: '50vh',
+})
+
+export const ModalMediaPreview = styled('div', { name: 'ModalMedia' })<{ image: string }>(
+  ({ image }) => ({
+    height: '180px',
+    backgroundImage: image.length ? `url(${image})` : 'none',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center,',
+  })
+)
+
+export const ModalControls = styled(ModalContent)({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
