@@ -11,7 +11,13 @@ import { CustomPaper } from '../CustomPaper'
 import { FilledButton } from '../FilledButton'
 import { OutlinedButton } from '../OutlinedButton'
 
-import { ModalContainer, ModalContent, ModalControls, ModalHeader, ModalInner } from './styled'
+import {
+  ModalContainer,
+  ModalControls,
+  ModalHeader,
+  ModalInner,
+  ScrollableModalContent,
+} from './styled'
 
 const modalBoxShadow =
   'rgba(0, 0, 0, 0.2) 0px 0px 15px -7px, ' +
@@ -54,9 +60,7 @@ export const AlternativeBasicModal: FC<AlternativeBasicModalProps> = props => {
             <Divider />
 
             <ModalInner>
-              <ModalContent sx={{ mb: '30px', overflow: 'auto', scrollbarWidth: 'thin' }}>
-                {children}
-              </ModalContent>
+              <ScrollableModalContent sx={{ mb: '30px' }}>{children}</ScrollableModalContent>
               <ModalControls>
                 <OutlinedButton onClick={onClose}>Cancel</OutlinedButton>
                 <FilledButton
