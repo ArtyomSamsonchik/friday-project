@@ -11,9 +11,10 @@ export const getQueryParamObject = <T extends {}, K extends keyof T = keyof T>(
 ) => {
   //const packNameQuery: { [key: string]: string } = paramValue ? { [paramName]: paramValue } : {}
   //const packNameQuery = paramValue ? { [paramName]: paramValue } : {}
-
   //const { [paramName]: param, ...otherQueries } = Object.fromEntries(searchParams)
   if (paramValue) {
+    // console.log({ ...searchParams, [paramName]: paramValue })
+
     return { ...searchParams, [paramName]: paramValue } as Record<string, string>
   } else {
     let copy = { ...searchParams }
