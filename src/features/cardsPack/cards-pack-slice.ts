@@ -56,6 +56,9 @@ export const cardsPackSlice = (
 
       return { ...state, ...initStateCopy }
     }
+    /*case 'CARD_PACKS/MIN-MAX-CARDS-COUNT': {
+      return { ...state, maxCardsCount: action.payload.max, minCardsCount: action.payload.min }
+    }*/
     default:
       return state
   }
@@ -82,6 +85,11 @@ export const setPackItemsPerPage = (count: number) => {
 export const setPersonalPacksParam = (isPersonal: boolean) => {
   return { type: 'CARD_PACKS/PERSONAL_PACKS_PARAM_CHANGED', payload: isPersonal } as const
 }
+export const setMinAndMaxCardsCount = (cardsCount: { min: number; max: number }) =>
+  ({
+    type: 'CARD_PACKS/MIN-MAX-CARDS-COUNT',
+    payload: cardsCount,
+  } as const)
 export const cleanPacks = () => {
   return { type: 'CARD_PACKS/PACKS_CLEANED' } as const
 }
@@ -167,7 +175,7 @@ type SetItemsPerPageAT = ReturnType<typeof setPackItemsPerPage>
 type SetPersonalPacksParamAT = ReturnType<typeof setPersonalPacksParam>
 type ClearPacksFiltersAT = ReturnType<typeof clearPacksFilters>
 type CleanPacksAT = ReturnType<typeof cleanPacks>
-
+type SetMinAndMaxCardsCountAT = ReturnType<typeof setMinAndMaxCardsCount>
 export type CardsPackSliceActionsType =
   | SetCardsPacksAT
   | SetPackNameAT
@@ -177,6 +185,7 @@ export type CardsPackSliceActionsType =
   | SetPersonalPacksParamAT
   | ClearPacksFiltersAT
   | CleanPacksAT
+  | SetMinAndMaxCardsCountAT
 
 // TODO: add app status processing via dispatching in every thunk
 // TODO: think about useless types from API response
