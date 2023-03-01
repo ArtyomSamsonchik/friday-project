@@ -1,48 +1,77 @@
-import React, { useCallback, useState } from 'react'
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react'
 
+import { TextField } from '@mui/material'
+import Button from '@mui/material/Button'
+
+import { GetCardPacksQueryParams } from '../../../../features/cardsPack/card-packs-api'
+import {
+  selectIsMyPacks,
+  selectMaxCardsCount,
+  selectMinCardsCount,
+  selectPacksSortOrder,
+} from '../../../../features/cardsPack/cards-pack-selectors'
+import {
+  DEPRECATED_fetchCardPacksTC,
+  setMinAndMaxCardsCount,
+  setPersonalPacksParam,
+} from '../../../../features/cardsPack/cards-pack-slice'
 import { AlternativeEditorAddPackModal } from '../../../../features/cardsPack/components/alternativeEditorAddPackModal/AlternativeEditorAddPackModal'
+import { useAppDispatch } from '../../../../utils/hooks/useAppDispatch'
+import { useAppQueryParams } from '../../../../utils/hooks/useAppQueryParams'
+import { useAppSelector } from '../../../../utils/hooks/useAppSelector'
+import { useDebounce } from '../../../../utils/hooks/useDebounce'
 import { FilledButton } from '../../FilledButton'
+import { MinimumDistanceSlider } from '../../RangeSlider'
+import { SuperButton } from '../../shared/SuperButton/SuperButton'
+import { SortPackButton } from '../../SortPacks/SortPacksButton'
 import { ToolBarHeader } from '../ToolBarHeader/ToolBarHeader'
 
-type ToolBarPropsType = {
-  title: string
-}
-export const ToolBar = (props: ToolBarPropsType) => {
-  /* const dispatch = useAppDispatch()
+import { CustomToolBarFilters } from './CustomToolBarFilters'
 
-  const packSearchName = useAppSelector(selectPackSearchName)
+export const ToolBar = () => {
+  const dispatch = useAppDispatch()
+  const [appQueryParams, setAppQueryParams] = useAppQueryParams<GetCardPacksQueryParams>({
+    page: '1',
+    pageCount: '12',
+  })
+  const [packSearchName, setPackSearchName] = useState(appQueryParams?.packName || '')
+
   const isMyPacks = useAppSelector(selectIsMyPacks)
   const sortPackOrder = useAppSelector(selectPacksSortOrder)
   const minCardsCount = useAppSelector(selectMinCardsCount)
   const maxCardsCount = useAppSelector(selectMaxCardsCount)
 
-  const debouncedPackSearchName = useDebounce(packSearchName)*/
+  console.log(minCardsCount)
+  const debouncedPackSearchName = useDebounce(packSearchName)
 
   const [modalIsOpen, setModalIsOpen] = useState(false)
+
   const handleModalClose = useCallback(() => {
     setModalIsOpen(false)
   }, [])
-  /*  const handleSliderChange = useCallback((min: number, max: number) => {
-    dispatch(DEPRECATED_fetchCardPacksTC({ min, max }))
+  const handleSliderChange = useCallback((min: number, max: number) => {
+    dispatch(setMinAndMaxCardsCount({ min, max }))
+    setAppQueryParams({ max: max + '' })
+    setAppQueryParams({ min: min + '' })
+    //dispatch(DEPRECATED_fetchCardPacksTC(appQueryParams))
   }, [])
   const handleSearchNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(setPackSearchName(e.currentTarget.value))
+    setPackSearchName(e.currentTarget.value)
   }
-  const resetAllFiltersHandler = () => {
-    dispatch(setPackItemsPerPage(12))
-    dispatch(setPacksSortOrder({ order: 'desc', column: 'updated' }))
-    dispatch(setCurrentPackPage(1))
-    dispatch(setPersonalPacksParam(false))
-    dispatch(setPackSearchName(''))
-  }*/
+
+  useEffect(() => {
+    setAppQueryParams({ packName: debouncedPackSearchName })
+  }, [debouncedPackSearchName])
+  const resetAllFiltersHandler = () => {}
 
   return (
     <div className={'toolBar'}>
-      <ToolBarHeader>
-        <h3>{props.title}</h3>
-        <FilledButton onClick={() => setModalIsOpen(true)}>Add new pack</FilledButton>
-      </ToolBarHeader>
-      {/*<div style={{ display: 'flex', gap: '20px' }}>
+      <ToolBarHeader
+        title={'Packs list'}
+        btnTitle={'Add new pack'}
+        btnOnclickHandler={() => setModalIsOpen(true)}
+      />
+      <div style={{ display: 'flex', gap: '20px' }}>
         <TextField value={packSearchName} onChange={handleSearchNameChange} />
         <CustomToolBarFilters>
           <SortPackButton sortPackOrder={sortPackOrder} />
@@ -78,7 +107,7 @@ export const ToolBar = (props: ToolBarPropsType) => {
             Reset
           </Button>
         </CustomToolBarFilters>
-      </div>*/}
+      </div>
       <AlternativeEditorAddPackModal
         isOpen={modalIsOpen}
         title="Add new pack"
