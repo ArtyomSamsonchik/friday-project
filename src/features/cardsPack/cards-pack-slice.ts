@@ -91,12 +91,12 @@ export const clearPacksFilters = () => ({ type: 'CARD_PACKS/FILTERS_CLEANED' } a
 export const DEPRECATED_fetchCardPacksTC =
   (params?: GetCardPacksQueryParams): AppThunk =>
   async (dispatch, getState) => {
-    const requestData = mapStateToPacksRequestParams(getState())
-    const sortData = { ...requestData, ...params }
+    const mappedState = mapStateToPacksRequestParams(getState())
+    const requestData = { ...mappedState, ...params }
 
     try {
       dispatch(setAppStatus('loading'))
-      const { data } = await cardPacksApi.getPacks(sortData)
+      const { data } = await cardPacksApi.getPacks(requestData)
 
       dispatch(setCardPacks(data))
       dispatch(setAppStatus('success'))

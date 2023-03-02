@@ -19,10 +19,9 @@ export type AddPackData = {
   name: string
   deckCover?: string
   private?: boolean
-  // _id: string
 }
 
-export type UpdatePackData = AddPackData & { _id: string }
+export type UpdatePackData = Partial<AddPackData> & { _id: string }
 
 export type GetCardPacksQueryParams = {
   packName?: string

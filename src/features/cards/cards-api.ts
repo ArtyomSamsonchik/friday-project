@@ -32,20 +32,27 @@ export type GetCardsQueryParams = {
 
 export type AddCardRequestData = {
   cardsPack_id: string
-  question: string
-  answer: string
-  grade?: number
-  shots?: number
-  answerImg?: string
-  questionImg?: string
-  questionVideo?: string
-  answerVideo?: string
-}
+  // grade?: number
+  // shots?: number
+} & CardMutationData
 
 export type UpdateCardRequestData = {
   _id: string
-  packId: string
-} & Partial<Pick<Card, 'question' | 'answer' | 'grade'>>
+} & CardMutationData
+
+export type CardMutationData =
+  | {
+      question: string
+      answer: string
+    }
+  | {
+      questionImg: string
+      answerImg: string
+    }
+  | {
+      questionVideo: string
+      answerVideo: string
+    }
 
 export type UpdateCardGradeRequestData = { card_id: string; grade: number }
 

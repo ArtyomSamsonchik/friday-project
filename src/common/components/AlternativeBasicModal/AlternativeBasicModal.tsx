@@ -1,7 +1,6 @@
 import React, { FC, MouseEventHandler, PropsWithChildren } from 'react'
 
 import CloseIcon from '@mui/icons-material/Close'
-import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
 import Modal from '@mui/material/Modal'
@@ -50,29 +49,27 @@ export const AlternativeBasicModal: FC<AlternativeBasicModalProps> = props => {
     <Modal open={isOpen} onClose={onClose}>
       <ModalContainer>
         <CustomPaper sx={{ boxShadow: modalBoxShadow }}>
-          <Box>
-            <ModalHeader>
-              <Typography>{title}</Typography>
-              <IconButton onClick={onClose}>
-                <CloseIcon />
-              </IconButton>
-            </ModalHeader>
-            <Divider />
+          <ModalHeader>
+            <Typography>{title}</Typography>
+            <IconButton onClick={onClose}>
+              <CloseIcon />
+            </IconButton>
+          </ModalHeader>
+          <Divider />
 
-            <ModalInner>
-              <ScrollableModalContent sx={{ mb: '30px' }}>{children}</ScrollableModalContent>
-              <ModalControls>
-                <OutlinedButton onClick={onClose}>Cancel</OutlinedButton>
-                <FilledButton
-                  red={primaryButtonHighSeverity}
-                  disabled={primaryButtonIsDisabled}
-                  onClick={onPrimaryButtonClick}
-                >
-                  {primaryButtonName}
-                </FilledButton>
-              </ModalControls>
-            </ModalInner>
-          </Box>
+          <ModalInner>
+            <ScrollableModalContent sx={{ mb: '30px' }}>{children}</ScrollableModalContent>
+            <ModalControls>
+              <OutlinedButton onClick={onClose}>Cancel</OutlinedButton>
+              <FilledButton
+                red={primaryButtonHighSeverity}
+                disabled={primaryButtonIsDisabled}
+                onClick={onPrimaryButtonClick}
+              >
+                {primaryButtonName}
+              </FilledButton>
+            </ModalControls>
+          </ModalInner>
         </CustomPaper>
       </ModalContainer>
     </Modal>

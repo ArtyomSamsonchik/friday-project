@@ -57,6 +57,9 @@ export const ModalButtonGroup = styled(ButtonGroup, {
     textTransform: 'none',
     fontFamily: 'Montserrat',
   },
+  '& .MuiButton-root:hover': {
+    border: 'none',
+  },
   '& > .MuiCollapse-root': {
     marginLeft: -1,
     '& .MuiButton-root': {

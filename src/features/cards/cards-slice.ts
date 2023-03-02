@@ -102,7 +102,7 @@ export const fetchCardsTC =
 
 export const getCardForLearning =
   (params: GetCardsQueryParams): AppThunk =>
-  async (dispatch, getState) => {
+  async dispatch => {
     /*const requestData = mapStateToCardsRequestParams(getState(), params)*/
 
     try {
@@ -158,7 +158,7 @@ export const deleteCardTC =
   }
 
 export const updateCardTC =
-  (data: UpdateCardRequestData): AppThunk =>
+  (data: UpdateCardRequestData & { packId: string }): AppThunk =>
   async dispatch => {
     try {
       dispatch(setAppStatus('loading'))
