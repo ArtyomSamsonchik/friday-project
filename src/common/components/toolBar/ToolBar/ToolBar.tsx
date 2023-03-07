@@ -41,7 +41,6 @@ export const ToolBar = () => {
   const minCardsCount = useAppSelector(selectMinCardsCount)
   const maxCardsCount = useAppSelector(selectMaxCardsCount)
 
-  console.log(minCardsCount)
   const debouncedPackSearchName = useDebounce(packSearchName)
 
   const [modalIsOpen, setModalIsOpen] = useState(false)
@@ -51,8 +50,7 @@ export const ToolBar = () => {
   }, [])
   const handleSliderChange = useCallback((min: number, max: number) => {
     dispatch(setMinAndMaxCardsCount({ min, max }))
-    setAppQueryParams({ max: max + '' })
-    setAppQueryParams({ min: min + '' })
+    setAppQueryParams({ min: min + '', max: max + '' })
     //dispatch(DEPRECATED_fetchCardPacksTC(appQueryParams))
   }, [])
   const handleSearchNameChange = (e: ChangeEvent<HTMLInputElement>) => {

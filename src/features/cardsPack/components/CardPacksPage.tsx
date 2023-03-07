@@ -26,7 +26,7 @@ export const CardPacksPage = () => {
 
   const cardPacksTotalCount = useAppSelector(selectPacksTotalCount)
   const itemsPerPage = useAppSelector(selectItemsPerPage)
-  const currentPage = useAppSelector(selectCurrentPage)
+  //const currentPage = useAppSelector(selectCurrentPage)
   const appStatus = useAppSelector(selectAppStatus)
 
   const dispatch = useAppDispatch()
@@ -34,7 +34,7 @@ export const CardPacksPage = () => {
   const controlsAreDisabled = appStatus === 'loading'
 
   useEffect(() => {
-    dispatch(DEPRECATED_fetchCardPacksTC(appQueryParams))
+    dispatch(DEPRECATED_fetchCardPacksTC(appQueryParams as GetCardPacksQueryParams))
 
     return () => {
       dispatch(cleanPacks())
@@ -44,7 +44,7 @@ export const CardPacksPage = () => {
   const changePageHandler = (event: ChangeEvent<unknown>, currentPage: number) => {
     dispatch(setCurrentPackPage(currentPage))
 
-    //setAppQueryParams('page', currentPage)
+    setAppQueryParams({ page: currentPage + '' })
   }
 
   const changeItemsPerPageHandler = useCallback(

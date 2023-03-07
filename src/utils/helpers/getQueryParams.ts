@@ -4,23 +4,41 @@ export const getQueryParams = (searchParams: URLSearchParams) => {
 
 // changed UrlSearchpType to GetCardPacksQueryParams
 
-export const getQueryParamObject = <T extends {}, K extends keyof T = keyof T>(
-  paramName: K,
-  paramValue: T[K],
-  searchParams: T
-) => {
-  //const packNameQuery: { [key: string]: string } = paramValue ? { [paramName]: paramValue } : {}
-  //const packNameQuery = paramValue ? { [paramName]: paramValue } : {}
-  //const { [paramName]: param, ...otherQueries } = Object.fromEntries(searchParams)
-  if (paramValue) {
-    // console.log({ ...searchParams, [paramName]: paramValue })
+// export const getQueryParamObject = <T extends {}, K extends keyof T = keyof T>(
+//   paramName: K,
+//   paramValue: T[K],
+//   searchParams: T
+// ) => {
+//   //const packNameQuery: { [key: string]: string } = paramValue ? { [paramName]: paramValue } : {}
+//   //const packNameQuery = paramValue ? { [paramName]: paramValue } : {}
+//   //const { [paramName]: param, ...otherQueries } = Object.fromEntries(searchParams)
+//   if (paramValue) {
+//     // console.log({ ...searchParams, [paramName]: paramValue })
+//
+//     return { ...searchParams, [paramName]: paramValue } as Record<string, string>
+//   } else {
+//     let copy = { ...searchParams }
+//
+//     delete copy[paramName]
+//
+//     return copy
+//   }
+// }
 
-    return { ...searchParams, [paramName]: paramValue } as Record<string, string>
-  } else {
-    let copy = { ...searchParams }
+export const getQueryParamObject = <T extends Record<string, any>>(searchParams: T) => {
+  const keys = Object.keys(searchParams)
+  const result = {} as Record<string, any>
 
-    delete copy[paramName]
+  for (let key of keys) {
+    const value = searchParams[key]
 
-    return copy
+    if (value) {
+      // console.log({ ...searchParams, [paramName]: paramValue })
+      result[key] = String(value)
+    } else {
+      continue
+    }
   }
+
+  return result
 }
