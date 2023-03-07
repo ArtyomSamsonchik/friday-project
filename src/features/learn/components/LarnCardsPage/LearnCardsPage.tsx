@@ -4,11 +4,14 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { useLocation, useParams } from 'react-router-dom'
 
+import { setAppStatus } from '../../../../app/app-slice'
 import { URL_PARAMS } from '../../../../app/path'
 import { BackLink } from '../../../../common/components/BackLink'
 import { CustomContainer } from '../../../../common/components/CustomContainer'
 import { CustomPaper } from '../../../../common/components/CustomPaper'
 import { FilledButton } from '../../../../common/components/FilledButton'
+import { handleError } from '../../../../utils/helpers/handleError'
+import { useAppDispatch } from '../../../../utils/hooks/useAppDispatch'
 import { useAppSelector } from '../../../../utils/hooks/useAppSelector'
 import { Card, cardsApi, GetCardsQueryParams } from '../../../cards/cards-api'
 import { selectPackName } from '../../../cards/cards-selectors'
@@ -22,6 +25,7 @@ export const LearnCardsPage = () => {
   const packName = useAppSelector(selectPackName)
   const { packId } = useParams<typeof URL_PARAMS.PACK_ID>()
   const { state } = useLocation()
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     if (packId) {
@@ -34,9 +38,16 @@ export const LearnCardsPage = () => {
   }, [])
 
   async function getLearnCards(params: GetCardsQueryParams) {
-    const data = await cardsApi.getCards(params)
+    dispatch(setAppStatus('loading'))
+    try {
+      const data = await cardsApi.getCards(params)
 
-    setCards(data.data.cards)
+      setCards(data.data.cards)
+    } catch (e) {
+      handleError(e as Error, dispatch)
+    } finally {
+      dispatch(setAppStatus('success'))
+    }
   }
 
   const increaseSimpleCounter = () => {
