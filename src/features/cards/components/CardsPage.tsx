@@ -83,20 +83,16 @@ export const CardsPage = () => {
         )}
       </CustomToolbar>
       <CardsContainer>
-        {cards.length ? (
-          cards.map(c => (
-            <QuestionCard
-              key={c._id}
-              question={c.question}
-              answer={c.answer}
-              isMyCard={isMyPack}
-              lastUpdated={c.updated}
-              rating={c.grade}
-            />
-          ))
-        ) : (
-          <div>˚‧º·(˚ ˃̣̣̥᷄⌓˂̣̣̥᷅ )‧º·˚</div>
-        )}
+        {cards.map(c => (
+          <QuestionCard
+            key={c._id}
+            question={c.question}
+            answer={c.answer}
+            isMyCard={isMyPack}
+            lastUpdated={c.updated}
+            rating={c.grade}
+          />
+        ))}
       </CardsContainer>
       <PaginationBar
         pagesCount={Math.ceil(cardsTotalCount / cardItemsPerPage)}

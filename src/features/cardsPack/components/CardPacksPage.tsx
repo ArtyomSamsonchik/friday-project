@@ -126,6 +126,7 @@ export const CardPacksPage = () => {
           </CustomToolBarSam>
         </div>
       </div>
+
       <CardPacksList />
       <PaginationBar
         pagesCount={Math.ceil(cardPacksTotalCount / itemsPerPage)}
