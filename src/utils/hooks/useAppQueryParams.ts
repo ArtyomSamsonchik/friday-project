@@ -29,7 +29,7 @@ export const useAppQueryParams = <U, T = DefaultParams<U>, K extends keyof T = k
   }*/
   const setAppQueryParams = (params: Record<string, any>) => {
     setSearchParams(prevParams => {
-      return { ...Object.fromEntries(prevParams), ...getQueryParamObject(params) }
+      return { ...getQueryParamObject({ ...prevParams, ...params }) }
     })
   }
 
