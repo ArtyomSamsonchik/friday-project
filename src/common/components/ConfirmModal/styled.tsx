@@ -46,14 +46,13 @@ export const ModalControls = styled(ModalContent)({
   },
 })
 
-export const ModalButtonGroup = styled(ButtonGroup, {
-  name: 'ModalButtonGroup',
-})({
-  border: '1px solid #1976d2',
+export const ModalButtonGroup = styled(ButtonGroup)(({ theme: { palette }, color }) => ({
   borderRadius: 2,
+  border: `1px solid ${color === 'error' ? palette.error.light : palette.primary.main}`,
   width: 'fit-content',
   '& .MuiButton-root': {
     border: 'none',
+    borderRadius: 2,
     textTransform: 'none',
     fontFamily: 'Montserrat',
   },
@@ -68,7 +67,7 @@ export const ModalButtonGroup = styled(ButtonGroup, {
       borderLeft: '1px solid #1976d2',
     },
   },
-})
+}))
 
 export const ModalHeader = styled('div', { name: 'ModalHeader' })(({ theme }) => ({
   display: 'flex',

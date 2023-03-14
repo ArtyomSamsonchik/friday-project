@@ -10,33 +10,42 @@ import { UploadImageInput } from '../UploadImageInput/UploadImageInput'
 
 import { ModalButtonGroup } from './styled'
 
-type ModalAddImageButtonProps = {
+export type AddImageButtonProps = {
   title: string
-  initIsCollapsed: boolean
-  disabled?: boolean
+  error?: boolean
+  collapsible?: boolean
+  initIsCollapsed?: boolean
   onImageUpload: (file64: string) => void
   onImageRemove: () => void
   sx?: SxProps<Theme>
 }
 
-export const AddImageButton: FC<ModalAddImageButtonProps> = props => {
-  const { title, initIsCollapsed, onImageUpload, onImageRemove, ...restProps } = props
+export const AddImageButton: FC<AddImageButtonProps> = props => {
+  const {
+    title,
+    error,
+    initIsCollapsed = true,
+    collapsible = true,
+    onImageUpload,
+    onImageRemove,
+    ...restProps
+  } = props
 
   const [isCollapsed, setIsCollapsed] = useState(initIsCollapsed)
 
   const handleCloseButtonClick = () => {
     onImageRemove()
-    setIsCollapsed(true)
+    if (collapsible) setIsCollapsed(true)
   }
 
   const handleImageUpload = (file64: string) => {
     onImageUpload(file64)
-    setIsCollapsed(false)
+    if (collapsible) setIsCollapsed(false)
   }
 
   return (
     <>
-      <ModalButtonGroup {...restProps} disableRipple>
+      <ModalButtonGroup {...restProps} color={error ? 'error' : undefined} disableRipple>
         <Button component="label" endIcon={<PanoramaOutlinedIcon />}>
           <UploadImageInput onImageUpload={handleImageUpload} />
           {title}
