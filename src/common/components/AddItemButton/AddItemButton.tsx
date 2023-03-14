@@ -8,9 +8,9 @@ import Collapse from '@mui/material/Collapse'
 
 import { UploadImageInput } from '../UploadImageInput/UploadImageInput'
 
-import { ModalButtonGroup } from './styled'
+import { AddItemButtonGroup } from './styled'
 
-export type AddImageButtonProps = {
+export type AddItemButtonProps = {
   title: string
   error?: boolean
   collapsible?: boolean
@@ -20,7 +20,7 @@ export type AddImageButtonProps = {
   sx?: SxProps<Theme>
 }
 
-export const AddImageButton: FC<AddImageButtonProps> = props => {
+export const AddItemButton: FC<AddItemButtonProps> = props => {
   const {
     title,
     error,
@@ -45,7 +45,7 @@ export const AddImageButton: FC<AddImageButtonProps> = props => {
 
   return (
     <>
-      <ModalButtonGroup {...restProps} color={error ? 'error' : undefined} disableRipple>
+      <AddItemButtonGroup {...restProps} color={error ? 'error' : undefined} disableRipple>
         <Button component="label" endIcon={<PanoramaOutlinedIcon />}>
           <UploadImageInput onImageUpload={handleImageUpload} />
           {title}
@@ -56,7 +56,7 @@ export const AddImageButton: FC<AddImageButtonProps> = props => {
             <CloseIcon />
           </Button>
         </Collapse>
-      </ModalButtonGroup>
+      </AddItemButtonGroup>
     </>
   )
 }
