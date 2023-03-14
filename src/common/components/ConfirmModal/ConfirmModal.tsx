@@ -23,7 +23,7 @@ const modalBoxShadow =
   'rgba(0, 0, 0, 0.14) 0px 0px 38px 3px, ' +
   'rgba(0, 0, 0, 0.12) 0px 0px 46px 8px'
 
-export type AlternativeBasicModalProps = PropsWithChildren<{
+export type ConfirmModalProps = PropsWithChildren<{
   isOpen: boolean
   title: string
   primaryButtonName: string
@@ -33,7 +33,7 @@ export type AlternativeBasicModalProps = PropsWithChildren<{
   onClose: () => void
 }>
 
-export const AlternativeBasicModal: FC<AlternativeBasicModalProps> = props => {
+export const ConfirmModal: FC<ConfirmModalProps> = props => {
   const {
     isOpen,
     title,

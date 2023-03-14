@@ -3,7 +3,8 @@ import React, { FC, memo } from 'react'
 import { Collapse, SxProps, Theme } from '@mui/material'
 import Box from '@mui/material/Box'
 
-import { AddImageButton } from './AddImageButton'
+import { AddItemButton, AddItemButtonProps } from '../AddItemButton/AddItemButton'
+
 import { ModalMediaPreview } from './styled'
 
 type ModalMediaLoaderProps = {

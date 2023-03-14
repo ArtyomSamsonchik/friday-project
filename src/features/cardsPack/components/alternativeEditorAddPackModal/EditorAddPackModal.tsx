@@ -8,10 +8,10 @@ import TextField from '@mui/material/TextField'
 import { string, ValidationError } from 'yup'
 
 import {
-  AlternativeBasicModal,
-  AlternativeBasicModalProps,
-} from '../../../../common/components/AlternativeBasicModal/AlternativeBasicModal'
-import { MediaLoader } from '../../../../common/components/AlternativeBasicModal/MediaLoader'
+  ConfirmModal,
+  ConfirmModalProps,
+} from '../../../../common/components/ConfirmModal/ConfirmModal'
+import { ModalMediaLoader } from '../../../../common/components/ConfirmModal/ModalMediaLoader'
 import { useAppDispatch } from '../../../../utils/hooks/useAppDispatch'
 import { useAppSelector } from '../../../../utils/hooks/useAppSelector'
 import { AddPackData } from '../../card-packs-api'
@@ -21,12 +21,11 @@ import { addCardPackTC, updateCardPackTC } from '../../cards-pack-slice'
 const validationSchema = string().trim().required('pack name should not be empty!')
 const modalMediaSxProps: SxProps = { mb: 3 }
 
-type AlternativeEditorAddPackModalProps = Pick<
-  AlternativeBasicModalProps,
-  'isOpen' | 'title' | 'onClose'
-> & { packId: string }
+type EditorAddPackModalProps = Pick<ConfirmModalProps, 'isOpen' | 'title' | 'onClose'> & {
+  packId: string
+}
 
-export const AlternativeEditorAddPackModal: FC<AlternativeEditorAddPackModalProps> = memo(props => {
+export const EditorAddPackModal: FC<EditorAddPackModalProps> = memo(props => {
   const { packId, onClose, ...restProps } = props
 
   const pack = useAppSelector(state => selectCardPack(state, packId))
