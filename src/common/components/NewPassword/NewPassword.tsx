@@ -11,15 +11,18 @@ import InputAdornment from '@mui/material/InputAdornment'
 import InputLabel from '@mui/material/InputLabel'
 import { useFormik } from 'formik'
 import { useNavigate, useParams } from 'react-router-dom'
+import { InferType } from 'yup'
 
 import { PATH } from '../../../app/path'
 import { setNewPasswordTC, setNewPasswordToken } from '../../../features/auth/auth-slice'
 import { selectIsStateToken } from '../../../features/auth/login-selectors'
 import { useAppDispatch } from '../../../utils/hooks/useAppDispatch'
 import { useAppSelector } from '../../../utils/hooks/useAppSelector'
-import { newPasswordFormValidationSchema } from '../../formValidation/basicFormValidationSchema'
+import { passwordSchema } from '../../../utils/validationSchemas'
 import common from '../../styles/common.module.css'
 import { CustomPaperContainer } from '../CustomPaperContainer/CustomPaperContainer'
+
+type FormValues = { newPassword: InferType<typeof passwordSchema> }
 
 export const NewPassword = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -34,11 +37,11 @@ export const NewPassword = () => {
   const { token } = useParams()
   const isStateToken = useAppSelector(selectIsStateToken)
 
-  const formik = useFormik({
+  const formik = useFormik<FormValues>({
     initialValues: {
       newPassword: '',
     },
-    validationSchema: newPasswordFormValidationSchema,
+    validationSchema: passwordSchema,
     onSubmit: values => {
       token && dispatch(setNewPasswordTC(values.newPassword, token))
     },

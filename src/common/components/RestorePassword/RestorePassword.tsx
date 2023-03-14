@@ -8,24 +8,27 @@ import FormLabel from '@mui/material/FormLabel'
 import TextField from '@mui/material/TextField'
 import { useFormik } from 'formik'
 import { Navigate } from 'react-router-dom'
+import { InferType } from 'yup'
 
 import { PATH } from '../../../app/path'
 import { recallPasswordTC } from '../../../features/auth/auth-slice'
 import { selectIsRecalled } from '../../../features/auth/login-selectors'
 import { useAppDispatch } from '../../../utils/hooks/useAppDispatch'
 import { useAppSelector } from '../../../utils/hooks/useAppSelector'
-import { emailFormValidationSchema } from '../../formValidation/basicFormValidationSchema'
+import { emailSchema } from '../../../utils/validationSchemas'
 import common from '../../styles/common.module.css'
 import { CustomPaperContainer } from '../CustomPaperContainer/CustomPaperContainer'
+
+type FormValues = { email: InferType<typeof emailSchema> }
 
 export const RestorePassword = () => {
   const dispatch = useAppDispatch()
   const isRecalled = useAppSelector(selectIsRecalled)
-  const formik = useFormik({
+  const formik = useFormik<FormValues>({
     initialValues: {
       email: '',
     },
-    validationSchema: emailFormValidationSchema,
+    validationSchema: emailSchema,
     onSubmit: values => {
       dispatch(recallPasswordTC(values.email))
     },
