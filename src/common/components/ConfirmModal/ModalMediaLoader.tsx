@@ -10,23 +10,39 @@ import { ModalMediaPreview } from './styled'
 type ModalMediaLoaderProps = {
   buttonName: string
   imageSrc: string
+  error?: boolean
+  hideCloseButton?: boolean
   onUploadImage: (file64: string) => void
   onRemoveImage: () => void
   sx?: SxProps<Theme>
 }
 
-export const MediaLoader: FC<ModalMediaLoaderProps> = memo(props => {
-  const { buttonName, imageSrc, onUploadImage, onRemoveImage, sx } = props
+export const ModalMediaLoader: FC<ModalMediaLoaderProps> = memo(props => {
+  const {
+    buttonName,
+    imageSrc,
+    error,
+    hideCloseButton = false,
+    onUploadImage,
+    onRemoveImage,
+    sx,
+  } = props
+
+  const behaviorProps: Pick<AddItemButtonProps, 'collapsible' | 'initIsCollapsed'> = {
+    collapsible: !hideCloseButton,
+    initIsCollapsed: hideCloseButton || !imageSrc,
+  }
 
   return (
     <Box sx={sx}>
-      <AddImageButton
+      <AddItemButton
+        error={error}
         title={buttonName}
-        initIsCollapsed={!imageSrc}
+        {...behaviorProps}
         onImageUpload={onUploadImage}
         onImageRemove={onRemoveImage}
       />
-      <Collapse in={Boolean(imageSrc)}>
+      <Collapse in={!!imageSrc}>
         <ModalMediaPreview image={imageSrc} sx={{ mt: 2 }} />
       </Collapse>
     </Box>
