@@ -40,19 +40,14 @@ export type UpdateCardRequestData = {
   _id: string
 } & CardMutationData
 
-export type CardMutationData =
-  | {
-      question: string
-      answer: string
-    }
-  | {
-      questionImg: string
-      answerImg: string
-    }
-  | {
-      questionVideo: string
-      answerVideo: string
-    }
+export type CardMutationData = {
+  question: string | 'no question'
+  answer: string | 'no answer'
+  questionImg?: string | 'no question image'
+  answerImg?: string | 'no answer image'
+  questionVideo?: string
+  answerVideo?: string
+}
 
 export type UpdateCardGradeRequestData = { card_id: string; grade: number }
 
@@ -67,8 +62,10 @@ export type UpdateCardGradeResponse = {
 
 export type Card = {
   _id: string
-  answer: string
-  question: string
+  answer: string | 'no answer'
+  question: string | 'no question'
+  answerImg?: string
+  questionImg?: string
   cardsPack_id: string
   user_id: string
   grade: number
@@ -101,9 +98,9 @@ export type GetCardsResponse = {
   packUpdated: string
 } & ResponseTokenData
 
-type AddCardResponse = { newCard: Card } & ResponseTokenData
-type DeleteCardResponse = { deletedCard: Card } & ResponseTokenData
-type UpdateCardResponse = { updatedCard: Card } & ResponseTokenData
+export type AddCardResponse = { newCard: Card } & ResponseTokenData
+export type DeleteCardResponse = { deletedCard: Card } & ResponseTokenData
+export type UpdateCardResponse = { updatedCard: Card } & ResponseTokenData
 
 // TODO: add sortCards helper to create according query param
 // TODO: reduce AddCardRequestData type in future. grade and shots are unnecessary

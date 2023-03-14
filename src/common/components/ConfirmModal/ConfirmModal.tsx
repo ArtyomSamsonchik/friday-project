@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography'
 
 import { CustomPaper } from '../CustomPaper'
 import { FilledButton } from '../FilledButton'
+import { LoadingBackdrop } from '../LoadingBackdrop/LoadingBackdrop'
 import { OutlinedButton } from '../OutlinedButton'
 
 import {
@@ -26,6 +27,7 @@ const modalBoxShadow =
 export type ConfirmModalProps = PropsWithChildren<{
   isOpen: boolean
   title: string
+  isLoading?: boolean
   primaryButtonName: string
   primaryButtonHighSeverity?: boolean
   primaryButtonIsDisabled?: boolean
@@ -37,6 +39,7 @@ export const ConfirmModal: FC<ConfirmModalProps> = props => {
   const {
     isOpen,
     title,
+    isLoading,
     children,
     primaryButtonName,
     primaryButtonHighSeverity,
@@ -48,7 +51,7 @@ export const ConfirmModal: FC<ConfirmModalProps> = props => {
   return (
     <Modal open={isOpen} onClose={onClose}>
       <ModalContainer>
-        <CustomPaper sx={{ boxShadow: modalBoxShadow }}>
+        <CustomPaper sx={{ position: 'relative', boxShadow: modalBoxShadow }}>
           <ModalHeader>
             <Typography>{title}</Typography>
             <IconButton onClick={onClose}>
@@ -70,6 +73,7 @@ export const ConfirmModal: FC<ConfirmModalProps> = props => {
               </FilledButton>
             </ModalControls>
           </ModalInner>
+          <LoadingBackdrop open={!!isLoading} progressProps={{ size: 50, thickness: 4 }} />
         </CustomPaper>
       </ModalContainer>
     </Modal>
