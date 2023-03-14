@@ -1,20 +1,20 @@
-import React, { ChangeEvent, useCallback, useEffect } from 'react'
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react'
 
+import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { PATH, URL_PARAMS } from '../../../app/path'
 import { BackLink } from '../../../common/components/BackLink'
-import { CardsContainer } from '../../../common/components/CardsContainer'
 import { CustomContainer } from '../../../common/components/CustomContainer'
-import { CustomToolbar } from '../../../common/components/CustomToolbar'
+import { FilledButton } from '../../../common/components/FilledButton'
 import { PaginationBar } from '../../../common/components/Pagination/PaginationBar'
+import { ToolBarHeader } from '../../../common/components/toolBar/ToolBarHeader/ToolBarHeader'
 import { useAppDispatch } from '../../../utils/hooks/useAppDispatch'
 import { useAppSelector } from '../../../utils/hooks/useAppSelector'
 import { useDebounce } from '../../../utils/hooks/useDebounce'
 import { selectProfile } from '../../profile/profile-slice'
 import {
-  selectAllCards,
   selectCardItemsPerPage,
   selectCardsCurrentPage,
   selectCardSearchName,
@@ -30,10 +30,10 @@ import {
   setCurrentCardsPage,
 } from '../cards-slice'
 
-import { QuestionCard } from './QuestionCard'
+import { EditorAddCardModal } from './EditorAddCardModal/EditorAddCardModal'
+import { QuestionCardsList } from './QuestionCardsList'
 
 export const CardsPage = () => {
-  const cards = useAppSelector(selectAllCards)
   const profile = useAppSelector(selectProfile)
   const cardsUserId = useAppSelector(selectCardsUserId)
   const cardsTotalCount = useAppSelector(selectCardsTotalCount)
@@ -44,7 +44,10 @@ export const CardsPage = () => {
   const debouncedCardSearchName = useDebounce(cardSearchName)
 
   const { packId } = useParams<typeof URL_PARAMS.PACK_ID>()
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
+
+  const [modalIsOpen, setModalIsOpen] = useState(false)
 
   useEffect(() => {
     if (packId) {
@@ -68,42 +71,58 @@ export const CardsPage = () => {
     dispatch(setCardItemsPerPage(+event.target.value))
   }, [])
 
+  const startLearning = () => {
+    if (packId) {
+      navigate(`/${PATH.CARDS}/${packId}/${PATH.LEARN}`, { state: cardsTotalCount })
+    }
+  }
+
   const isMyPack = profile._id === cardsUserId
+
+  const handleModalClose = useCallback(() => {
+    setModalIsOpen(false)
+  }, [])
+
+  const handleHeaderButtonClick = () => {
+    if (isMyPack) setModalIsOpen(true)
+    else startLearning()
+  }
 
   return (
     <CustomContainer sx={{ mb: 9 }}>
       <BackLink title="Back to Packs List" to={`/${PATH.PACKS}`} />
-      <CustomToolbar
-        title={packName}
-        actionButtonName={isMyPack ? 'Add new card' : 'Learn to pack'}
-        onActionButtonClick={() => {}}
-      >
-        {!!cardsTotalCount && (
+
+      <div className="toolBar">
+        <ToolBarHeader>
+          <h3>{cardsTotalCount ? packName : 'Pack is empty'}</h3>
+          <FilledButton onClick={handleHeaderButtonClick}>
+            {isMyPack ? 'Add new card' : 'Learn to pack'}
+          </FilledButton>
+        </ToolBarHeader>
+        <Stack alignItems="flex-start" gap={2.5}>
           <TextField value={cardSearchName} onChange={handleSearchNameChange} />
-        )}
-      </CustomToolbar>
-      <CardsContainer>
-        {cards.length ? (
-          cards.map(c => (
-            <QuestionCard
-              key={c._id}
-              question={c.question}
-              answer={c.answer}
-              isMyCard={isMyPack}
-              lastUpdated={c.updated}
-              rating={c.grade}
-            />
-          ))
-        ) : (
-          <div>˚‧º·(˚ ˃̣̣̥᷄⌓˂̣̣̥᷅ )‧º·˚</div>
-        )}
-      </CardsContainer>
+          {cardsTotalCount === 0 && <div>˚‧º·(˚ ˃̣̣̥᷄⌓˂̣̣̥᷅ )‧º·˚</div>}
+        </Stack>
+      </div>
+
+      <QuestionCardsList />
       <PaginationBar
         pagesCount={Math.ceil(cardsTotalCount / cardItemsPerPage)}
         itemsPerPage={cardItemsPerPage}
         onPageChange={changePageHandler}
         onItemsCountChange={changeItemsPerPageHandler}
       />
+      <EditorAddCardModal
+        isOpen={modalIsOpen}
+        title="Add new card"
+        onClose={handleModalClose}
+        cardId=""
+        packId={packId as string}
+      />
     </CustomContainer>
   )
 }
+
+// TODO: think about error handling when packId from URL is invalid.
+//  Also think about potential error when passing packId as string to modal
+//  when id is invalid or empty (add loader to page?).

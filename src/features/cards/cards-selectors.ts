@@ -1,12 +1,11 @@
 import { RootStateType } from '../../app/store'
 
-import { Card } from './cards-api'
-
 const selectCardsSlice = (state: RootStateType): RootStateType['cards'] => state.cards
 
 export const selectAllCards = (state: RootStateType) => selectCardsSlice(state).cards
+export const selectAllCardsIds = (state: RootStateType) => selectAllCards(state).map(c => c._id)
 export const selectCard = (state: RootStateType, id: string) => {
-  return selectAllCards(state).find(c => c._id === id) as Card
+  return selectAllCards(state).find(c => c._id === id)
 }
 export const selectPackName = (state: RootStateType) => selectCardsSlice(state).packName
 export const selectCardSearchName = (state: RootStateType) => selectCardsSlice(state).cardSearchName
