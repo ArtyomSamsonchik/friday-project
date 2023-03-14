@@ -85,7 +85,7 @@ export const EditorAddPackModal: FC<EditorAddPackModalProps> = memo(props => {
   const handleImageRemove = useCallback(() => setImageSrc(''), [])
 
   return (
-    <AlternativeBasicModal
+    <ConfirmModal
       primaryButtonName="Save"
       primaryButtonIsDisabled={!!error}
       onPrimaryButtonClick={handleEditorAddPack}
@@ -104,7 +104,7 @@ export const EditorAddPackModal: FC<EditorAddPackModalProps> = memo(props => {
           onKeyDown={handleKeyDown}
           sx={{ mb: '10px' }}
         />
-        <MediaLoader
+        <ModalMediaLoader
           buttonName="Add cover"
           imageSrc={imageSrc}
           onUploadImage={handleImageUpload}
@@ -117,6 +117,6 @@ export const EditorAddPackModal: FC<EditorAddPackModalProps> = memo(props => {
           sx={{ width: 'fit-content' }}
         />
       </Stack>
-    </AlternativeBasicModal>
+    </ConfirmModal>
   )
 })

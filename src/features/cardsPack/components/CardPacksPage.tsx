@@ -34,8 +34,8 @@ import {
   setPersonalPacksParam,
 } from '../cards-pack-slice'
 
-import { AlternativeEditorAddPackModal } from './alternativeEditorAddPackModal/AlternativeEditorAddPackModal'
 import { CardPacksList } from './CardPacksList'
+import { EditorAddPackModal } from './EditorAddPackModal/EditorAddPackModal'
 
 export const CardPacksPage = () => {
   const cardPacksTotalCount = useAppSelector(selectPacksTotalCount)
@@ -134,7 +134,7 @@ export const CardPacksPage = () => {
         onPageChange={changePageHandler}
         onItemsCountChange={changeItemsPerPageHandler}
       />
-      <AlternativeEditorAddPackModal
+      <EditorAddPackModal
         isOpen={modalIsOpen}
         title="Add new pack"
         onClose={handleModalClose}

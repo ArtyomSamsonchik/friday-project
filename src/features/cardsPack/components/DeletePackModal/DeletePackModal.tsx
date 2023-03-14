@@ -3,20 +3,19 @@ import React, { FC, memo, KeyboardEvent } from 'react'
 import { Typography } from '@mui/material'
 
 import {
-  AlternativeBasicModal,
-  AlternativeBasicModalProps,
-} from '../../../../common/components/AlternativeBasicModal/AlternativeBasicModal'
+  ConfirmModal,
+  ConfirmModalProps,
+} from '../../../../common/components/ConfirmModal/ConfirmModal'
 import { useAppDispatch } from '../../../../utils/hooks/useAppDispatch'
 import { useAppSelector } from '../../../../utils/hooks/useAppSelector'
 import { selectCardPack } from '../../cards-pack-selectors'
 import { deleteCardPackTC } from '../../cards-pack-slice'
 
-type AlternativeDeletePackModalProps = Pick<
-  AlternativeBasicModalProps,
-  'title' | 'isOpen' | 'onClose'
-> & { packId: string }
+type DeletePackModalProps = Pick<ConfirmModalProps, 'title' | 'isOpen' | 'onClose'> & {
+  packId: string
+}
 
-export const AlternativeDeletePackModal: FC<AlternativeDeletePackModalProps> = memo(props => {
+export const DeletePackModal: FC<DeletePackModalProps> = memo(props => {
   const { packId, ...restProps } = props
   const pack = useAppSelector(state => selectCardPack(state, packId))
 
@@ -35,7 +34,7 @@ export const AlternativeDeletePackModal: FC<AlternativeDeletePackModalProps> = m
 
   return (
     <div onKeyDown={handleKeyDown}>
-      <AlternativeBasicModal
+      <ConfirmModal
         primaryButtonName="Delete"
         primaryButtonHighSeverity
         onPrimaryButtonClick={handleDelete}
@@ -46,7 +45,7 @@ export const AlternativeDeletePackModal: FC<AlternativeDeletePackModalProps> = m
           <br />
           All cards will be deleted.
         </Typography>
-      </AlternativeBasicModal>
+      </ConfirmModal>
     </div>
   )
 })

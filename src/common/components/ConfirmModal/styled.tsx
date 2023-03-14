@@ -1,5 +1,4 @@
 import { styled } from '@mui/material'
-import ButtonGroup from '@mui/material/ButtonGroup'
 
 export const ModalContainer = styled('div', { name: 'ModalContainer' })(({ theme }) => ({
   position: 'absolute',
@@ -24,18 +23,19 @@ export const ModalContent = styled('div', { name: 'ModalContent' })(({ theme }) 
 export const ScrollableModalContent = styled(ModalContent)({
   overflow: 'auto',
   scrollbarWidth: 'thin',
+  minHeight: 250,
   maxHeight: '50vh',
 })
 
-export const ModalMediaPreview = styled('div', { name: 'ModalMedia' })<{ image: string }>(
-  ({ image }) => ({
-    height: '180px',
-    backgroundImage: image.length ? `url(${image})` : 'none',
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center,',
-  })
-)
+export const ModalMediaPreview = styled('div', {
+  name: 'ModalMedia',
+})<{ image: string }>(({ image }) => ({
+  height: '180px',
+  backgroundImage: image.length ? `url(${image})` : 'none',
+  backgroundSize: 'cover',
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: 'center,',
+}))
 
 export const ModalControls = styled(ModalContent)({
   display: 'flex',
