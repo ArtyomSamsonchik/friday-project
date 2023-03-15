@@ -1,11 +1,9 @@
 import React, { ChangeEvent, forwardRef } from 'react'
 
-import { setAppError } from '../../../app/app-slice'
 import { convertFileToBase64 } from '../../../utils/helpers/convertFileToBase64'
 import { handleError } from '../../../utils/helpers/handleError'
 import { useAppDispatch } from '../../../utils/hooks/useAppDispatch'
-
-const BASE64_MAX_SIZE = 107_520 //105 KiB
+import { uploadImageInputSchema } from '../../../utils/validationSchemas'
 
 type UploadImageInputProps = {
   disabled?: boolean
@@ -22,23 +20,8 @@ export const UploadImageInput = forwardRef<HTMLInputElement, UploadImageInputPro
 
       if (!file) return
 
-      if (!file.type.startsWith('image/')) {
-        dispatch(
-          setAppError(
-            'Unsupported image format. Please select one of the following: JPEG, PNG, GIF'
-          )
-        )
-
-        return
-      }
-
-      if (file.size > BASE64_MAX_SIZE) {
-        dispatch(setAppError('Image file is too large. Max size is 105 KiB (kilobytes)'))
-
-        return
-      }
-
       try {
+        uploadImageInputSchema.validateSync(file)
         const file64 = await convertFileToBase64(file)
 
         onImageUpload(file64)

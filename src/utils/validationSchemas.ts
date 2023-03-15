@@ -1,4 +1,5 @@
 import * as Yup from 'yup'
+import { mixed } from 'yup'
 
 import { Tabs } from '../features/cards/components/EditorAddCardModal/EditorAddCardModal'
 
@@ -32,3 +33,16 @@ export const editorAddCardSchema = Yup.object({
   question: getModalInputSchema(),
   answer: getModalInputSchema(),
 })
+
+const BASE64_MAX_SIZE = 107_520 //105 KiB
+
+export const uploadImageInputSchema = mixed<File>()
+  .defined()
+  .test({
+    message: 'Unsupported image format. Please select one of the following: JPEG, PNG, GIF',
+    test: file => file.type.startsWith('image/'),
+  })
+  .test({
+    message: 'Image file is too large. Max size is 105 KiB (kilobytes)',
+    test: file => !(file.size > BASE64_MAX_SIZE),
+  })
