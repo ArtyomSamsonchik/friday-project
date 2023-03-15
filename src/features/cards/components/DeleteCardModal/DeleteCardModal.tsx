@@ -29,7 +29,9 @@ export const DeleteCardModal: FC<DeleteCardModalProps> = props => {
   return (
     <DeleteModal onDelete={handleDelete} isLoading={status === 'deleting'} {...restProps}>
       <Typography sx={{ fontFamily: 'Montserrat', '& b': { fontWeight: 600 } }}>
-        Do you really want to remove <b>this card</b> ?
+        Do you want to remove this card ?
+        <br />
+        This action cannot be undone.
       </Typography>
     </DeleteModal>
   )

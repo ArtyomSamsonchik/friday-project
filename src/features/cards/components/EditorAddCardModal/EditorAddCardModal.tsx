@@ -43,9 +43,9 @@ export const EditorAddCardModal: FC<EditorAddCardModalProps> = memo(props => {
   const card = useAppSelector(state => selectCard(state, cardId))
   const dispatch = useAppDispatch()
 
-  const getFormInitValues = (card?: Card, tab: Tabs = Tabs.Text) => {
+  const getFormInitValues = (card?: Card, tab?: Tabs) => {
     const initValues: CardModalFormValues = {
-      tab,
+      tab: tab || Tabs.Text,
       question: '',
       answer: '',
     }
@@ -55,8 +55,11 @@ export const EditorAddCardModal: FC<EditorAddCardModalProps> = memo(props => {
       const answerImg = coerceImage64(card.answerImg)
       const isAnyValidImage = Boolean(questionImg || answerImg)
 
+      //Select active tab on modal open/close (when tab arg is undefined) if card is defined
+      if (!tab) initValues.tab = isAnyValidImage ? Tabs.Image : Tabs.Text
+
       //Card modal should not display text fields if it has any image for question/answer
-      if (tab === Tabs.Text) {
+      if (initValues.tab === Tabs.Text) {
         initValues.question = isAnyValidImage ? '' : card.question
         initValues.answer = isAnyValidImage ? '' : card.answer
       } else {
