@@ -6,6 +6,8 @@ import CardContent from '@mui/material/CardContent'
 import { ReactComponent as DeleteSVG } from '../../../common/assets/icons/delete.svg'
 import { ReactComponent as EditSVG } from '../../../common/assets/icons/edit.svg'
 import { CustomCard } from '../../../common/components/CustomCard'
+import { ModalMediaPreview } from '../../../common/components/modals/ConfirmModal/styled'
+import { coerceImage64 } from '../../../utils/helpers/coerceImage64'
 import { useAppSelector } from '../../../utils/hooks/useAppSelector'
 import { ActionButtonsContainer } from '../../cardsPack/components/cardPack/ActionButtonsContainer'
 import { ActonIconButton } from '../../cardsPack/components/cardPack/ActonIconButton'
@@ -26,6 +28,9 @@ export const QuestionCard: FC<QuestionCardProps> = memo(props => {
   const cardUserId = useAppSelector(selectCardsUserId)
   const profile = useAppSelector(selectProfile)
 
+  const questionImage = coerceImage64(card.questionImg)
+  const answerImage = coerceImage64(card.answerImg)
+  const isAnyImage = questionImage || answerImage
   const isMyCard = profile._id === cardUserId
 
   return (
@@ -53,11 +58,19 @@ export const QuestionCard: FC<QuestionCardProps> = memo(props => {
         <Typography variant="h5" sx={{ mb: 1 }}>
           Question:
         </Typography>
-        <Typography sx={{ mb: 1 }}>{card.question}</Typography>
+        {isAnyImage ? (
+          <ModalMediaPreview image={questionImage} />
+        ) : (
+          <Typography sx={{ mb: 1 }}>{card.question}</Typography>
+        )}
         <Typography variant="h6" sx={{ mb: 1 }}>
           Answer:
         </Typography>
-        <Typography sx={{ mb: 1 }}>{card.answer}</Typography>
+        {isAnyImage ? (
+          <ModalMediaPreview image={answerImage} />
+        ) : (
+          <Typography sx={{ mb: 1 }}>{card.answer}</Typography>
+        )}
         <Typography sx={{ mb: 1 }}>Last updated: {card.updated}</Typography>
         <Rating value={card.rating} precision={0.5} readOnly />
       </CardContent>
