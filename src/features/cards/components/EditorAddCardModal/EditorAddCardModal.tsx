@@ -96,6 +96,7 @@ export const EditorAddCardModal: FC<EditorAddCardModalProps> = memo(props => {
       if (updatedCard) resetForm({ values: getFormInitValues(updatedCard) })
     } else {
       await dispatch(addCardTC({ cardsPack_id: packId, ...patch }))
+      resetForm({ values: getFormInitValues() })
     }
 
     onClose()

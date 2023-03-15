@@ -142,15 +142,18 @@ export const deleteCardPackTC =
   }
 
 export const updateCardPackTC =
-  (data: UpdatePackData): AppThunk =>
+  (data: UpdatePackData): AppThunk<Promise<CardPackType | undefined>> =>
   async dispatch => {
     try {
       dispatch(setAppStatus('loading'))
       dispatch(setPacksStatus('updating'))
 
-      await cardPacksApi.updatePack(data)
+      const result = await cardPacksApi.updatePack(data)
+
       dispatch(setPacksStatus('idle'))
       dispatch(fetchCardPacksTC())
+
+      return result.data.updatedCardsPack
     } catch (e) {
       handleError(e as Error, dispatch)
     }

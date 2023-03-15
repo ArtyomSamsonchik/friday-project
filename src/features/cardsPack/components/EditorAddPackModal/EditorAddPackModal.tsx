@@ -56,12 +56,14 @@ export const EditorAddPackModal: FC<EditorAddPackModalProps> = memo(props => {
       }
 
       if (pack) {
-        await dispatch(updateCardPackTC({ ...packData, _id: packId }))
+        const newPack = await dispatch(updateCardPackTC({ ...packData, _id: packId }))
+
+        if (newPack) setPackName(newPack.name)
       } else {
         await dispatch(addCardPackTC(packData))
+        setPackName('')
       }
 
-      setPackName(newPackName)
       onClose()
     } catch (e) {
       if (ValidationError.isError(e)) setError(e.errors[0])
