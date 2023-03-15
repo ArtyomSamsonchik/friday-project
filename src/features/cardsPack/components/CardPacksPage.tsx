@@ -27,7 +27,7 @@ import {
 } from '../cards-pack-selectors'
 import {
   cleanPacks,
-  DEPRECATED_fetchCardPacksTC,
+  fetchCardPacksTC,
   setCurrentPackPage,
   setPackItemsPerPage,
   setPackSearchName,
@@ -57,7 +57,7 @@ export const CardPacksPage = () => {
   const controlsAreDisabled = appStatus === 'loading'
 
   useEffect(() => {
-    dispatch(DEPRECATED_fetchCardPacksTC())
+    dispatch(fetchCardPacksTC())
 
     return () => {
       dispatch(cleanPacks())
@@ -83,7 +83,7 @@ export const CardPacksPage = () => {
   )
 
   const handleSliderChange = useCallback((min: number, max: number) => {
-    dispatch(DEPRECATED_fetchCardPacksTC({ min, max }))
+    dispatch(fetchCardPacksTC({ min, max }))
   }, [])
 
   const handleModalClose = useCallback(() => {

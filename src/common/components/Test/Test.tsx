@@ -12,7 +12,7 @@ import {
 } from '../../../features/cardsPack/cards-pack-selectors'
 import {
   cleanPacks,
-  DEPRECATED_fetchCardPacksTC,
+  fetchCardPacksTC,
   setCardPacks,
 } from '../../../features/cardsPack/cards-pack-slice'
 import { CardPack } from '../../../features/cardsPack/components/cardPack/CardPack'
@@ -91,7 +91,7 @@ export const Test = memo(() => {
   const handleFetchPacksClick = () => {
     dispatch(cleanPacks())
     dispatch(
-      DEPRECATED_fetchCardPacksTC({
+      fetchCardPacksTC({
         min: values[0],
         max: values[1],
         sortPacks: showNew ? '0updated' : '1updated',

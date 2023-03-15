@@ -8,7 +8,7 @@ import {
 } from '../../../../common/components/modals/DeleteModal/DeleteModal'
 import { useAppDispatch } from '../../../../utils/hooks/useAppDispatch'
 import { useAppSelector } from '../../../../utils/hooks/useAppSelector'
-import { selectCardPack } from '../../cards-pack-selectors'
+import { selectCardPack, selectPacksStatus } from '../../cards-pack-selectors'
 import { deleteCardPackTC } from '../../cards-pack-slice'
 
 type DeletePackModalProps = Pick<DeleteModalProps, 'title' | 'isOpen' | 'onClose'> & {
@@ -17,17 +17,18 @@ type DeletePackModalProps = Pick<DeleteModalProps, 'title' | 'isOpen' | 'onClose
 
 export const DeletePackModal: FC<DeletePackModalProps> = memo(props => {
   const { packId, ...restProps } = props
-  const pack = useAppSelector(state => selectCardPack(state, packId))
 
+  const pack = useAppSelector(state => selectCardPack(state, packId))
+  const status = useAppSelector(selectPacksStatus)
   const dispatch = useAppDispatch()
 
-  const handleDelete = () => {
-    dispatch(deleteCardPackTC(packId))
+  const handleDelete = async () => {
+    await dispatch(deleteCardPackTC(packId))
     props.onClose()
   }
 
   return (
-    <DeleteModal onDelete={handleDelete} {...restProps}>
+    <DeleteModal onDelete={handleDelete} isLoading={status === 'deleting'} {...restProps}>
       <Typography sx={{ fontFamily: 'Montserrat', '& b': { fontWeight: 600 } }}>
         Do you really want to remove <b>{pack?.name || 'this pack'}</b> ?
         <br />

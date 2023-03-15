@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, memo } from 'react'
 
 import { Typography } from '@mui/material'
 
@@ -15,7 +15,7 @@ type DeleteCardModalProps = Pick<DeleteModalProps, 'title' | 'isOpen' | 'onClose
   packId: string
   cardId: string
 }
-export const DeleteCardModal: FC<DeleteCardModalProps> = props => {
+export const DeleteCardModal: FC<DeleteCardModalProps> = memo(props => {
   const { packId, cardId, ...restProps } = props
 
   const status = useAppSelector(selectCardsStatus)
@@ -35,4 +35,4 @@ export const DeleteCardModal: FC<DeleteCardModalProps> = props => {
       </Typography>
     </DeleteModal>
   )
-}
+})

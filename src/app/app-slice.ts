@@ -32,6 +32,7 @@ export const selectAppStatus = (state: RootStateType) => state.app.status
 export const selectAppError = (state: RootStateType) => state.app.error
 
 export type RequestStatus = 'idle' | 'init loading' | 'loading' | 'success' | 'failure'
+export type EntityStatus = 'idle' | 'adding item' | 'updating' | 'deleting'
 
 type SetAppStatusAT = ReturnType<typeof setAppStatus>
 type SetAppErrorAT = ReturnType<typeof setAppError>

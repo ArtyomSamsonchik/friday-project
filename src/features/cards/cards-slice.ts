@@ -1,4 +1,4 @@
-import { setAppStatus } from '../../app/app-slice'
+import { EntityStatus, setAppStatus } from '../../app/app-slice'
 import { AppThunk } from '../../app/store'
 import { handleError } from '../../utils/helpers/handleError'
 import { mapStateToCardsRequestParams } from '../../utils/helpers/mapStateToCardsRequestParams'
@@ -141,8 +141,8 @@ export const addCardTC =
     try {
       dispatch(setAppStatus('loading'))
       dispatch(setCardsStatus('adding item'))
-      await cardsApi.addCard(cardData)
 
+      await cardsApi.addCard(cardData)
       dispatch(setCardsStatus('idle'))
       dispatch(fetchCardsTC({ cardsPack_id: cardData.cardsPack_id }))
     } catch (e) {
@@ -156,8 +156,8 @@ export const deleteCardTC =
     try {
       dispatch(setAppStatus('loading'))
       dispatch(setCardsStatus('deleting'))
-      await cardsApi.deleteCard(cardId)
 
+      await cardsApi.deleteCard(cardId)
       dispatch(setCardsStatus('idle'))
       dispatch(fetchCardsTC({ cardsPack_id: packId }))
     } catch (e) {
@@ -200,7 +200,7 @@ export type CardsSliceActions =
   | CleanCardsAT
   | SetCardsStatusAT
 
-type CardsStatus = 'idle' | 'adding item' | 'updating' | 'updating grade' | 'deleting'
+type CardsStatus = EntityStatus | 'updating grade'
 
 //TODO: remove unnecessary properties in init state
 //TODO: add mapper-helper to CARDS_LOADED reducer case

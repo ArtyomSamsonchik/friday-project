@@ -1,4 +1,4 @@
-import { setAppStatus } from '../../app/app-slice'
+import { EntityStatus, setAppStatus } from '../../app/app-slice'
 import { AppThunk } from '../../app/store'
 import { handleError } from '../../utils/helpers/handleError'
 import { mapStateToPacksRequestParams } from '../../utils/helpers/mapStateToPacksRequestParams'
@@ -15,6 +15,7 @@ import {
 } from './card-packs-api'
 
 const initState = {
+  status: 'idle' as EntityStatus,
   cardPacks: [] as CardPackType[],
   packSearchName: '',
   currentPage: 1,
@@ -56,6 +57,8 @@ export const cardsPackSlice = (
 
       return { ...state, ...initStateCopy }
     }
+    case 'CARD_PACKS/STATUS_CHANGED':
+      return { ...state, status: action.payload }
     default:
       return state
   }
@@ -86,9 +89,12 @@ export const cleanPacks = () => {
   return { type: 'CARD_PACKS/PACKS_CLEANED' } as const
 }
 export const clearPacksFilters = () => ({ type: 'CARD_PACKS/FILTERS_CLEANED' } as const)
+export const setPacksStatus = (status: EntityStatus) => {
+  return { type: 'CARD_PACKS/STATUS_CHANGED', payload: status } as const
+}
 
 //thunks
-export const DEPRECATED_fetchCardPacksTC =
+export const fetchCardPacksTC =
   (params?: GetCardPacksQueryParams): AppThunk =>
   async (dispatch, getState) => {
     const mappedState = mapStateToPacksRequestParams(getState())
@@ -105,28 +111,16 @@ export const DEPRECATED_fetchCardPacksTC =
     }
   }
 
-export const fetchCardPacksTC = (): AppThunk => async (dispatch, getState) => {
-  const requestData = mapStateToPacksRequestParams(getState())
-
-  try {
-    dispatch(setAppStatus('loading'))
-    const { data } = await cardPacksApi.getPacks(requestData)
-
-    dispatch(setCardPacks(data))
-    dispatch(setAppStatus('success'))
-  } catch (e) {
-    handleError(e as Error, dispatch)
-  }
-}
-
 export const addCardPackTC =
   (packData: AddPackData): AppThunk =>
   async dispatch => {
     try {
       dispatch(setAppStatus('loading'))
+      dispatch(setPacksStatus('adding item'))
+
       await cardPacksApi.addPack(packData)
-      await dispatch(fetchCardPacksTC())
-      dispatch(setAppStatus('success'))
+      dispatch(setPacksStatus('idle'))
+      dispatch(fetchCardPacksTC())
     } catch (e) {
       handleError(e as Error, dispatch)
     }
@@ -137,9 +131,11 @@ export const deleteCardPackTC =
   async dispatch => {
     try {
       dispatch(setAppStatus('loading'))
+      dispatch(setPacksStatus('deleting'))
+
       await cardPacksApi.deletePack(packId)
-      await dispatch(fetchCardPacksTC())
-      dispatch(setAppStatus('success'))
+      dispatch(setPacksStatus('idle'))
+      dispatch(fetchCardPacksTC())
     } catch (e) {
       handleError(e as Error, dispatch)
     }
@@ -150,9 +146,11 @@ export const updateCardPackTC =
   async dispatch => {
     try {
       dispatch(setAppStatus('loading'))
+      dispatch(setPacksStatus('updating'))
+
       await cardPacksApi.updatePack(data)
-      await dispatch(fetchCardPacksTC())
-      dispatch(setAppStatus('success'))
+      dispatch(setPacksStatus('idle'))
+      dispatch(fetchCardPacksTC())
     } catch (e) {
       handleError(e as Error, dispatch)
     }
@@ -167,6 +165,7 @@ type SetItemsPerPageAT = ReturnType<typeof setPackItemsPerPage>
 type SetPersonalPacksParamAT = ReturnType<typeof setPersonalPacksParam>
 type ClearPacksFiltersAT = ReturnType<typeof clearPacksFilters>
 type CleanPacksAT = ReturnType<typeof cleanPacks>
+type SetPacksStatusAT = ReturnType<typeof setPacksStatus>
 
 export type CardsPackSliceActionsType =
   | SetCardsPacksAT
@@ -177,6 +176,7 @@ export type CardsPackSliceActionsType =
   | SetPersonalPacksParamAT
   | ClearPacksFiltersAT
   | CleanPacksAT
+  | SetPacksStatusAT
 
 // TODO: add app status processing via dispatching in every thunk
 // TODO: think about useless types from API response

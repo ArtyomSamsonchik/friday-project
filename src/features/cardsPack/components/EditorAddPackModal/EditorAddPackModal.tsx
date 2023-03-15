@@ -15,7 +15,7 @@ import { ModalMediaLoader } from '../../../../common/components/modals/ConfirmMo
 import { useAppDispatch } from '../../../../utils/hooks/useAppDispatch'
 import { useAppSelector } from '../../../../utils/hooks/useAppSelector'
 import { AddPackData } from '../../card-packs-api'
-import { selectCardPack } from '../../cards-pack-selectors'
+import { selectCardPack, selectPacksStatus } from '../../cards-pack-selectors'
 import { addCardPackTC, updateCardPackTC } from '../../cards-pack-slice'
 
 const validationSchema = string().trim().required('pack name should not be empty!')
@@ -29,6 +29,7 @@ export const EditorAddPackModal: FC<EditorAddPackModalProps> = memo(props => {
   const { packId, onClose, ...restProps } = props
 
   const pack = useAppSelector(state => selectCardPack(state, packId))
+  const status = useAppSelector(selectPacksStatus)
   const initPackName = pack?.name || ''
   const initImageSrc = pack?.deckCover || ''
 
@@ -45,7 +46,7 @@ export const EditorAddPackModal: FC<EditorAddPackModalProps> = memo(props => {
 
   const handleIsPrivateChange = () => setIsPrivate(isPrivate => !isPrivate)
 
-  const handleEditorAddPack = () => {
+  const handleModalSubmit = async () => {
     try {
       const newPackName = validationSchema.validateSync(packName)
       const packData: AddPackData = {
@@ -55,10 +56,11 @@ export const EditorAddPackModal: FC<EditorAddPackModalProps> = memo(props => {
       }
 
       if (pack) {
-        dispatch(updateCardPackTC({ ...packData, _id: packId }))
+        await dispatch(updateCardPackTC({ ...packData, _id: packId }))
       } else {
-        dispatch(addCardPackTC(packData))
+        await dispatch(addCardPackTC(packData))
       }
+
       setPackName(newPackName)
       onClose()
     } catch (e) {
@@ -68,7 +70,8 @@ export const EditorAddPackModal: FC<EditorAddPackModalProps> = memo(props => {
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
-      handleEditorAddPack()
+      // noinspection JSIgnoredPromiseFromCall
+      handleModalSubmit()
       e.preventDefault()
     }
   }
@@ -86,9 +89,10 @@ export const EditorAddPackModal: FC<EditorAddPackModalProps> = memo(props => {
 
   return (
     <ConfirmModal
+      isLoading={status === 'adding item' || status === 'updating'}
       primaryButtonName="Save"
       primaryButtonIsDisabled={!!error}
-      onPrimaryButtonClick={handleEditorAddPack}
+      onPrimaryButtonClick={handleModalSubmit}
       onClose={handleEditModalClose}
       {...restProps}
     >
