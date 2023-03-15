@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useState, KeyboardEvent } from 'react'
 
 import CloseIcon from '@mui/icons-material/Close'
 import PanoramaOutlinedIcon from '@mui/icons-material/PanoramaOutlined'
@@ -43,10 +43,14 @@ export const AddItemButton: FC<AddItemButtonProps> = props => {
     if (collapsible) setIsCollapsed(false)
   }
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLLabelElement>) => {
+    if (e.key === 'Enter') e.currentTarget.click()
+  }
+
   return (
     <>
       <AddItemButtonGroup {...restProps} color={error ? 'error' : undefined} disableRipple>
-        <Button component="label" endIcon={<PanoramaOutlinedIcon />}>
+        <Button component="label" endIcon={<PanoramaOutlinedIcon />} onKeyDown={handleKeyDown}>
           <UploadImageInput onImageUpload={handleImageUpload} />
           {title}
         </Button>
