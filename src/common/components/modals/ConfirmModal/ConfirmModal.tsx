@@ -3,13 +3,13 @@ import React, { FC, MouseEventHandler, PropsWithChildren } from 'react'
 import CloseIcon from '@mui/icons-material/Close'
 import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
-import Modal from '@mui/material/Modal'
+import MUIModal from '@mui/material/Modal'
 import Typography from '@mui/material/Typography'
 
-import { CustomPaper } from '../CustomPaper'
-import { FilledButton } from '../FilledButton'
-import { LoadingBackdrop } from '../LoadingBackdrop/LoadingBackdrop'
-import { OutlinedButton } from '../OutlinedButton'
+import { CustomPaper } from '../../CustomPaper'
+import { FilledButton } from '../../FilledButton'
+import { LoadingBackdrop } from '../../LoadingBackdrop/LoadingBackdrop'
+import { OutlinedButton } from '../../OutlinedButton'
 
 import {
   ModalContainer,
@@ -49,7 +49,7 @@ export const ConfirmModal: FC<ConfirmModalProps> = props => {
   } = props
 
   return (
-    <Modal open={isOpen} onClose={onClose}>
+    <MUIModal open={isOpen} onClose={onClose}>
       <ModalContainer>
         <CustomPaper sx={{ position: 'relative', boxShadow: modalBoxShadow }}>
           <ModalHeader>
@@ -76,6 +76,6 @@ export const ConfirmModal: FC<ConfirmModalProps> = props => {
           <LoadingBackdrop open={!!isLoading} progressProps={{ size: 50, thickness: 4 }} />
         </CustomPaper>
       </ModalContainer>
-    </Modal>
+    </MUIModal>
   )
 }

@@ -10,8 +10,8 @@ import { string, ValidationError } from 'yup'
 import {
   ConfirmModal,
   ConfirmModalProps,
-} from '../../../../common/components/ConfirmModal/ConfirmModal'
-import { ModalMediaLoader } from '../../../../common/components/ConfirmModal/ModalMediaLoader'
+} from '../../../../common/components/modals/ConfirmModal/ConfirmModal'
+import { ModalMediaLoader } from '../../../../common/components/modals/ConfirmModal/ModalMediaLoader'
 import { useAppDispatch } from '../../../../utils/hooks/useAppDispatch'
 import { useAppSelector } from '../../../../utils/hooks/useAppSelector'
 import { AddPackData } from '../../card-packs-api'
