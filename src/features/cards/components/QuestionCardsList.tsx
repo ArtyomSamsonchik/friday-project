@@ -9,6 +9,7 @@ import { useAppSelector } from '../../../utils/hooks/useAppSelector'
 import { ModalStatus } from '../../cardsPack/components/CardPacksList'
 import { selectAllCardsIds } from '../cards-selectors'
 
+import { DeleteCardModal } from './DeleteCardModal/DeleteCardModal'
 import { EditorAddCardModal } from './EditorAddCardModal/EditorAddCardModal'
 import { QuestionCard } from './QuestionCard'
 
@@ -52,6 +53,13 @@ export const QuestionCardsList: FC = () => {
         onClose={closeModal}
         cardId={cardId}
         packId={packId as string}
+      />
+      <DeleteCardModal
+        isOpen={modalStatus === 'deleting'}
+        title="Delete Card"
+        onClose={closeModal}
+        packId={packId as string}
+        cardId={cardId}
       />
     </>
   )
