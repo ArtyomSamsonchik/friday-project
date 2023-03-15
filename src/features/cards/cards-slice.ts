@@ -140,9 +140,10 @@ export const addCardTC =
   async dispatch => {
     try {
       dispatch(setAppStatus('loading'))
+      dispatch(setCardsStatus('adding item'))
       await cardsApi.addCard(cardData)
 
-      dispatch(setCardsStatus('card added'))
+      dispatch(setCardsStatus('idle'))
       dispatch(fetchCardsTC({ cardsPack_id: cardData.cardsPack_id }))
     } catch (e) {
       handleError(e as Error, dispatch)
@@ -154,9 +155,10 @@ export const deleteCardTC =
   async dispatch => {
     try {
       dispatch(setAppStatus('loading'))
+      dispatch(setCardsStatus('deleting'))
       await cardsApi.deleteCard(cardId)
 
-      dispatch(setCardsStatus('card deleted'))
+      dispatch(setCardsStatus('idle'))
       dispatch(fetchCardsTC({ cardsPack_id: packId }))
     } catch (e) {
       handleError(e as Error, dispatch)
@@ -168,9 +170,10 @@ export const updateCardTC =
   async dispatch => {
     try {
       dispatch(setAppStatus('loading'))
+      dispatch(setCardsStatus('updating'))
       const result = await cardsApi.updateCard(data)
 
-      dispatch(setCardsStatus('card updated'))
+      dispatch(setCardsStatus('idle'))
       dispatch(fetchCardsTC({ cardsPack_id: data.packId }))
 
       return result.data.updatedCard
@@ -197,7 +200,7 @@ export type CardsSliceActions =
   | CleanCardsAT
   | SetCardsStatusAT
 
-type CardsStatus = 'idle' | 'card added' | 'card updated' | 'card deleted'
+type CardsStatus = 'idle' | 'adding item' | 'updating' | 'updating grade' | 'deleting'
 
 //TODO: remove unnecessary properties in init state
 //TODO: add mapper-helper to CARDS_LOADED reducer case

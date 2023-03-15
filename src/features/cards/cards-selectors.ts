@@ -17,3 +17,4 @@ export const selectCardsTotalCount = (state: RootStateType) =>
   selectCardsSlice(state).cardsTotalCount
 
 export const selectCardsUserId = (state: RootStateType) => selectCardsSlice(state).packUserId
+export const selectCardsStatus = (state: RootStateType) => selectCardsSlice(state).status
