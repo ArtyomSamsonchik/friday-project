@@ -5,7 +5,7 @@ import { Typography } from '@mui/material'
 import {
   DeleteModal,
   DeleteModalProps,
-} from '../../../../common/components/modals/DeleteModal/DeleteModal'
+} from '../../../../common/components/Modals/DeleteModal/DeleteModal'
 import { useAppDispatch } from '../../../../utils/hooks/useAppDispatch'
 import { useAppSelector } from '../../../../utils/hooks/useAppSelector'
 import { selectCardsStatus } from '../../cards-selectors'

@@ -100,8 +100,11 @@ export const CardsPage = () => {
           </FilledButton>
         </ToolBarHeader>
         <Stack alignItems="flex-start" gap={2.5}>
-          <TextField value={cardSearchName} onChange={handleSearchNameChange} />
-          {cardsTotalCount === 0 && <div>˚‧º·(˚ ˃̣̣̥᷄⌓˂̣̣̥᷅ )‧º·˚</div>}
+          {cardsTotalCount ? (
+            <TextField value={cardSearchName} onChange={handleSearchNameChange} />
+          ) : (
+            <div>˚‧º·(˚ ˃̣̣̥᷄⌓˂̣̣̥᷅ )‧º·˚</div>
+          )}
         </Stack>
       </div>
 

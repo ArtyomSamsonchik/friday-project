@@ -5,7 +5,7 @@ import FormHelperText from '@mui/material/FormHelperText'
 import TextField from '@mui/material/TextField'
 import { useField } from 'formik'
 
-import { ModalMediaLoader } from '../../../../common/components/modals/ConfirmModal/ModalMediaLoader'
+import { ModalMediaLoader } from '../../../../common/components/Modals/ConfirmModal/ModalMediaLoader'
 
 import { CardModalFormValues, Tabs } from './EditorAddCardModal'
 

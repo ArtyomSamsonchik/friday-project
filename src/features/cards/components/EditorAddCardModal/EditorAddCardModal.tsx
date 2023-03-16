@@ -8,8 +8,8 @@ import { InferType } from 'yup'
 import {
   ConfirmModal,
   ConfirmModalProps,
-} from '../../../../common/components/modals/ConfirmModal/ConfirmModal'
-import { ModalLabel } from '../../../../common/components/modals/ConfirmModal/styled'
+} from '../../../../common/components/Modals/ConfirmModal/ConfirmModal'
+import { ModalLabel } from '../../../../common/components/Modals/ConfirmModal/styled'
 import { coerceImage64 } from '../../../../utils/helpers/coerceImage64'
 import { useAppDispatch } from '../../../../utils/hooks/useAppDispatch'
 import { useAppSelector } from '../../../../utils/hooks/useAppSelector'
