@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/friday-project/static/css/main.1790806a.css",
-    "main.js": "/friday-project/static/js/main.5650c1c7.js",
+    "main.js": "/friday-project/static/js/main.882ca913.js",
     "static/media/email.svg": "/friday-project/static/media/email.94cba1d27e689497f35abb31ac4c9ecd.svg",
     "static/media/header_logo.svg": "/friday-project/static/media/header_logo.f5da7f8bedc2bfe87aba.svg",
     "static/media/delete.svg": "/friday-project/static/media/delete.330585a346cc5566ec273996e0a43c2b.svg",
@@ -10,10 +10,10 @@
     "static/media/teacher.svg": "/friday-project/static/media/teacher.8eee21c3e6cda302607bd25c3a51f557.svg",
     "static/media/arrow-back.svg": "/friday-project/static/media/arrow-back.305825a3b6f4705e2c8376d0a281ec4e.svg",
     "main.1790806a.css.map": "/friday-project/static/css/main.1790806a.css.map",
-    "main.5650c1c7.js.map": "/friday-project/static/js/main.5650c1c7.js.map"
+    "main.882ca913.js.map": "/friday-project/static/js/main.882ca913.js.map"
   },
   "entrypoints": [
     "static/css/main.1790806a.css",
-    "static/js/main.5650c1c7.js"
+    "static/js/main.882ca913.js"
   ]
 }
