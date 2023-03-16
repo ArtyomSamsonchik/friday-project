@@ -27,15 +27,15 @@ import {
 } from '../cards-pack-selectors'
 import {
   cleanPacks,
-  DEPRECATED_fetchCardPacksTC,
+  fetchCardPacksTC,
   setCurrentPackPage,
   setPackItemsPerPage,
   setPackSearchName,
   setPersonalPacksParam,
 } from '../cards-pack-slice'
 
-import { AlternativeEditorAddPackModal } from './alternativeEditorAddPackModal/AlternativeEditorAddPackModal'
 import { CardPacksList } from './CardPacksList'
+import { EditorAddPackModal } from './EditorAddPackModal/EditorAddPackModal'
 
 export const CardPacksPage = () => {
   const cardPacksTotalCount = useAppSelector(selectPacksTotalCount)
@@ -57,7 +57,7 @@ export const CardPacksPage = () => {
   const controlsAreDisabled = appStatus === 'loading'
 
   useEffect(() => {
-    dispatch(DEPRECATED_fetchCardPacksTC())
+    dispatch(fetchCardPacksTC())
 
     return () => {
       dispatch(cleanPacks())
@@ -83,7 +83,7 @@ export const CardPacksPage = () => {
   )
 
   const handleSliderChange = useCallback((min: number, max: number) => {
-    dispatch(DEPRECATED_fetchCardPacksTC({ min, max }))
+    dispatch(fetchCardPacksTC({ min, max }))
   }, [])
 
   const handleModalClose = useCallback(() => {
@@ -135,7 +135,7 @@ export const CardPacksPage = () => {
         onPageChange={changePageHandler}
         onItemsCountChange={changeItemsPerPageHandler}
       />
-      <AlternativeEditorAddPackModal
+      <EditorAddPackModal
         isOpen={modalIsOpen}
         title="Add new pack"
         onClose={handleModalClose}

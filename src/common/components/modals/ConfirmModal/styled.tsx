@@ -1,5 +1,4 @@
 import { styled } from '@mui/material'
-import ButtonGroup from '@mui/material/ButtonGroup'
 
 export const ModalContainer = styled('div', { name: 'ModalContainer' })(({ theme }) => ({
   position: 'absolute',
@@ -14,7 +13,6 @@ export const ModalContainer = styled('div', { name: 'ModalContainer' })(({ theme
 export const ModalInner = styled('div', { name: 'ModalInner' })(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  height: 'calc(100% - 60px)',
   padding: theme.spacing(4, 0, 5),
 }))
 
@@ -22,7 +20,24 @@ export const ModalContent = styled('div', { name: 'ModalContent' })(({ theme }) 
   padding: theme.spacing(0, 3),
 }))
 
-export const ModalControls = styled(ModalContent, { name: 'ModalControls' })({
+export const ScrollableModalContent = styled(ModalContent)({
+  overflow: 'auto',
+  scrollbarWidth: 'thin',
+  minHeight: 250,
+  maxHeight: '50vh',
+})
+
+export const ModalMediaPreview = styled('div', {
+  name: 'ModalMedia',
+})<{ image: string }>(({ image }) => ({
+  height: '180px',
+  backgroundImage: image.length ? `url(${image})` : 'none',
+  backgroundSize: 'cover',
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: 'center,',
+}))
+
+export const ModalControls = styled(ModalContent)({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
@@ -55,5 +70,5 @@ export const ModalLabel = styled('span')(({ theme }) => ({
   color: theme.palette.text.secondary,
 }))
 
-//TODO: think about 'styled' file with components instead of separate files just
+// TODO: think about 'styled' file with components instead of separate files just
 //  to store styled divs.

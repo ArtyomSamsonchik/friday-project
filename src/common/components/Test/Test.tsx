@@ -1,6 +1,8 @@
 import React, { memo, useEffect, useState } from 'react'
 
-import { EditorAddCardModal } from '../../../features/cards/components/EditorAddCardModal/EditorAddCardModal'
+import { GetCardsResponse } from '../../../features/cards/cards-api'
+import { selectAllCards } from '../../../features/cards/cards-selectors'
+import { setCards } from '../../../features/cards/cards-slice'
 import { QuestionCard } from '../../../features/cards/components/QuestionCard'
 import { CardPackType, GetCardPackResponse } from '../../../features/cardsPack/card-packs-api'
 import {
@@ -10,7 +12,7 @@ import {
 } from '../../../features/cardsPack/cards-pack-selectors'
 import {
   cleanPacks,
-  DEPRECATED_fetchCardPacksTC,
+  fetchCardPacksTC,
   setCardPacks,
 } from '../../../features/cardsPack/cards-pack-slice'
 import { CardPack } from '../../../features/cardsPack/components/cardPack/CardPack'
@@ -35,6 +37,7 @@ export const Test = memo(() => {
   const options = ['x', 'y', 'z']
   const [selected, setSelected] = useState(options[1])
   const packs = useAppSelector(selectAllPacks)
+  const cards = useAppSelector(selectAllCards)
   const profile = useAppSelector(selectProfile)
   const minCardsCount = useAppSelector(selectMinCardsCount)
   const maxCardsCount = useAppSelector(selectMaxCardsCount)
@@ -64,7 +67,21 @@ export const Test = memo(() => {
       maxCardsCount: 50,
     } as GetCardPackResponse
 
+    const cards = {
+      cards: [
+        {
+          _id: '1',
+          question: "Who's bad?",
+          answer: 'Michael',
+          rating: 3,
+          cardsPack_id: '1',
+        },
+      ],
+      packUserId: profile._id,
+    } as GetCardsResponse
+
     dispatch(setCardPacks(packsResponse))
+    dispatch(setCards(cards))
 
     return () => {
       dispatch(cleanPacks())
@@ -74,7 +91,7 @@ export const Test = memo(() => {
   const handleFetchPacksClick = () => {
     dispatch(cleanPacks())
     dispatch(
-      DEPRECATED_fetchCardPacksTC({
+      fetchCardPacksTC({
         min: values[0],
         max: values[1],
         sortPacks: showNew ? '0updated' : '1updated',
@@ -85,13 +102,6 @@ export const Test = memo(() => {
 
   return (
     <div className={commonS.demo}>
-      <EditorAddCardModal
-        isOpen={true}
-        title={'Add New Card'}
-        onClose={() => {}}
-        cardId="ff"
-        packId="dd"
-      />
       <h1>Super components demo</h1>
       <h3>Super button</h3>
       <div className={s.container}>
@@ -140,15 +150,15 @@ export const Test = memo(() => {
                 }}
               />
             ))}
-          <QuestionCard
-            question={'Lorem ipsum dolor sit amet'}
-            answer={'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'}
-            isMyCard={true}
-            lastUpdated="19.01.2023"
-            rating={2.7}
-            editCard={() => alert('card edited')}
-            deleteCard={() => alert('card deleted')}
-          />
+          {cards.length &&
+            cards.map(c => (
+              <QuestionCard
+                key={c._id}
+                cardId={c._id}
+                onEditCard={() => alert('card edited')}
+                onDeleteCard={() => alert('card deleted')}
+              />
+            ))}
         </CardsContainer>
       </CustomContainer>
       <h3>Super checkbox</h3>
