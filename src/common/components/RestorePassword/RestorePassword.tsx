@@ -8,7 +8,7 @@ import FormLabel from '@mui/material/FormLabel'
 import TextField from '@mui/material/TextField'
 import { useFormik } from 'formik'
 import { Navigate } from 'react-router-dom'
-import { InferType } from 'yup'
+import { InferType, object } from 'yup'
 
 import { PATH } from '../../../app/path'
 import { recallPasswordTC } from '../../../features/auth/auth-slice'
@@ -19,7 +19,9 @@ import { emailSchema } from '../../../utils/validationSchemas'
 import common from '../../styles/common.module.css'
 import { CustomPaperContainer } from '../CustomPaperContainer/CustomPaperContainer'
 
-type FormValues = { email: InferType<typeof emailSchema> }
+const validationSchema = object({ email: emailSchema })
+
+type FormValues = InferType<typeof validationSchema>
 
 export const RestorePassword = () => {
   const dispatch = useAppDispatch()
@@ -28,7 +30,7 @@ export const RestorePassword = () => {
     initialValues: {
       email: '',
     },
-    validationSchema: emailSchema,
+    validationSchema,
     onSubmit: values => {
       dispatch(recallPasswordTC(values.email))
     },
