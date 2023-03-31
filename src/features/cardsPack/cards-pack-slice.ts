@@ -89,6 +89,7 @@ export const setMinAndMaxCardsCount = (cardsCount: { min: number; max: number })
   ({
     type: 'CARD_PACKS/MIN-MAX-CARDS-COUNT',
     payload: cardsCount,
+    //
   } as const)
 export const cleanPacks = () => {
   return { type: 'CARD_PACKS/PACKS_CLEANED' } as const

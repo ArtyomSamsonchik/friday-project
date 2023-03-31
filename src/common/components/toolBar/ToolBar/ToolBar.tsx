@@ -11,7 +11,6 @@ import {
   selectPacksSortOrder,
 } from '../../../../features/cardsPack/cards-pack-selectors'
 import {
-  DEPRECATED_fetchCardPacksTC,
   setMinAndMaxCardsCount,
   setPersonalPacksParam,
 } from '../../../../features/cardsPack/cards-pack-slice'
@@ -20,7 +19,6 @@ import { useAppDispatch } from '../../../../utils/hooks/useAppDispatch'
 import { useAppQueryParams } from '../../../../utils/hooks/useAppQueryParams'
 import { useAppSelector } from '../../../../utils/hooks/useAppSelector'
 import { useDebounce } from '../../../../utils/hooks/useDebounce'
-import { FilledButton } from '../../FilledButton'
 import { MinimumDistanceSlider } from '../../RangeSlider'
 import { SuperButton } from '../../shared/SuperButton/SuperButton'
 import { SortPackButton } from '../../SortPacks/SortPacksButton'
