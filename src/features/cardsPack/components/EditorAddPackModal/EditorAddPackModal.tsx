@@ -1,35 +1,41 @@
-import React, { ChangeEvent, FC, memo, useState, KeyboardEvent } from 'react'
+import React, { ChangeEvent, FC, KeyboardEvent, memo, useCallback, useState } from 'react'
 
+import { SxProps } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import FormGroup from '@mui/material/FormGroup'
+import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import { string, ValidationError } from 'yup'
 
 import {
-  AlternativeBasicModal,
-  AlternativeBasicModalProps,
-} from '../../../../common/components/AlternativeBasicModal/AlternativeBasicModal'
+  ConfirmModal,
+  ConfirmModalProps,
+} from '../../../../common/components/Modals/ConfirmModal/ConfirmModal'
+import { ModalMediaLoader } from '../../../../common/components/Modals/ConfirmModal/ModalMediaLoader'
 import { useAppDispatch } from '../../../../utils/hooks/useAppDispatch'
 import { useAppSelector } from '../../../../utils/hooks/useAppSelector'
-import { selectCardPack } from '../../cards-pack-selectors'
+import { AddPackData } from '../../card-packs-api'
+import { selectCardPack, selectPacksStatus } from '../../cards-pack-selectors'
 import { addCardPackTC, updateCardPackTC } from '../../cards-pack-slice'
 
-type AlternativeEditorAddPackModalProps = Pick<
-  AlternativeBasicModalProps,
-  'isOpen' | 'title' | 'onClose'
-> & { packId: string }
-
 const validationSchema = string().trim().required('pack name should not be empty!')
+const modalMediaSxProps: SxProps = { mb: 3 }
 
-export const AlternativeEditorAddPackModal: FC<AlternativeEditorAddPackModalProps> = memo(props => {
+type EditorAddPackModalProps = Pick<ConfirmModalProps, 'isOpen' | 'title' | 'onClose'> & {
+  packId: string
+}
+
+export const EditorAddPackModal: FC<EditorAddPackModalProps> = memo(props => {
   const { packId, onClose, ...restProps } = props
 
   const pack = useAppSelector(state => selectCardPack(state, packId))
+  const status = useAppSelector(selectPacksStatus)
   const initPackName = pack?.name || ''
+  const initImageSrc = pack?.deckCover || ''
 
   const [packName, setPackName] = useState(initPackName)
   const [isPrivate, setIsPrivate] = useState(false)
+  const [imageSrc, setImageSrc] = useState(initImageSrc)
   const [error, setError] = useState<string | null>(null)
   const dispatch = useAppDispatch()
 
@@ -40,16 +46,24 @@ export const AlternativeEditorAddPackModal: FC<AlternativeEditorAddPackModalProp
 
   const handleIsPrivateChange = () => setIsPrivate(isPrivate => !isPrivate)
 
-  const handleEditorAddPack = () => {
+  const handleModalSubmit = async () => {
     try {
       const newPackName = validationSchema.validateSync(packName)
+      const packData: AddPackData = {
+        name: newPackName,
+        private: isPrivate,
+        deckCover: imageSrc,
+      }
 
       if (pack) {
-        dispatch(updateCardPackTC({ _id: packId, name: newPackName, private: isPrivate }))
+        const newPack = await dispatch(updateCardPackTC({ ...packData, _id: packId }))
+
+        if (newPack) setPackName(newPack.name)
       } else {
-        dispatch(addCardPackTC({ name: newPackName, private: isPrivate }))
+        await dispatch(addCardPackTC(packData))
+        setPackName('')
       }
-      setPackName(newPackName)
+
       onClose()
     } catch (e) {
       if (ValidationError.isError(e)) setError(e.errors[0])
@@ -58,7 +72,8 @@ export const AlternativeEditorAddPackModal: FC<AlternativeEditorAddPackModalProp
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
-      handleEditorAddPack()
+      // noinspection JSIgnoredPromiseFromCall
+      handleModalSubmit()
       e.preventDefault()
     }
   }
@@ -66,18 +81,24 @@ export const AlternativeEditorAddPackModal: FC<AlternativeEditorAddPackModalProp
   const handleEditModalClose = () => {
     onClose()
     setPackName(initPackName)
+    setImageSrc(initImageSrc)
     setError(null)
   }
 
+  const handleImageUpload = useCallback((file64: string) => setImageSrc(file64), [])
+
+  const handleImageRemove = useCallback(() => setImageSrc(''), [])
+
   return (
-    <AlternativeBasicModal
+    <ConfirmModal
+      isLoading={status === 'adding item' || status === 'updating'}
       primaryButtonName="Save"
       primaryButtonIsDisabled={!!error}
-      onPrimaryButtonClick={handleEditorAddPack}
+      onPrimaryButtonClick={handleModalSubmit}
       onClose={handleEditModalClose}
       {...restProps}
     >
-      <FormGroup>
+      <Stack>
         <TextField
           autoFocus
           label="Pack Name"
@@ -87,12 +108,21 @@ export const AlternativeEditorAddPackModal: FC<AlternativeEditorAddPackModalProp
           helperText={error || ' '}
           onChange={handlePackTitleChange}
           onKeyDown={handleKeyDown}
+          sx={{ mb: '10px' }}
+        />
+        <ModalMediaLoader
+          buttonName="Add cover"
+          imageSrc={imageSrc}
+          onUploadImage={handleImageUpload}
+          onRemoveImage={handleImageRemove}
+          sx={modalMediaSxProps}
         />
         <FormControlLabel
           control={<Checkbox checked={isPrivate} onChange={handleIsPrivateChange} />}
           label="Private"
+          sx={{ width: 'fit-content' }}
         />
-      </FormGroup>
-    </AlternativeBasicModal>
+      </Stack>
+    </ConfirmModal>
   )
 })

@@ -15,6 +15,7 @@ import InputLabel from '@mui/material/InputLabel'
 import TextField from '@mui/material/TextField'
 import { useFormik } from 'formik'
 import { Navigate } from 'react-router-dom'
+import { InferType } from 'yup'
 
 import { PATH } from '../../../app/path'
 import { loginTC } from '../../../features/auth/auth-slice'
@@ -22,11 +23,13 @@ import { selectIsLoggedIn } from '../../../features/auth/login-selectors'
 import { useAppDispatch } from '../../../utils/hooks/useAppDispatch'
 import { useAppSelector } from '../../../utils/hooks/useAppSelector'
 import { useRedirectLocation } from '../../../utils/hooks/useRedirectLocation'
-import { loginFormValidationSchema } from '../../formValidation/basicFormValidationSchema'
+import { loginSchema } from '../../../utils/validationSchemas'
 import common from '../../styles/common.module.css'
 import { CustomPaperContainer } from '../CustomPaperContainer/CustomPaperContainer'
 
 import s from './Login.module.css'
+
+type FormValues = InferType<typeof loginSchema> & { rememberMe: boolean }
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -39,13 +42,13 @@ export const Login = () => {
   }
   const dispatch = useAppDispatch()
   const isLoggedIn = useAppSelector(selectIsLoggedIn)
-  const formik = useFormik({
+  const formik = useFormik<FormValues>({
     initialValues: {
       email: '',
       password: '',
       rememberMe: false,
     },
-    validationSchema: loginFormValidationSchema,
+    validationSchema: loginSchema,
     onSubmit: values => {
       dispatch(loginTC(values))
     },

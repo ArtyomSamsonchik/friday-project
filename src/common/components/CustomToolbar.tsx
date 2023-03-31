@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { useNavigate, useParams } from 'react-router-dom'
 
+import { selectAppStatus } from '../../app/app-slice'
 import { PATH, URL_PARAMS } from '../../app/path'
 import { selectCardsTotalCount, selectCardsUserId } from '../../features/cards/cards-selectors'
 import { addCardTC } from '../../features/cards/cards-slice'
@@ -29,6 +30,8 @@ export const CustomToolbar: FC<CustomToolbarProps> = props => {
   const cardsUserId = useAppSelector(selectCardsUserId)
   const dispatch = useAppDispatch()
   const profile = useAppSelector(selectProfile)
+  const appStatus = useAppSelector(selectAppStatus)
+
   const startLearn = () => {
     if (packId) {
       navigate(`/${PATH.CARDS}/${packId}/${PATH.LEARN}`, { state: cardsCount })
@@ -46,6 +49,10 @@ export const CustomToolbar: FC<CustomToolbarProps> = props => {
         })
       )
     }
+  }
+
+  if (appStatus === 'loading') {
+    return <></>
   }
 
   return (

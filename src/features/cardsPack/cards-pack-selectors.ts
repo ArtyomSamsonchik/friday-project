@@ -15,3 +15,4 @@ export const selectMinCardsCount = (state: RootStateType) => selectPacksSlice(st
 export const selectMaxCardsCount = (state: RootStateType) => selectPacksSlice(state).maxCardsCount
 export const selectPacksTotalCount = (state: RootStateType) =>
   selectPacksSlice(state).cardPacksTotalCount
+export const selectPacksStatus = (state: RootStateType) => selectPacksSlice(state).status

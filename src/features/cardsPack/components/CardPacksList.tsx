@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { FC, useCallback, useState } from 'react'
 
 import { shallowEqual } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -8,13 +8,13 @@ import { CardsContainer } from '../../../common/components/CardsContainer'
 import { useAppSelector } from '../../../utils/hooks/useAppSelector'
 import { selectAllPacksIds } from '../cards-pack-selectors'
 
-import { AlternativeDeletePackModal } from './alternativeDeletePackModal/AlternativeDeletePackModal'
-import { AlternativeEditorAddPackModal } from './alternativeEditorAddPackModal/AlternativeEditorAddPackModal'
 import { CardPack } from './cardPack/CardPack'
+import { DeletePackModal } from './DeletePackModal/DeletePackModal'
+import { EditorAddPackModal } from './EditorAddPackModal/EditorAddPackModal'
 
 export type ModalStatus = 'editing' | 'deleting' | 'inactive'
 
-export const CardPacksList = () => {
+export const CardPacksList: FC = () => {
   const packIds = useAppSelector(selectAllPacksIds, shallowEqual)
   const navigate = useNavigate()
 
@@ -50,14 +50,14 @@ export const CardPacksList = () => {
           />
         ))}
       </CardsContainer>
-      <AlternativeEditorAddPackModal
+      <EditorAddPackModal
         key={packId}
         title="Edit Pack"
         isOpen={modalStatus === 'editing'}
         packId={packId}
         onClose={closeModal}
       />
-      <AlternativeDeletePackModal
+      <DeletePackModal
         title="Delete Pack"
         isOpen={modalStatus === 'deleting'}
         packId={packId}

@@ -4,7 +4,7 @@ import Backdrop, { BackdropProps } from '@mui/material/Backdrop'
 import CircularProgress, { CircularProgressProps } from '@mui/material/CircularProgress'
 
 type LoadingBackdropProps = BackdropProps & {
-  progressProps: CircularProgressProps
+  progressProps?: CircularProgressProps
 }
 
 export const LoadingBackdrop: FC<LoadingBackdropProps> = props => {

@@ -75,6 +75,7 @@ export const CardPack: FC<CardPackProps> = memo(props => {
           <DeleteSVG />
         </ActonIconButton>
       </ActionButtonsContainer>
+
       <CardContent sx={{ wordWrap: 'break-word' }}>
         <Typography variant="h5">{pack.name}</Typography>
         <Typography>Last updated: {lastUpdated}</Typography>

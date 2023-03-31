@@ -1,4 +1,4 @@
-import { setAppStatus } from '../../app/app-slice'
+import { EntityStatus, setAppStatus } from '../../app/app-slice'
 import { AppThunk } from '../../app/store'
 import { handleError } from '../../utils/helpers/handleError'
 import { mapStateToCardsRequestParams } from '../../utils/helpers/mapStateToCardsRequestParams'
@@ -16,6 +16,7 @@ import {
 } from './cards-api'
 
 const initState = {
+  status: 'idle' as CardsStatus,
   cards: [] as Card[],
   packName: '',
   cardSearchName: '',
@@ -57,7 +58,9 @@ export const cardsSlice = (state = initState, action: CardsSliceActions): typeof
     case 'CARDS/ITEMS_PER_PAGE_CHANGED':
       return { ...state, pageCount: action.payload }
     case 'CARDS/CARDS_CLEANED':
-      return { ...state, cards: [], packName: '', pageCount: 12 }
+      return { ...state, cards: [], packName: '', packUserId: '' }
+    case 'CARDS/STATUS_CHANGED':
+      return { ...state, status: action.payload }
     default:
       return state
   }
@@ -82,6 +85,9 @@ export const setCardItemsPerPage = (count: number) => {
 export const cleanCards = () => {
   return { type: 'CARDS/CARDS_CLEANED' } as const
 }
+export const setCardsStatus = (status: CardsStatus) => {
+  return { type: 'CARDS/STATUS_CHANGED', payload: status } as const
+}
 
 //thunks
 export const fetchCardsTC =
@@ -102,7 +108,7 @@ export const fetchCardsTC =
 
 export const getCardForLearning =
   (params: GetCardsQueryParams): AppThunk =>
-  async (dispatch, getState) => {
+  async dispatch => {
     /*const requestData = mapStateToCardsRequestParams(getState(), params)*/
 
     try {
@@ -130,42 +136,47 @@ export const updateCardGradeTC =
   }
 
 export const addCardTC =
-  (cardData: AddCardRequestData): AppThunk =>
+  (cardData: AddCardRequestData): AppThunk<Promise<void>> =>
   async dispatch => {
     try {
       dispatch(setAppStatus('loading'))
-      await cardsApi.addCard(cardData)
+      dispatch(setCardsStatus('adding item'))
 
+      await cardsApi.addCard(cardData)
+      dispatch(setCardsStatus('idle'))
       dispatch(fetchCardsTC({ cardsPack_id: cardData.cardsPack_id }))
-      dispatch(setAppStatus('success'))
     } catch (e) {
       handleError(e as Error, dispatch)
     }
   }
 
 export const deleteCardTC =
-  (packId: string, cardId: string): AppThunk =>
+  (packId: string, cardId: string): AppThunk<Promise<void>> =>
   async dispatch => {
     try {
       dispatch(setAppStatus('loading'))
-      await cardsApi.deleteCard(cardId)
+      dispatch(setCardsStatus('deleting'))
 
+      await cardsApi.deleteCard(cardId)
+      dispatch(setCardsStatus('idle'))
       dispatch(fetchCardsTC({ cardsPack_id: packId }))
-      dispatch(setAppStatus('success'))
     } catch (e) {
       handleError(e as Error, dispatch)
     }
   }
 
 export const updateCardTC =
-  (data: UpdateCardRequestData): AppThunk =>
+  (data: UpdateCardRequestData & { packId: string }): AppThunk<Promise<Card | undefined>> =>
   async dispatch => {
     try {
       dispatch(setAppStatus('loading'))
-      await cardsApi.updateCard(data)
+      dispatch(setCardsStatus('updating'))
+      const result = await cardsApi.updateCard(data)
 
+      dispatch(setCardsStatus('idle'))
       dispatch(fetchCardsTC({ cardsPack_id: data.packId }))
-      dispatch(setAppStatus('success'))
+
+      return result.data.updatedCard
     } catch (e) {
       handleError(e as Error, dispatch)
     }
@@ -178,6 +189,7 @@ type SetCardsSortOrderAT = ReturnType<typeof setCardsSortOrder>
 type SetCurrentCardsPageAT = ReturnType<typeof setCurrentCardsPage>
 type SetCardItemsPerPageAT = ReturnType<typeof setCardItemsPerPage>
 type CleanCardsAT = ReturnType<typeof cleanCards>
+type SetCardsStatusAT = ReturnType<typeof setCardsStatus>
 
 export type CardsSliceActions =
   | SetCardsAT
@@ -186,6 +198,9 @@ export type CardsSliceActions =
   | SetCurrentCardsPageAT
   | SetCardItemsPerPageAT
   | CleanCardsAT
+  | SetCardsStatusAT
+
+type CardsStatus = EntityStatus | 'updating grade'
 
 //TODO: remove unnecessary properties in init state
 //TODO: add mapper-helper to CARDS_LOADED reducer case
