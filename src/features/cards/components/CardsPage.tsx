@@ -93,12 +93,11 @@ export const CardsPage = () => {
       <BackLink title="Back to Packs List" to={`/${PATH.PACKS}`} />
 
       <div className="toolBar">
-        <ToolBarHeader>
-          <h3>{cardsTotalCount ? packName : 'Pack is empty'}</h3>
-          <FilledButton onClick={handleHeaderButtonClick}>
-            {isMyPack ? 'Add new card' : 'Learn to pack'}
-          </FilledButton>
-        </ToolBarHeader>
+        <ToolBarHeader
+          title={cardsTotalCount ? packName : 'Pack is empty'}
+          btnTitle={isMyPack ? 'Add new card' : 'Learn to pack'}
+          btnOnclickHandler={handleHeaderButtonClick}
+        />
         <Stack alignItems="flex-start" gap={2.5}>
           {cardsTotalCount ? (
             <TextField value={cardSearchName} onChange={handleSearchNameChange} />

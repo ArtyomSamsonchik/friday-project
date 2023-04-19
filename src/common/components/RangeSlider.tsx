@@ -1,15 +1,17 @@
-import React, { ChangeEvent, memo, useEffect, useState } from 'react'
+import React, { ChangeEvent, FC, memo, useEffect, useState } from 'react'
 
 import Box from '@mui/material/Box'
 import Input from '@mui/material/Input'
-import Slider from '@mui/material/Slider'
+import Slider, { SliderProps } from '@mui/material/Slider'
 import { shallowEqual } from 'react-redux'
 
 import { useDebounce } from '../../utils/hooks/useDebounce'
 
-type MinimumDistanceSliderType = {
-  minValue: number
-  maxValue: number
+type RangeSliderProps = {
+  minValueLimit: number
+  maxValueLimit: number
+  minValue?: number
+  maxValue?: number
   disabled?: boolean
   onRangeChange: (minValue: number, maxValue: number) => void
 }
@@ -22,17 +24,21 @@ const getCorrectedInputMinValue = (min: number, max: number) =>
 const getCorrectedInputMaxValue = (min: number, max: number) =>
   max - min < minThumbDistance ? min + minThumbDistance : max
 
-export const MinimumDistanceSlider = memo((props: MinimumDistanceSliderType) => {
-  const { minValue, maxValue, disabled, onRangeChange } = props
+export const RangeSlider: FC<RangeSliderProps> = memo(props => {
+  const { minValueLimit, maxValueLimit, minValue, maxValue, disabled, onRangeChange } = props
 
-  const [sliderMinMax, setSliderMinMax] = useState([minValue, maxValue])
-  const [inputMinMax, setInputMinMax] = useState([minValue, maxValue])
+  // min and max values are optional, so Slider can be used as uncontrolled component
+  const resolvedMinValue = minValue || minValueLimit
+  const resolvedMaxValue = maxValue || maxValueLimit
+
+  const [sliderMinMax, setSliderMinMax] = useState([resolvedMinValue, resolvedMaxValue])
+  const [inputMinMax, setInputMinMax] = useState([resolvedMinValue, resolvedMaxValue])
   const debouncedInputMinMax = useDebounce(inputMinMax)
 
   useEffect(() => {
-    setSliderMinMax([0, maxValue || 1])
-    setInputMinMax([0, maxValue || 1])
-  }, [minValue, maxValue])
+    setSliderMinMax([resolvedMinValue, resolvedMaxValue || 1])
+    setInputMinMax([resolvedMinValue, resolvedMaxValue || 1])
+  }, [resolvedMinValue, resolvedMaxValue])
 
   //synchronize slider with inputs when changing input field
   useEffect(() => {
@@ -53,7 +59,7 @@ export const MinimumDistanceSlider = memo((props: MinimumDistanceSliderType) => 
     onRangeChange(inputMinValue, inputMaxValue)
   }, debouncedInputMinMax)
 
-  const handleSliderChange = (event: Event, newValues: number | number[], activeThumb: number) => {
+  const handleSliderChange: SliderProps['onChange'] = (_, newValues, activeThumb) => {
     let [newMinValue, newMaxValue] = newValues as number[]
 
     if (activeThumb === 0) {
@@ -69,16 +75,18 @@ export const MinimumDistanceSlider = memo((props: MinimumDistanceSliderType) => 
     }
   }
 
-  const handleSliderChangeCommit = () => onRangeChange(sliderMinMax[0], sliderMinMax[1])
+  const handleSliderChangeCommit: SliderProps['onChangeCommitted'] = (_, values) => {
+    if (Array.isArray(values)) onRangeChange(values[0], values[1])
+  }
 
   const handleMinInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newMinValue = Math.max(minValue, Number(e.currentTarget.value))
+    const newMinValue = Math.max(minValueLimit, Number(e.currentTarget.value))
 
     setInputMinMax([newMinValue, inputMinMax[1]])
   }
 
   const handleMaxInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newMaxValue = Math.min(maxValue, Number(e.currentTarget.value))
+    const newMaxValue = Math.min(maxValueLimit, Number(e.currentTarget.value))
 
     setInputMinMax([inputMinMax[0], newMaxValue])
   }
@@ -92,20 +100,19 @@ export const MinimumDistanceSlider = memo((props: MinimumDistanceSliderType) => 
         onChange={handleMinInputChange}
         inputProps={{
           step: 1,
-          min: minValue,
+          min: minValueLimit,
           max: sliderMinMax[1] - 1,
           type: 'number',
         }}
         sx={{
-          '& input': {
-            minWidth: 'max-content',
-          },
+          flexShrink: 0,
+          width: 70,
         }}
       />
       <Slider
         value={sliderMinMax}
         disabled={disabled}
-        max={maxValue}
+        max={maxValueLimit}
         onChange={handleSliderChange}
         onChangeCommitted={handleSliderChangeCommit}
         valueLabelDisplay="auto"
@@ -119,13 +126,12 @@ export const MinimumDistanceSlider = memo((props: MinimumDistanceSliderType) => 
         inputProps={{
           step: 1,
           min: sliderMinMax[0] + 1,
-          max: maxValue,
+          max: maxValueLimit,
           type: 'number',
         }}
         sx={{
-          '& input': {
-            minWidth: 'max-content',
-          },
+          flexShrink: 0,
+          width: 70,
         }}
       />
     </Box>

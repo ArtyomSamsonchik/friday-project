@@ -7,6 +7,7 @@ import { StyledPagination } from './StyledPagination'
 import { StyledSelect } from './StyledSelect'
 
 type PaginationBarPropsType = {
+  page?: number
   pagesCount: number
   itemsPerPage: number
   disabled?: boolean
@@ -14,11 +15,12 @@ type PaginationBarPropsType = {
   onItemsCountChange: NativeSelectInputProps['onChange']
 }
 export const PaginationBar = memo((props: PaginationBarPropsType) => {
-  const { pagesCount, disabled, itemsPerPage, onItemsCountChange, onPageChange } = props
+  const { page, pagesCount, disabled, itemsPerPage, onItemsCountChange, onPageChange } = props
 
   return (
     <div className={s.paginationBarContainer}>
       <StyledPagination
+        page={page}
         disabled={disabled}
         count={pagesCount}
         color="primary"
@@ -45,3 +47,6 @@ export const PaginationBar = memo((props: PaginationBarPropsType) => {
     </div>
   )
 })
+
+// TODO: pagination bar does not display current page after reload
+//  (maybe there is required prop in MUI component)

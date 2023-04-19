@@ -1,39 +1,42 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 
 import { useSearchParams } from 'react-router-dom'
 
-import { getQueryParamObject } from '../helpers/getQueryParams'
+export type StringifiedRecord<T> = { [P in keyof T]-?: string }
 
-type QueryParamsValues<T> = T[keyof T]
-type DefaultParams<T> = Partial<Record<keyof T, string>>
-export const useAppQueryParams = <U, T = DefaultParams<U>, K extends keyof T = keyof T>(
-  defaultParams: T = {} as T
-): [T, typeof setAppQueryParams] => {
-  const [searchParams, setSearchParams] = useSearchParams(defaultParams as Record<string, string>)
+export const useAppQueryParams = <T extends StringifiedRecord<{}>>(defaultParams?: T) => {
+  const [searchParams, setSearchParams] = useSearchParams(defaultParams)
 
-  // const setAppQueryParams = (paramName: K, paramValue: QueryParamsValues<T>) => {
-  //   setSearchParams(searchParams => {
-  //     return getQueryParamObject<T>(paramName, paramValue, Object.fromEntries(searchParams) as T)
-  //   })
-  // }
-  /* const setAppQueryParams = (params: { [key in K]: QueryParamsValues<T> }) => {
-    for (let itemParam in params) {
-      setSearchParams(searchParams => {
-        return getQueryParamObject<T>(
-          itemParam,
-          params[itemParam],
-          Object.fromEntries(searchParams) as T
+  // setSearchParams doesn't retain its identity like setState from useState
+  const searchParamsRef = useRef(setSearchParams)
+
+  searchParamsRef.current = setSearchParams
+
+  const setAppQueryParams = useCallback(
+    // allows partial params object as argument, but doesn't allow 'undefined' as props values
+    <
+      U extends {
+        [P in keyof U]: P extends keyof T ? T[P] : never
+      }
+    >(
+      params: U & Partial<T>
+    ) => {
+      searchParamsRef.current(prevParams => {
+        const mergedParams = { ...Object.fromEntries(prevParams), ...params }
+        const filteredParamPairs = Object.entries(mergedParams).filter(([_, value]) =>
+          Boolean(value)
         )
+
+        return Object.fromEntries(filteredParamPairs)
       })
-    }
-  }*/
-  const setAppQueryParams = (params: Record<string, any>) => {
-    setSearchParams(prevParams => {
-      return { ...getQueryParamObject({ ...prevParams, ...params }) }
-    })
-  }
+    },
+    []
+  )
 
-  const memoParamsObject = useMemo(() => Object.fromEntries(searchParams) as T, [searchParams])
+  const memoParamsObject = useMemo(
+    () => Object.fromEntries(searchParams) as Partial<T>,
+    [searchParams]
+  )
 
-  return [memoParamsObject, setAppQueryParams]
+  return [memoParamsObject, setAppQueryParams] as const
 }

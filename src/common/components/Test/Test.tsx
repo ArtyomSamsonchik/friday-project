@@ -24,7 +24,7 @@ import { CardsContainer } from '../CardsContainer'
 import { CustomContainer } from '../CustomContainer'
 import { FilledButton } from '../FilledButton'
 import { OutlinedButton } from '../OutlinedButton'
-import { MinimumDistanceSlider } from '../RangeSlider'
+import { RangeSlider } from '../RangeSlider'
 import { SuperButton } from '../shared/SuperButton/SuperButton'
 import { SuperCheckbox } from '../shared/SuperCheckbox/SuperCheckbox'
 import { SuperInputText } from '../shared/SuperInputText/SuperInputText'
@@ -126,9 +126,9 @@ export const Test = memo(() => {
       <SuperButton style={{ backgroundColor: 'blue' }} onClick={() => setShowNew(!showNew)}>
         {showNew ? 'show old' : 'show new'}
       </SuperButton>
-      <MinimumDistanceSlider
-        minValue={minCardsCount}
-        maxValue={maxCardsCount}
+      <RangeSlider
+        minValueLimit={minCardsCount}
+        maxValueLimit={maxCardsCount}
         onRangeChange={(min, max) => setValues([min, max])}
       />
       <h3>Cards</h3>

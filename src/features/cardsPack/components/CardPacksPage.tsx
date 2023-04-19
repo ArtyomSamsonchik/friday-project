@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useEffect } from 'react'
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react'
 
 import { selectAppStatus } from '../../../app/app-slice'
 import { BackLink } from '../../../common/components/BackLink'
@@ -6,39 +6,30 @@ import { CustomContainer } from '../../../common/components/CustomContainer'
 import { PaginationBar } from '../../../common/components/Pagination/PaginationBar'
 import { ToolBar } from '../../../common/components/toolBar/ToolBar/ToolBar'
 import { useAppDispatch } from '../../../utils/hooks/useAppDispatch'
-import { useAppQueryParams } from '../../../utils/hooks/useAppQueryParams'
+import { StringifiedRecord, useAppQueryParams } from '../../../utils/hooks/useAppQueryParams'
 import { useAppSelector } from '../../../utils/hooks/useAppSelector'
 import { GetCardPacksQueryParams } from '../card-packs-api'
-import {
-  selectCurrentPage,
-  selectItemsPerPage,
-  selectPacksTotalCount,
-} from '../cards-pack-selectors'
-import {
-  cleanPacks,
-  fetchCardPacksTC,
-  setCurrentPackPage,
-  setPackItemsPerPage,
-  setPackSearchName,
-  setPersonalPacksParam,
-} from '../cards-pack-slice'
+import { selectPacksTotalCount } from '../cards-pack-selectors'
+import { cleanPacks, fetchCardPacksTC } from '../cards-pack-slice'
 
 import { CardPacksList } from './CardPacksList'
 import { EditorAddPackModal } from './EditorAddPackModal/EditorAddPackModal'
 
+type PacksSearchParams = Pick<StringifiedRecord<GetCardPacksQueryParams>, 'page' | 'pageCount'>
+
+const DEFAULT_PAGE = 1
+const DEFAULT_ITEMS_PER_PAGE = 12
+
 export const CardPacksPage = () => {
-  const [appQueryParams, setAppQueryParams] = useAppQueryParams<GetCardPacksQueryParams>({
-    page: '1',
-    pageCount: '12',
-  })
+  const [queryParams, setQueryParams] = useAppQueryParams<PacksSearchParams>()
+
+  const itemsPerPage = Number(queryParams.pageCount || DEFAULT_ITEMS_PER_PAGE)
+  const currentPage = Number(queryParams.page || DEFAULT_PAGE)
 
   const cardPacksTotalCount = useAppSelector(selectPacksTotalCount)
-  const itemsPerPage = useAppSelector(selectItemsPerPage)
-  //const currentPage = useAppSelector(selectCurrentPage)
+  // const itemsPerPage = useAppSelector(selectItemsPerPage)
+  // const currentPage = useAppSelector(selectCurrentPage)
   const appStatus = useAppSelector(selectAppStatus)
-
-  const packSearchName = useAppSelector(selectPackSearchName)
-  const debouncedPackSearchName = useDebounce(packSearchName)
 
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
@@ -47,22 +38,17 @@ export const CardPacksPage = () => {
   const controlsAreDisabled = appStatus === 'loading'
 
   useEffect(() => {
-    dispatch(fetchCardPacksTC())
+    dispatch(fetchCardPacksTC(queryParams as GetCardPacksQueryParams))
 
     return () => {
       dispatch(cleanPacks())
     }
-  }, [appQueryParams])
-
-  const handleSearchNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(setPackSearchName(e.currentTarget.value))
-  }
+  }, [queryParams])
 
   const changePageHandler = useCallback(
     (event: ChangeEvent<unknown>, page: number) => {
-      dispatch(setCurrentPackPage(currentPage))
-
-      setAppQueryParams({ page: currentPage + '' })
+      // dispatch(setCurrentPackPage(currentPage))
+      setQueryParams({ page: page + '' })
     },
     [dispatch]
   )
@@ -70,14 +56,10 @@ export const CardPacksPage = () => {
   const changeItemsPerPageHandler = useCallback(
     (event: ChangeEvent<HTMLSelectElement>) => {
       //dispatch(setPackItemsPerPage(+event.target.value))
-      setAppQueryParams({ pageCount: event.target.value })
+      setQueryParams({ pageCount: event.target.value })
     },
-    [dispatch, appQueryParams]
+    [dispatch]
   )
-
-  const handleSliderChange = useCallback((min: number, max: number) => {
-    dispatch(fetchCardPacksTC({ min, max }))
-  }, [])
 
   const handleModalClose = useCallback(() => {
     setModalIsOpen(false)
@@ -87,42 +69,9 @@ export const CardPacksPage = () => {
     <CustomContainer sx={{ mb: 9 }}>
       <BackLink title="test link to profile" to="/profile" />
       <ToolBar />
-      <div className={'toolBar'}>
-        <ToolBarHeader>
-          <h3>Packs List</h3>
-          <FilledButton onClick={() => setModalIsOpen(true)}>Add new pack</FilledButton>
-        </ToolBarHeader>
-
-        <div style={{ display: 'flex', gap: '20px' }}>
-          <TextField value={packSearchName} onChange={handleSearchNameChange} />
-          <CustomToolBarSam>
-            <SortPackButton sortPackOrder={sortPackOrder} />
-
-            <MinimumDistanceSlider
-              minValue={minCardsCount}
-              maxValue={maxCardsCount}
-              onRangeChange={handleSliderChange}
-            />
-            <div>
-              <SuperButton
-                style={isMyPacks ? { backgroundColor: 'blue' } : { backgroundColor: 'white' }}
-                onClick={() => dispatch(setPersonalPacksParam(true))}
-              >
-                my
-              </SuperButton>
-              <SuperButton
-                style={isMyPacks ? { backgroundColor: 'white' } : { backgroundColor: 'blue' }}
-                onClick={() => dispatch(setPersonalPacksParam(false))}
-              >
-                all
-              </SuperButton>
-            </div>
-          </CustomToolBarSam>
-        </div>
-      </div>
-
       <CardPacksList />
       <PaginationBar
+        page={currentPage}
         pagesCount={Math.ceil(cardPacksTotalCount / itemsPerPage)}
         disabled={controlsAreDisabled}
         itemsPerPage={itemsPerPage}
