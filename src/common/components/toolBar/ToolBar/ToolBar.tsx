@@ -4,7 +4,10 @@ import { TextField } from '@mui/material'
 import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 
-import { GetCardPacksQueryParams } from '../../../../features/cardsPack/card-packs-api'
+import {
+  GetCardPacksQueryParams,
+  SortPacksParams,
+} from '../../../../features/cardsPack/card-packs-api'
 import {
   selectIsMyPacks,
   selectMaxCardsCount,
@@ -13,35 +16,43 @@ import {
 } from '../../../../features/cardsPack/cards-pack-selectors'
 import { setPersonalPacksParam } from '../../../../features/cardsPack/cards-pack-slice'
 import { EditorAddPackModal } from '../../../../features/cardsPack/components/EditorAddPackModal/EditorAddPackModal'
+import { SortPacksSplitButton } from '../../../../features/cardsPack/components/SortPacksSplitButton/SortPacksSplitButton'
+import { stringifySortQueryParams } from '../../../../utils/helpers/stringifySortQueryParams'
 import { useAppDispatch } from '../../../../utils/hooks/useAppDispatch'
 import { StringifiedRecord, useAppQueryParams } from '../../../../utils/hooks/useAppQueryParams'
 import { useAppSelector } from '../../../../utils/hooks/useAppSelector'
 import { useDebounce } from '../../../../utils/hooks/useDebounce'
+import { DropdownListSplitButton } from '../../DropdownListSplitButton/DropdownListSplitButton'
 import { RangeSlider } from '../../RangeSlider'
 import { SuperButton } from '../../shared/SuperButton/SuperButton'
-import { SortPackButton } from '../../SortPacks/SortPacksButton'
 import { ToolBarHeader } from '../ToolBarHeader/ToolBarHeader'
 
 import { CustomToolBarFilters } from './CustomToolBarFilters'
 
 type ToolbarSearchParams = Pick<
   StringifiedRecord<GetCardPacksQueryParams>,
-  'packName' | 'min' | 'max' | 'user_id'
+  'packName' | 'min' | 'max' | 'sortPacks'
 >
 
 export const ToolBar = () => {
   const isMyPacks = useAppSelector(selectIsMyPacks)
-  const sortPackOrder = useAppSelector(selectPacksSortOrder)
+  // const sortPackOrder = useAppSelector(selectPacksSortOrder)
   const minCardsCount = useAppSelector(selectMinCardsCount)
   const maxCardsCount = useAppSelector(selectMaxCardsCount)
 
-  const [queryParams, setQueryParams] = useAppQueryParams<ToolbarSearchParams>()
+  const [queryParams, setQueryParams] = useAppQueryParams({
+    // sortPacks: '1updated',
+  } as ToolbarSearchParams)
 
   const [packSearchName, setPackSearchName] = useState(queryParams?.packName || '')
   const debouncedPackSearchName = useDebounce(packSearchName)
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
   const dispatch = useAppDispatch()
+
+  const sortPackOrder =
+    queryParams.sortPacks ||
+    stringifySortQueryParams({ order: 'desc', column: 'updated' as SortPacksParams['column'] })
 
   const handleModalClose = useCallback(() => {
     setModalIsOpen(false)
@@ -55,6 +66,10 @@ export const ToolBar = () => {
   const handleSearchNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPackSearchName(e.currentTarget.value)
   }
+
+  const handlePacksSortingChange = useCallback((sortParams: SortPacksParams) => {
+    setQueryParams({ sortPacks: stringifySortQueryParams(sortParams) })
+  }, [])
 
   useEffect(() => {
     setQueryParams({ packName: debouncedPackSearchName })
@@ -72,7 +87,10 @@ export const ToolBar = () => {
       <Stack direction="row" gap="20px">
         <TextField value={packSearchName} onChange={handleSearchNameChange} />
         <CustomToolBarFilters>
-          <SortPackButton sortPackOrder={sortPackOrder} />
+          <SortPacksSplitButton
+            sortPackOrder={sortPackOrder}
+            onSortChange={handlePacksSortingChange}
+          />
           <RangeSlider
             minValueLimit={minCardsCount}
             maxValueLimit={maxCardsCount}

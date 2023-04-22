@@ -42,6 +42,7 @@ export const CustomToolBarFilters = ({ children }: CustomToolBarPropsType) => {
             padding: '20px',
             display: 'flex',
             flexDirection: 'column',
+            alignItems: 'flex-start',
             gap: '20px',
             minHeight: '200px',
           }}

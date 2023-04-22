@@ -1,6 +1,9 @@
-import { SortCardsParams } from '../../features/cards/cards-api'
-import { SortPacksParams } from '../../features/cardsPack/card-packs-api'
+/**
+ * Stringifies params object to match API query parameter
+ */
 
-//Use this function to get sortPacks query parameter for cardsApi
-export const stringifySortQueryParams = ({ order, column }: SortPacksParams | SortCardsParams) =>
-  (order === 'asc' ? 1 : 0) + column
+export const stringifySortQueryParams = (sortParams: { order: 'asc' | 'desc'; column: string }) => {
+  const { order, column } = sortParams
+
+  return (order === 'asc' ? 1 : 0) + column
+}

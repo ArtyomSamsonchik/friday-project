@@ -15,7 +15,7 @@ export const useAppQueryParams = <T extends StringifiedRecord<{}>>(defaultParams
   const setAppQueryParams = useCallback(
     // allows partial params object as argument, but doesn't allow 'undefined' as props values
     <
-      U extends {
+      U extends object & {
         [P in keyof U]: P extends keyof T ? T[P] : never
       }
     >(
