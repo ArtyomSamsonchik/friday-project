@@ -129,7 +129,7 @@ export const Test = memo(() => {
       <RangeSlider
         minValueLimit={minCardsCount}
         maxValueLimit={maxCardsCount}
-        onRangeChange={(min, max) => setValues([min, max])}
+        onRangeChangeCommit={(min, max) => setValues([min, max])}
       />
       <h3>Cards</h3>
       <CustomContainer>

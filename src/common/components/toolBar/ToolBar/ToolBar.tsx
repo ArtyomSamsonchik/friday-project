@@ -96,7 +96,7 @@ export const ToolBar = () => {
             maxValueLimit={maxCardsCount}
             minValue={Number(queryParams.min) || undefined}
             maxValue={Number(queryParams.max) || undefined}
-            onRangeChange={handleSliderChange}
+            onRangeChangeCommit={handleSliderChange}
           />
 
           <div>

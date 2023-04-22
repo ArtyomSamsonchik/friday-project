@@ -13,7 +13,7 @@ type RangeSliderProps = {
   minValue?: number
   maxValue?: number
   disabled?: boolean
-  onRangeChange: (minValue: number, maxValue: number) => void
+  onRangeChangeCommit: (minValue: number, maxValue: number) => void
 }
 
 const minThumbDistance = 1
@@ -25,22 +25,24 @@ const getCorrectedInputMaxValue = (min: number, max: number) =>
   max - min < minThumbDistance ? min + minThumbDistance : max
 
 export const RangeSlider: FC<RangeSliderProps> = memo(props => {
-  const { minValueLimit, maxValueLimit, minValue, maxValue, disabled, onRangeChange } = props
+  const { minValueLimit, maxValueLimit, minValue, maxValue, disabled, onRangeChangeCommit } = props
 
-  // min and max values are optional, so Slider can be used as uncontrolled component
-  const resolvedMinValue = minValue || minValueLimit
-  const resolvedMaxValue = maxValue || maxValueLimit
+  // validates min/max, so min/max cannot exceed its limits
+  const resolvedMaxValue = maxValue ? Math.min(maxValue, maxValueLimit) : maxValueLimit
+  const resolvedMinValue = minValue
+    ? Math.min(Math.max(minValue, minValueLimit), resolvedMaxValue - 1)
+    : minValueLimit
 
   const [sliderMinMax, setSliderMinMax] = useState([resolvedMinValue, resolvedMaxValue])
   const [inputMinMax, setInputMinMax] = useState([resolvedMinValue, resolvedMaxValue])
   const debouncedInputMinMax = useDebounce(inputMinMax)
 
   useEffect(() => {
-    setSliderMinMax([resolvedMinValue, resolvedMaxValue || 1])
-    setInputMinMax([resolvedMinValue, resolvedMaxValue || 1])
+    setSliderMinMax([resolvedMinValue, resolvedMaxValue])
+    setInputMinMax([resolvedMinValue, resolvedMaxValue])
   }, [resolvedMinValue, resolvedMaxValue])
 
-  //synchronize slider with inputs when changing input field
+  // synchronize slider with inputs when changing input field
   useEffect(() => {
     if (shallowEqual(sliderMinMax, debouncedInputMinMax)) return
 
@@ -56,27 +58,28 @@ export const RangeSlider: FC<RangeSliderProps> = memo(props => {
 
     setSliderMinMax([inputMinValue, inputMaxValue])
     setInputMinMax([inputMinValue, inputMaxValue])
-    onRangeChange(inputMinValue, inputMaxValue)
+    onRangeChangeCommit(inputMinValue, inputMaxValue)
   }, debouncedInputMinMax)
 
-  const handleSliderChange: SliderProps['onChange'] = (_, newValues, activeThumb) => {
-    let [newMinValue, newMaxValue] = newValues as number[]
+  const handleSliderChange: SliderProps['onChange'] = (_, values, activeThumb) => {
+    const [minValue, maxValue] = values as number[]
+    let newValues: [number, number]
 
     if (activeThumb === 0) {
-      newMinValue = Math.min(newMinValue, sliderMinMax[1] - minThumbDistance)
+      const newMinValue = Math.min(minValue, sliderMinMax[1] - minThumbDistance)
 
-      setSliderMinMax([newMinValue, sliderMinMax[1]])
-      setInputMinMax([newMinValue, sliderMinMax[1]])
+      newValues = [newMinValue, sliderMinMax[1]]
     } else {
-      newMaxValue = Math.max(newMaxValue, sliderMinMax[0] + minThumbDistance)
+      const newMaxValue = Math.max(maxValue, sliderMinMax[0] + minThumbDistance)
 
-      setSliderMinMax([sliderMinMax[0], newMaxValue])
-      setInputMinMax([sliderMinMax[0], newMaxValue])
+      newValues = [sliderMinMax[0], newMaxValue]
     }
+    setSliderMinMax(newValues)
+    setInputMinMax(newValues)
   }
 
   const handleSliderChangeCommit: SliderProps['onChangeCommitted'] = (_, values) => {
-    if (Array.isArray(values)) onRangeChange(values[0], values[1])
+    if (Array.isArray(values)) onRangeChangeCommit(values[0], values[1])
   }
 
   const handleMinInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -112,6 +115,7 @@ export const RangeSlider: FC<RangeSliderProps> = memo(props => {
       <Slider
         value={sliderMinMax}
         disabled={disabled}
+        min={minValueLimit}
         max={maxValueLimit}
         onChange={handleSliderChange}
         onChangeCommitted={handleSliderChangeCommit}
@@ -137,5 +141,3 @@ export const RangeSlider: FC<RangeSliderProps> = memo(props => {
     </Box>
   )
 })
-
-// TODO: add to state slider
