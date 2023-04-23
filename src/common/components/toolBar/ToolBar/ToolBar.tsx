@@ -1,7 +1,8 @@
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react'
+import React, { ChangeEvent, memo, useCallback, useEffect, useState } from 'react'
 
 import { TextField } from '@mui/material'
 import Button from '@mui/material/Button'
+import ButtonGroup from '@mui/material/ButtonGroup'
 import Stack from '@mui/material/Stack'
 
 import {
@@ -9,30 +10,26 @@ import {
   SortPacksParams,
 } from '../../../../features/cardsPack/card-packs-api'
 import {
-  selectIsMyPacks,
   selectMaxCardsCount,
   selectMinCardsCount,
-  selectPacksSortOrder,
 } from '../../../../features/cardsPack/cards-pack-selectors'
-import { setPersonalPacksParam } from '../../../../features/cardsPack/cards-pack-slice'
 import { EditorAddPackModal } from '../../../../features/cardsPack/components/EditorAddPackModal/EditorAddPackModal'
 import { SortPacksSplitButton } from '../../../../features/cardsPack/components/SortPacksSplitButton/SortPacksSplitButton'
+import { selectProfile } from '../../../../features/profile/profile-slice'
 import { stringifySortQueryParams } from '../../../../utils/helpers/stringifySortQueryParams'
-import { useAppDispatch } from '../../../../utils/hooks/useAppDispatch'
 import { StringifiedRecord, useAppQueryParams } from '../../../../utils/hooks/useAppQueryParams'
 import { useAppSelector } from '../../../../utils/hooks/useAppSelector'
 import { useDebounce } from '../../../../utils/hooks/useDebounce'
-import { DropdownListSplitButton } from '../../DropdownListSplitButton/DropdownListSplitButton'
 import { RangeSlider } from '../../RangeSlider'
-import { SuperButton } from '../../shared/SuperButton/SuperButton'
 import { ToolBarHeader } from '../ToolBarHeader/ToolBarHeader'
 
 import { CustomToolBarFilters } from './CustomToolBarFilters'
 
 type ToolbarSearchParams = Omit<StringifiedRecord<GetCardPacksQueryParams>, 'block'>
 
-export const ToolBar = () => {
-  const isMyPacks = useAppSelector(selectIsMyPacks)
+export const ToolBar = memo(() => {
+  const profile = useAppSelector(selectProfile)
+  // const isMyPacks = useAppSelector(selectIsMyPacks)
   // const sortPackOrder = useAppSelector(selectPacksSortOrder)
   const minCardsCount = useAppSelector(selectMinCardsCount)
   const maxCardsCount = useAppSelector(selectMaxCardsCount)
@@ -42,8 +39,12 @@ export const ToolBar = () => {
   const debouncedPackSearchName = useDebounce(packSearchName)
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
-  const dispatch = useAppDispatch()
+  useEffect(() => {
+    setQueryParams({ packName: debouncedPackSearchName })
+  }, [debouncedPackSearchName])
 
+  // const dispatch = useAppDispatch()
+  const isMyPacks = !!queryParams.user_id
   const sortPackOrder =
     queryParams.sortPacks ||
     stringifySortQueryParams({ order: 'desc', column: 'updated' as SortPacksParams['column'] })
@@ -56,7 +57,6 @@ export const ToolBar = () => {
     // dispatch(setMinAndMaxCardsCount({ min, max }))
     setQueryParams({ min: min + '', max: max + '', page: '' })
   }, [])
-
   const handleSearchNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPackSearchName(e.currentTarget.value)
   }
@@ -65,9 +65,12 @@ export const ToolBar = () => {
     setQueryParams({ sortPacks: stringifySortQueryParams(sortParams) })
   }, [])
 
-  useEffect(() => {
-    setQueryParams({ packName: debouncedPackSearchName })
-  }, [debouncedPackSearchName])
+  const togglePacksArePersonal = (userId: string) => {
+    setQueryParams({
+      user_id: userId,
+      page: '',
+    })
+  }
 
   const resetAllFiltersHandler = () => {}
 
@@ -94,18 +97,20 @@ export const ToolBar = () => {
           />
 
           <div>
-            <SuperButton
-              style={isMyPacks ? { backgroundColor: 'blue' } : { backgroundColor: 'white' }}
-              onClick={() => dispatch(setPersonalPacksParam(true))}
-            >
-              my
-            </SuperButton>
-            <SuperButton
-              style={isMyPacks ? { backgroundColor: 'white' } : { backgroundColor: 'blue' }}
-              onClick={() => dispatch(setPersonalPacksParam(false))}
-            >
-              all
-            </SuperButton>
+            <ButtonGroup>
+              <Button
+                variant={isMyPacks ? 'contained' : 'outlined'}
+                onClick={() => togglePacksArePersonal(profile._id)}
+              >
+                my
+              </Button>
+              <Button
+                variant={isMyPacks ? 'outlined' : 'contained'}
+                onClick={() => togglePacksArePersonal('')}
+              >
+                all
+              </Button>
+            </ButtonGroup>
           </div>
           <Button
             variant="text"
@@ -128,6 +133,6 @@ export const ToolBar = () => {
       />
     </div>
   )
-}
+})
 
 // TODO: header change children to different props
