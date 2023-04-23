@@ -29,10 +29,7 @@ import { ToolBarHeader } from '../ToolBarHeader/ToolBarHeader'
 
 import { CustomToolBarFilters } from './CustomToolBarFilters'
 
-type ToolbarSearchParams = Pick<
-  StringifiedRecord<GetCardPacksQueryParams>,
-  'packName' | 'min' | 'max' | 'sortPacks'
->
+type ToolbarSearchParams = Omit<StringifiedRecord<GetCardPacksQueryParams>, 'block'>
 
 export const ToolBar = () => {
   const isMyPacks = useAppSelector(selectIsMyPacks)
@@ -40,10 +37,7 @@ export const ToolBar = () => {
   const minCardsCount = useAppSelector(selectMinCardsCount)
   const maxCardsCount = useAppSelector(selectMaxCardsCount)
 
-  const [queryParams, setQueryParams] = useAppQueryParams({
-    // sortPacks: '1updated',
-  } as ToolbarSearchParams)
-
+  const [queryParams, setQueryParams] = useAppQueryParams<ToolbarSearchParams>()
   const [packSearchName, setPackSearchName] = useState(queryParams?.packName || '')
   const debouncedPackSearchName = useDebounce(packSearchName)
   const [modalIsOpen, setModalIsOpen] = useState(false)
@@ -60,7 +54,7 @@ export const ToolBar = () => {
 
   const handleSliderChange = useCallback((min: number, max: number) => {
     // dispatch(setMinAndMaxCardsCount({ min, max }))
-    setQueryParams({ min: min + '', max: max + '' })
+    setQueryParams({ min: min + '', max: max + '', page: '' })
   }, [])
 
   const handleSearchNameChange = (e: ChangeEvent<HTMLInputElement>) => {

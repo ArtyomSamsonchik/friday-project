@@ -42,9 +42,13 @@ export const RangeSlider: FC<RangeSliderProps> = memo(props => {
     setInputMinMax([resolvedMinValue, resolvedMaxValue])
   }, [resolvedMinValue, resolvedMaxValue])
 
-  // synchronize slider with inputs when changing input field
+  // correct input values and synchronize slider with inputs when changing input field.
+  // debounced value used just to trigger useEffect.
+  // shallowEqual uses more relevant current input state value.
+  // debounced input value in shallowEqual fn produces react "batching" bugs,
+  // which leads to duplication of api queries
   useEffect(() => {
-    if (shallowEqual(sliderMinMax, debouncedInputMinMax)) return
+    if (shallowEqual(sliderMinMax, inputMinMax)) return
 
     const [sliderMinValue, sliderMaxValue] = sliderMinMax
     let [inputMinValue, inputMaxValue] = debouncedInputMinMax
