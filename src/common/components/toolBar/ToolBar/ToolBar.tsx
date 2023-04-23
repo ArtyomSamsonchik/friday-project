@@ -72,7 +72,17 @@ export const ToolBar = memo(() => {
     })
   }
 
-  const resetAllFiltersHandler = () => {}
+  const restFilters = () => {
+    setQueryParams({
+      user_id: '',
+      min: '',
+      max: '',
+      packName: '',
+      sortPacks: '',
+      page: '',
+      pageCount: '',
+    })
+  }
 
   return (
     <div>
@@ -112,15 +122,7 @@ export const ToolBar = memo(() => {
               </Button>
             </ButtonGroup>
           </div>
-          <Button
-            variant="text"
-            size={'small'}
-            sx={{
-              width: 'fit-content',
-            }}
-            fullWidth={false}
-            onClick={resetAllFiltersHandler}
-          >
+          <Button variant="text" size={'small'} onClick={restFilters}>
             Reset
           </Button>
         </CustomToolBarFilters>
